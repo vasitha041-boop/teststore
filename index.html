@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4729,12 +4730,13 @@ Please confirm my order.`
   }
 
   function populateThemeForm(colors){
-    if (!colors || !window.THEME_FIELD_MAP) return;
+    if (!window.THEME_FIELD_MAP) return;
+    const fallback = (window.readCurrentCssColors ? window.readCurrentCssColors() : null) || {};
     Object.keys(window.THEME_FIELD_MAP).forEach(key => {
       const suffix = capitalizeThemeKey(key);
       const colorInput = document.getElementById("themeColor" + suffix);
       const hexInput = document.getElementById("themeHex" + suffix);
-      const value = colors[key] || "#000000";
+      const value = (colors && colors[key]) || fallback[key] || "#000000";
       if (colorInput) colorInput.value = value;
       if (hexInput) hexInput.value = value.toUpperCase();
     });
@@ -4839,9 +4841,19 @@ Please confirm my order.`
         console.error("Failed to load store settings:", err);
       }
     }
-    if (!settings) return;
+    if (!settings) settings = {};
     window.__storeSettings = settings;
-    if (settings.colors) populateThemeForm(settings.colors);
+
+    // The stored settings document may predate the Theme feature (or a write
+    // may have failed before `colors`/`defaultColors` were saved). populateThemeForm
+    // now falls back to the colors actually applied on the page for any missing key,
+    // so the form always shows real values instead of blank/black swatches.
+    populateThemeForm(settings.colors);
+    if (!settings.defaultColors){
+      const liveCssColors = window.readCurrentCssColors ? window.readCurrentCssColors() : null;
+      if (liveCssColors) settings.defaultColors = liveCssColors;
+    }
+
     populateStoreInfoForm(settings);
     populateProductCardForm(settings);
     populateCurrencyDeliveryForm(settings);
