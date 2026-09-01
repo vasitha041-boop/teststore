@@ -32,6 +32,7 @@
   .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:20px;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Sora';font-weight:800;font-size:20px;flex-shrink:0;}
   .logo-mark{width:28px;height:28px;border-radius:8px;background:var(--orange);display:inline-block;}
+  .store-logo-img{height:32px;width:auto;max-width:160px;object-fit:contain;display:block;}
   .navlinks{display:flex;gap:28px;font-size:14px;font-weight:500;color:var(--ink);flex-shrink:0;}
   .navlinks a{opacity:0.75;transition:opacity .2s;position:relative;}
   .navlinks a:hover{opacity:1;}
@@ -158,6 +159,24 @@
   .view-btn svg{width:15px;height:15px;stroke:var(--ink);}
   .prod-btns{display:flex;gap:8px;}
 
+  /* ---- Product Card Style variants (Admin → Store Settings → productCardStyle) ---- */
+  /* "classic" is the default/original design above — untouched. */
+  body.card-style-minimal .prod-card{border:none;box-shadow:none;border-radius:12px;}
+  body.card-style-minimal .prod-card:hover{transform:none;box-shadow:none;}
+  body.card-style-minimal .prod-thumb{border-radius:12px;}
+  body.card-style-minimal .prod-cat{display:none;}
+  body.card-style-minimal .prod-body{padding:12px 2px 16px;}
+  body.card-style-minimal .add-btn{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  body.card-style-minimal .add-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  body.card-style-modern .prod-card{border:none;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,0.07);}
+  body.card-style-modern .prod-card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,0.14);}
+  body.card-style-modern .prod-thumb{border-radius:22px 22px 0 0;}
+  body.card-style-modern .prod-cat{display:inline-block;background:var(--teal);color:#fff;padding:3px 10px;border-radius:100px;font-size:10px;letter-spacing:0.02em;}
+  body.card-style-modern .prod-name{font-size:15.5px;}
+  body.card-style-modern .prod-price{font-size:17px;}
+  body.card-style-modern .add-btn{border-radius:100px;}
+
   .section-alt{background:#FBF8F3;}
 
   /* ---- Firestore product card additions ---- */
@@ -225,6 +244,7 @@
   .cart-drawer-foot{border-top:1px solid var(--line);padding:16px 20px 22px;display:flex;flex-direction:column;gap:10px;}
   .cart-sum-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);}
   .cart-sum-row.total{font-size:16px;font-weight:800;color:var(--ink);font-family:'Sora';}
+  .checkout-col-right .cart-sum-row{margin-bottom:10px;}
   .cart-clear-btn{background:none;border:1px solid var(--line);border-radius:100px;padding:10px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--muted);transition:border-color .2s,color .2s;}
   .cart-clear-btn:hover{border-color:#B3261E;color:#B3261E;}
 
@@ -365,6 +385,7 @@
   .form-error.show{display:block;}
   .form-group.invalid input,.form-group.invalid textarea{border-color:#B3261E;}
   .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .form-row-2 .form-group:only-child{grid-column:1 / -1;}
 
   /* two-column checkout layout: left = customer/delivery details, right = order summary/payment/place-order */
   .checkout-box.checkout-box-v2{max-width:920px;}
@@ -942,7 +963,7 @@
         <a href="#categories">Displays</a>
         <a href="#categories">Accessories</a>
       </div>
-      <div class="foot-col">
+      <div class="foot-col" id="footSupportCol">
         <h4>Support</h4>
         <a href="#">Delivery info</a>
         <a href="#">Returns policy</a>
@@ -987,6 +1008,7 @@
     <div class="cart-drawer-items" id="cartItems"></div>
     <div class="cart-drawer-foot" id="cartFoot">
       <div class="cart-sum-row"><span>Subtotal</span><span id="cartSubtotal">Rs. 0</span></div>
+      <div class="cart-sum-row"><span>Delivery</span><span id="cartDelivery">Free Delivery</span></div>
       <div class="cart-sum-row total"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
       <button class="btn-primary" id="checkoutBtn" onclick="openCheckout()" style="width:100%;">Proceed to Checkout</button>
       <button class="cart-clear-btn" id="clearCartBtn" onclick="clearCart()">Clear Cart</button>
@@ -1019,7 +1041,7 @@
         <h2>Customer / Delivery Details</h2>
 
         <form id="checkoutForm" onsubmit="return false;">
-          <div class="form-row-2">
+          <div class="form-row-2" id="rowNameFields">
             <div class="form-group" id="fieldFirstName">
               <label for="custFirstName">First Name</label>
               <input type="text" id="custFirstName" placeholder="e.g. Nimal" autocomplete="given-name">
@@ -1031,7 +1053,7 @@
               <span class="form-error" id="errLastName">Please enter your last name.</span>
             </div>
           </div>
-          <div class="form-row-2">
+          <div class="form-row-2" id="rowContactFields">
             <div class="form-group" id="fieldContact1">
               <label for="custContact1">Contact 1</label>
               <input type="tel" id="custContact1" placeholder="e.g. 0771234567" autocomplete="tel">
@@ -1061,6 +1083,8 @@
         <h2>Your Order</h2>
 
         <div class="order-summary" id="checkoutSummary"></div>
+        <div class="cart-sum-row"><span>Subtotal</span><span id="checkoutSubtotal">Rs. 0</span></div>
+        <div class="cart-sum-row"><span>Delivery</span><span id="checkoutDelivery">Free Delivery</span></div>
         <div class="order-total-row"><span>Total</span><span id="checkoutTotal">Rs. 0</span></div>
 
         <div class="payment-note">
@@ -1744,6 +1768,158 @@
     };
   }
 
+  // ============================================================
+  // ============ PART 2: APPLY SETTINGS TO CUSTOMER STORE ======
+  // ============================================================
+
+  function isValidStoreImageUrl(url){
+    return typeof url === "string" && /^https?:\/\//i.test(url.trim());
+  }
+
+  // ---- Central price formatter — used everywhere a price is shown. ----
+  function formatStorePrice(amount){
+    const n = Number(amount);
+    const safeAmount = isNaN(n) ? 0 : n;
+    // Only LKR is currently offered in Admin → Store Settings; formatted as "Rs. 1,500".
+    return "Rs. " + safeAmount.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  }
+  window.formatStorePrice = formatStorePrice;
+
+  // ---- Delivery charge / currency getters (safe defaults if settings are missing) ----
+  window.getStoreDeliveryCharge = function(){
+    const settings = window.__storeSettings;
+    const raw = settings && typeof settings.deliveryCharge !== "undefined" ? Number(settings.deliveryCharge) : 0;
+    return isNaN(raw) || raw < 0 ? 0 : raw;
+  };
+
+  const DEFAULT_CHECKOUT_FIELDS = {
+    firstName: true, lastName: true, contact1: true, contact2: true, streetAddress: true, city: true
+  };
+  window.getCheckoutFieldsConfig = function(){
+    const settings = window.__storeSettings;
+    const cf = (settings && settings.checkoutFields) || DEFAULT_CHECKOUT_FIELDS;
+    return {
+      firstName: cf.firstName !== false,
+      lastName: cf.lastName !== false,
+      contact1: cf.contact1 !== false,
+      contact2: cf.contact2 !== false,
+      streetAddress: cf.streetAddress !== false,
+      city: cf.city !== false
+    };
+  };
+
+  // ---- Store name / logo, applied to header, mobile menu, and footer ----
+  function applyStoreBranding(settings){
+    const storeName = (settings.storeName || "").trim();
+    const logoUrl = (settings.logoUrl || "").trim();
+
+    document.querySelectorAll("header .logo, .mobile-menu-head .logo, footer .foot-brand .logo").forEach(logoEl => {
+      if (!logoEl.dataset.originalName){
+        logoEl.dataset.originalName = logoEl.textContent.trim();
+      }
+      const nameToShow = storeName || logoEl.dataset.originalName;
+
+      logoEl.innerHTML = "";
+      if (logoUrl && isValidStoreImageUrl(logoUrl)){
+        const img = document.createElement("img");
+        img.className = "store-logo-img";
+        img.alt = nameToShow;
+        img.onerror = function(){
+          // Broken/failed logo image — fall back to the existing mark + store name, never a broken icon.
+          logoEl.innerHTML = "";
+          const mark = document.createElement("span");
+          mark.className = "logo-mark";
+          logoEl.appendChild(mark);
+          logoEl.appendChild(document.createTextNode(nameToShow));
+        };
+        img.src = logoUrl;
+        logoEl.appendChild(img);
+      } else {
+        const mark = document.createElement("span");
+        mark.className = "logo-mark";
+        logoEl.appendChild(mark);
+        logoEl.appendChild(document.createTextNode(nameToShow));
+      }
+    });
+
+    if (storeName){
+      document.title = storeName;
+      const footTagline = document.querySelector(".foot-row span:first-child");
+      if (footTagline) footTagline.textContent = storeName + " — premium storefront layout.";
+    }
+  }
+
+  // ---- Footer links: only replace the "Support" column when Admin has configured real links ----
+  function applyFooterLinks(settings){
+    const links = Array.isArray(settings.footerLinks)
+      ? settings.footerLinks.filter(l => l && typeof l.title === "string" && l.title.trim() && typeof l.url === "string" && l.url.trim())
+      : [];
+    if (!links.length) return; // keep the existing hardcoded Support links — clean footer, nothing broken
+
+    const col = document.getElementById("footSupportCol");
+    if (!col) return;
+    const heading = col.querySelector("h4");
+    col.innerHTML = "";
+    col.appendChild(heading || Object.assign(document.createElement("h4"), { textContent: "Links" }));
+
+    links.forEach(link => {
+      const url = link.url.trim();
+      const a = document.createElement("a");
+      a.textContent = link.title.trim();
+      a.href = url;
+      if (/^https?:\/\//i.test(url)){
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+      }
+      col.appendChild(a);
+    });
+  }
+
+  // ---- Social links: show only configured, valid, non-empty URLs ----
+  const SOCIAL_ICON_LABEL = { facebook: "f", instagram: "ig", tiktok: "tt", youtube: "yt", whatsapp: "wa" };
+  const SOCIAL_TITLE = { facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube", whatsapp: "WhatsApp" };
+  function applySocialLinks(settings){
+    if (!settings || !settings.socialLinks) return; // field entirely absent — keep existing footer icons untouched
+    const sl = settings.socialLinks;
+    const container = document.querySelector(".foot-social");
+    if (!container) return;
+
+    const entries = Object.keys(SOCIAL_ICON_LABEL)
+      .map(key => ({ key, url: (sl[key] || "").trim() }))
+      .filter(e => e.url && /^https?:\/\//i.test(e.url));
+
+    container.innerHTML = ""; // clean footer — no broken/placeholder icons either way
+    entries.forEach(({ key, url }) => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.title = SOCIAL_TITLE[key];
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = SOCIAL_ICON_LABEL[key];
+      container.appendChild(a);
+    });
+  }
+
+  // ---- Product card style: classic (default, untouched) / minimal / modern ----
+  function applyProductCardStyle(settings){
+    const style = settings.productCardStyle || "classic";
+    document.body.classList.remove("card-style-minimal", "card-style-modern");
+    if (style === "minimal" || style === "modern"){
+      document.body.classList.add("card-style-" + style);
+    }
+  }
+
+  // ---- Run every customer-facing application step from one place ----
+  function applySettingsToStorefront(settings){
+    if (!settings) return;
+    if (settings.colors) applyThemeColors(settings.colors);
+    applyStoreBranding(settings);
+    applyFooterLinks(settings);
+    applySocialLinks(settings);
+    applyProductCardStyle(settings);
+    document.dispatchEvent(new CustomEvent("storeSettings:ready", { detail: settings }));
+  }
+
   async function initStoreSettings(){
     try {
       const db = await themeWaitForDb();
@@ -1751,7 +1927,6 @@
       const snap = await getDoc(settingsRef);
 
       if (snap.exists()){
-        // Cache for the Admin panel — NOT applied to the storefront in Part 1.
         window.__storeSettings = snap.data();
       } else {
         // First run ever: capture the store's own current configuration.
@@ -1761,6 +1936,10 @@
       }
     } catch (err) {
       console.error("Failed to load store settings:", err);
+      // Settings failed to load entirely — the store still works using existing index.html defaults.
+    } finally {
+      // Whether settings loaded, were just created, or failed — the storefront must never be blocked.
+      applySettingsToStorefront(window.__storeSettings || {});
     }
   }
 
@@ -1799,6 +1978,7 @@
 
   // ---- Helpers ----
   function formatPrice(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -2055,6 +2235,7 @@
   }
 
   function pdpFormatPrice(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -2652,6 +2833,7 @@ function showToast(message){
   }
 
   function formatPriceLKR(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return 'Rs. 0';
     return 'Rs. ' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -2812,10 +2994,13 @@ function showToast(message){
     }).join('');
 
     const subtotal = cartSubtotal(cart);
+    const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
     const totalEl = document.getElementById('cartTotal');
     const subtotalEl = document.getElementById('cartSubtotal');
+    const deliveryEl = document.getElementById('cartDelivery');
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
-    if (totalEl) totalEl.textContent = formatPriceLKR(subtotal); // Total = Subtotal for now (no delivery yet)
+    if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : 'Free Delivery';
+    if (totalEl) totalEl.textContent = formatPriceLKR(subtotal + deliveryCharge);
   }
 
   function escapeHtmlCart(str){
@@ -2986,6 +3171,7 @@ function showToast(message){
   let lastOrderForWhatsapp = null;
 
   function formatPriceLKR(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -3003,6 +3189,30 @@ function showToast(message){
     return /^(?:\+94|0)(7\d{8}|[1-9]\d{8})$/.test(cleaned);
   }
 
+  // ---- Show/hide checkout fields per Admin → Store Settings → Checkout Fields ----
+  function applyCheckoutFieldVisibility(){
+    const cf = window.getCheckoutFieldsConfig ? window.getCheckoutFieldsConfig() : {
+      firstName: true, lastName: true, contact1: true, contact2: true, streetAddress: true, city: true
+    };
+    const setVisible = (id, visible) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = visible ? "" : "none";
+    };
+    setVisible("fieldFirstName", cf.firstName);
+    setVisible("fieldLastName", cf.lastName);
+    setVisible("fieldContact1", cf.contact1);
+    setVisible("fieldContact2", cf.contact2);
+    setVisible("fieldStreetAddress", cf.streetAddress);
+    setVisible("fieldCity", cf.city);
+
+    const rowName = document.getElementById("rowNameFields");
+    if (rowName) rowName.style.display = (cf.firstName || cf.lastName) ? "" : "none";
+    const rowContact = document.getElementById("rowContactFields");
+    if (rowContact) rowContact.style.display = (cf.contact1 || cf.contact2) ? "" : "none";
+
+    return cf;
+  }
+
   // ---- Checkout modal open/close ----
   window.openCheckout = function(){
     const cart = window.getCart ? window.getCart() : [];
@@ -3011,6 +3221,7 @@ function showToast(message){
       return;
     }
     window.closeCartDrawer && window.closeCartDrawer();
+    applyCheckoutFieldVisibility();
     renderCheckoutSummary();
     hideCheckoutError();
     document.getElementById("checkoutModal").classList.add("open");
@@ -3025,19 +3236,26 @@ function showToast(message){
   function renderCheckoutSummary(){
     const cart = window.getCart ? window.getCart() : [];
     const summaryEl = document.getElementById("checkoutSummary");
+    const subtotalEl = document.getElementById("checkoutSubtotal");
+    const deliveryEl = document.getElementById("checkoutDelivery");
     const totalEl = document.getElementById("checkoutTotal");
     if (!summaryEl) return;
 
     summaryEl.innerHTML = cart.map(item => {
-      const subtotal = item.price * item.qty;
+      const lineTotal = item.price * item.qty;
       return `
         <div class="order-summary-row">
           <span class="osr-name">${escapeHtmlCheckout(item.name)}</span>
-          <span class="osr-calc">${formatPriceLKR(item.price)} × ${item.qty} = ${formatPriceLKR(subtotal)}</span>
+          <span class="osr-calc">${formatPriceLKR(item.price)} × ${item.qty} = ${formatPriceLKR(lineTotal)}</span>
         </div>`;
     }).join("");
 
-    const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
+    const total = subtotal + deliveryCharge;
+
+    if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
+    if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : "Free Delivery";
     if (totalEl) totalEl.textContent = formatPriceLKR(total);
   }
 
@@ -3050,19 +3268,24 @@ function showToast(message){
   }
 
   function validateForm(){
-    const firstName = document.getElementById("custFirstName").value.trim();
-    const lastName = document.getElementById("custLastName").value.trim();
-    const contact1 = document.getElementById("custContact1").value.trim();
-    const contact2 = document.getElementById("custContact2").value.trim();
-    const streetAddress = document.getElementById("custStreetAddress").value.trim();
-    const city = document.getElementById("custCity").value.trim();
+    const cf = window.getCheckoutFieldsConfig ? window.getCheckoutFieldsConfig() : {
+      firstName: true, lastName: true, contact1: true, contact2: true, streetAddress: true, city: true
+    };
 
-    const firstNameValid = firstName.length > 0;
-    const lastNameValid = lastName.length > 0;
-    const contact1Valid = contact1.length > 0 && isValidSLPhone(contact1);
-    const contact2Valid = contact2.length > 0 && isValidSLPhone(contact2);
-    const streetAddressValid = streetAddress.length > 0;
-    const cityValid = city.length > 0;
+    const firstName = cf.firstName ? document.getElementById("custFirstName").value.trim() : "";
+    const lastName = cf.lastName ? document.getElementById("custLastName").value.trim() : "";
+    const contact1 = cf.contact1 ? document.getElementById("custContact1").value.trim() : "";
+    const contact2 = cf.contact2 ? document.getElementById("custContact2").value.trim() : "";
+    const streetAddress = cf.streetAddress ? document.getElementById("custStreetAddress").value.trim() : "";
+    const city = cf.city ? document.getElementById("custCity").value.trim() : "";
+
+    // A field that's disabled in Admin Settings is never required and never invalid.
+    const firstNameValid = !cf.firstName || firstName.length > 0;
+    const lastNameValid = !cf.lastName || lastName.length > 0;
+    const contact1Valid = !cf.contact1 || (contact1.length > 0 && isValidSLPhone(contact1));
+    const contact2Valid = !cf.contact2 || (contact2.length > 0 && isValidSLPhone(contact2));
+    const streetAddressValid = !cf.streetAddress || streetAddress.length > 0;
+    const cityValid = !cf.city || city.length > 0;
 
     setFieldError("fieldFirstName", "errFirstName", !firstNameValid);
     setFieldError("fieldLastName", "errLastName", !lastNameValid);
@@ -3074,18 +3297,19 @@ function showToast(message){
     const allValid = firstNameValid && lastNameValid && contact1Valid && contact2Valid && streetAddressValid && cityValid;
     if (!allValid) return null;
 
-    return {
-      firstName,
-      lastName,
-      contact1,
-      contact2,
-      streetAddress,
-      city,
-      // ---- compatibility fields for existing order structure ----
-      customerName: `${firstName} ${lastName}`,
-      phone: contact1,
-      address: `${streetAddress}, ${city}`
-    };
+    // ---- Build safe compatibility fields — never "undefined"/"null" text for a disabled field ----
+    const customerName = [firstName, lastName].filter(Boolean).join(" ") || "Customer";
+    const phone = contact1 || "";
+    const address = [streetAddress, city].filter(Boolean).join(", ");
+
+    const result = { customerName, phone, address };
+    if (cf.firstName) result.firstName = firstName;
+    if (cf.lastName) result.lastName = lastName;
+    if (cf.contact1) result.contact1 = contact1;
+    if (cf.contact2) result.contact2 = contact2;
+    if (cf.streetAddress) result.streetAddress = streetAddress;
+    if (cf.city) result.city = city;
+    return result;
   }
 
   function showCheckoutError(message){
@@ -3153,24 +3377,31 @@ function showToast(message){
         qty: item.qty
       }));
 
-      const totalAmount = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
+      const totalAmount = subtotal + deliveryCharge;
 
-      const orderRef = await addDoc(collection(db, "orders"), {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        contact1: formData.contact1,
-        contact2: formData.contact2,
-        streetAddress: formData.streetAddress,
-        city: formData.city,
+      // ---- Only include a field if it was actually collected (Admin may have disabled it) ----
+      const orderPayload = {
         // ---- compatibility fields for existing order structure ----
         customerName: formData.customerName,
         phone: formData.phone,
         address: formData.address,
         items: orderItems,
+        subtotal,
+        deliveryCharge,
         totalAmount,
         status: "pending",
         createdAt: serverTimestamp()
-      });
+      };
+      if (formData.firstName !== undefined) orderPayload.firstName = formData.firstName;
+      if (formData.lastName !== undefined) orderPayload.lastName = formData.lastName;
+      if (formData.contact1 !== undefined) orderPayload.contact1 = formData.contact1;
+      if (formData.contact2 !== undefined) orderPayload.contact2 = formData.contact2;
+      if (formData.streetAddress !== undefined) orderPayload.streetAddress = formData.streetAddress;
+      if (formData.city !== undefined) orderPayload.city = formData.city;
+
+      const orderRef = await addDoc(collection(db, "orders"), orderPayload);
 
       // ---- Success: clear cart, reset form, show success modal ----
       lastOrderForWhatsapp = {
@@ -3354,6 +3585,7 @@ Please confirm my order.`
   }
 
   function formatPriceLKR(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
