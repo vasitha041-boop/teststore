@@ -461,6 +461,24 @@
 
   .admin-panel{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:24px;}
   .admin-panel-head{padding:16px 20px;border-bottom:1px solid var(--line);font-size:15px;font-weight:700;}
+
+  /* ---- Admin: Store Settings (theme colors) ---- */
+  .settings-panel-body{padding:22px 24px 26px;}
+  .settings-hint{font-size:13px;color:var(--muted);margin:0 0 22px;max-width:640px;line-height:1.6;}
+  .theme-color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-bottom:26px;}
+  .theme-color-field label{display:block;font-size:12.5px;font-weight:700;margin-bottom:8px;color:var(--ink);}
+  .theme-color-field label span{display:block;font-size:11.5px;font-weight:500;color:var(--muted);margin-top:2px;}
+  .color-input-row{display:flex;align-items:center;gap:8px;}
+  .color-input-row input[type="color"]{width:42px;height:38px;border:1px solid var(--line);border-radius:9px;padding:2px;cursor:pointer;background:#fff;flex-shrink:0;}
+  .color-input-row input[type="text"]{flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13px;font-family:'Inter';color:var(--ink);text-transform:uppercase;}
+  .color-input-row input[type="text"]:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(251,106,25,0.12);}
+  .settings-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;}
+  .settings-actions .btn-ghost{flex:none;}
+  .settings-actions .place-order-btn{flex:none;min-width:150px;}
+  @media(max-width:560px){
+    .settings-actions{flex-direction:column-reverse;}
+    .settings-actions .btn-ghost,.settings-actions .place-order-btn{width:100%;text-align:center;}
+  }
   .admin-table-wrap{overflow-x:auto;}
   table.admin-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
   table.admin-table th{text-align:left;padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;color:var(--muted);background:#FBF8F3;white-space:nowrap;}
@@ -1125,6 +1143,10 @@
         Orders
         <span class="nav-badge" id="ordersNavBadge">0</span>
       </button>
+      <button class="admin-nav-item" data-view="settings" onclick="switchAdminView('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Store Settings
+      </button>
       <div class="admin-sidebar-foot">
         <button class="admin-nav-item" onclick="adminLogout()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1233,6 +1255,81 @@
           </div>
           <div class="admin-cards" id="adminOrdersCards">
             <div class="admin-loading-row" style="text-align:center;padding:30px;color:var(--muted);">Loading orders…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Settings view ---- -->
+      <div class="admin-view" id="adminViewSettings">
+        <div class="admin-panel">
+          <div class="admin-panel-head">Store Theme Colors</div>
+          <div class="settings-panel-body">
+            <p class="settings-hint">These are the colors currently used across your storefront. Changing them updates the live site immediately — nothing here is a new design, just the existing colors made editable.</p>
+            <div class="theme-color-grid" id="themeColorGrid">
+              <div class="theme-color-field">
+                <label>Primary<span>Text, buttons &amp; headings</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorPrimary" oninput="syncThemeHexInput('primary', this.value)">
+                  <input type="text" id="themeHexPrimary" maxlength="7" oninput="syncThemeColorInput('primary', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Secondary<span>Stock badges &amp; highlights</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorSecondary" oninput="syncThemeHexInput('secondary', this.value)">
+                  <input type="text" id="themeHexSecondary" maxlength="7" oninput="syncThemeColorInput('secondary', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Accent<span>Buttons &amp; call-to-action</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorAccent" oninput="syncThemeHexInput('accent', this.value)">
+                  <input type="text" id="themeHexAccent" maxlength="7" oninput="syncThemeColorInput('accent', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Accent (Hover)<span>Button hover state</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorAccentDark" oninput="syncThemeHexInput('accentDark', this.value)">
+                  <input type="text" id="themeHexAccentDark" maxlength="7" oninput="syncThemeColorInput('accentDark', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Page Background<span>Overall site background</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorBackground" oninput="syncThemeHexInput('background', this.value)">
+                  <input type="text" id="themeHexBackground" maxlength="7" oninput="syncThemeColorInput('background', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Surface<span>Cards &amp; panels</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorSurface" oninput="syncThemeHexInput('surface', this.value)">
+                  <input type="text" id="themeHexSurface" maxlength="7" oninput="syncThemeColorInput('surface', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Muted Text<span>Secondary text &amp; labels</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorMuted" oninput="syncThemeHexInput('muted', this.value)">
+                  <input type="text" id="themeHexMuted" maxlength="7" oninput="syncThemeColorInput('muted', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Borders<span>Dividers &amp; outlines</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorBorder" oninput="syncThemeHexInput('border', this.value)">
+                  <input type="text" id="themeHexBorder" maxlength="7" oninput="syncThemeColorInput('border', this.value)">
+                </div>
+              </div>
+            </div>
+            <div class="settings-actions">
+              <button type="button" class="btn-ghost" onclick="resetThemeToDefault()">Reset Colors to Default</button>
+              <button class="place-order-btn" id="saveThemeBtn" onclick="saveThemeSettings()">
+                <span class="spinner"></span>
+                <span id="saveThemeBtnLabel">Save Theme</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1454,6 +1551,92 @@
   // No product loading, cart, checkout, or admin logic is implemented in this step.
 </script>
 <!-- ============ END FIREBASE INITIALIZATION ============ -->
+
+<!-- ============ STORE THEME SETTINGS (colors) ============ -->
+<!-- Reads storeSettings/main from Firestore and applies the saved theme
+     colors as CSS custom properties on top of the existing stylesheet.
+     The FIRST time this document doesn't exist yet, the colors already
+     hard-coded in this file's :root block (the current, live design) are
+     captured exactly as-is and saved as BOTH defaultColors and colors —
+     nothing is invented, guessed, or changed visually. -->
+<script type="module">
+  import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  // Maps each named theme role to the actual CSS custom property already
+  // used throughout the existing stylesheet — no new palette is introduced.
+  const THEME_FIELD_MAP = {
+    primary: "--ink",
+    secondary: "--teal",
+    accent: "--orange",
+    accentDark: "--orange-dark",
+    background: "--paper",
+    surface: "--card",
+    muted: "--muted",
+    border: "--line"
+  };
+
+  function themeWaitForDb(){
+    return new Promise((resolve) => {
+      if (window.firebaseDb) return resolve(window.firebaseDb);
+      const iv = setInterval(() => {
+        if (window.firebaseDb) { clearInterval(iv); resolve(window.firebaseDb); }
+      }, 30);
+    });
+  }
+
+  // ---- Read the colors currently hard-coded in :root (the existing design) ----
+  function readCurrentCssColors(){
+    const styles = getComputedStyle(document.documentElement);
+    const colors = {};
+    Object.entries(THEME_FIELD_MAP).forEach(([key, cssVar]) => {
+      const value = styles.getPropertyValue(cssVar);
+      colors[key] = value ? value.trim() : "";
+    });
+    return colors;
+  }
+
+  // ---- Apply a colors object to the live page (overrides the :root defaults) ----
+  function applyThemeColors(colors){
+    if (!colors) return;
+    Object.entries(THEME_FIELD_MAP).forEach(([key, cssVar]) => {
+      if (colors[key]){
+        document.documentElement.style.setProperty(cssVar, colors[key]);
+      }
+    });
+  }
+
+  async function initStoreTheme(){
+    try {
+      const db = await themeWaitForDb();
+      const settingsRef = doc(db, "storeSettings", "main");
+      const snap = await getDoc(settingsRef);
+
+      if (snap.exists()){
+        const data = snap.data();
+        window.__storeSettings = data;
+        applyThemeColors(data.colors);
+      } else {
+        // First run ever: the EXISTING design's own colors become the default —
+        // read directly from the live stylesheet, not invented.
+        const currentColors = readCurrentCssColors();
+        const payload = { defaultColors: currentColors, colors: currentColors };
+        await setDoc(settingsRef, payload);
+        window.__storeSettings = payload;
+        // No need to re-apply — these are already the page's live colors.
+      }
+    } catch (err) {
+      console.error("Failed to load store theme settings:", err);
+    }
+  }
+
+  // ---- Expose for the Admin → Store Settings panel to reuse (no duplicate logic) ----
+  window.THEME_FIELD_MAP = THEME_FIELD_MAP;
+  window.applyThemeColors = applyThemeColors;
+  window.readCurrentCssColors = readCurrentCssColors;
+
+  initStoreTheme();
+</script>
+<!-- ============ END STORE THEME SETTINGS ============ -->
 
 <!-- ============ FIRESTORE: LOAD PRODUCTS (customer storefront) ============ -->
 <!-- Reads the "products" collection and renders active products into the
@@ -2975,6 +3158,7 @@ Please confirm my order.`
     collection,
     getDocs,
     doc,
+    getDoc,
     setDoc,
     updateDoc,
     deleteDoc,
@@ -3152,10 +3336,11 @@ Please confirm my order.`
       btn.classList.toggle("active", btn.getAttribute("data-view") === view);
     });
     document.querySelectorAll(".admin-view").forEach(el => el.classList.remove("active"));
-    const titles = { overview: "Dashboard", products: "Products", orders: "Orders" };
+    const titles = { overview: "Dashboard", products: "Products", orders: "Orders", settings: "Store Settings" };
     document.getElementById("adminViewTitle").textContent = titles[view] || "Dashboard";
     document.getElementById("adminView" + view.charAt(0).toUpperCase() + view.slice(1)).classList.add("active");
     document.getElementById("adminSidebar").classList.remove("mobile-open");
+    if (view === "settings") loadThemeSettingsIntoForm();
   };
 
   window.toggleAdminSidebar = function(){
@@ -4164,6 +4349,124 @@ Please confirm my order.`
     } finally {
       btn.disabled = false;
       btn.textContent = "Delete";
+    }
+  };
+
+  // ---- Store Settings: theme colors (Admin panel) ----
+  // Reuses window.THEME_FIELD_MAP / window.applyThemeColors set up by the
+  // Store Theme Settings script — no duplicate color logic here.
+  function capitalizeThemeKey(key){
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
+  function populateThemeForm(colors){
+    if (!colors || !window.THEME_FIELD_MAP) return;
+    Object.keys(window.THEME_FIELD_MAP).forEach(key => {
+      const suffix = capitalizeThemeKey(key);
+      const colorInput = document.getElementById("themeColor" + suffix);
+      const hexInput = document.getElementById("themeHex" + suffix);
+      const value = colors[key] || "#000000";
+      if (colorInput) colorInput.value = value;
+      if (hexInput) hexInput.value = value.toUpperCase();
+    });
+  }
+
+  async function loadThemeSettingsIntoForm(){
+    let settings = window.__storeSettings;
+    if (!settings || !settings.colors){
+      try {
+        await waitForFirebase();
+        const snap = await getDoc(doc(window.firebaseDb, "storeSettings", "main"));
+        if (snap.exists()) settings = snap.data();
+      } catch (err) {
+        console.error("Failed to load theme settings:", err);
+      }
+    }
+    if (settings && settings.colors) populateThemeForm(settings.colors);
+  }
+
+  // Live-preview as the admin edits either the color swatch or the hex text
+  window.syncThemeHexInput = function(key, colorValue){
+    const suffix = capitalizeThemeKey(key);
+    const hexInput = document.getElementById("themeHex" + suffix);
+    if (hexInput) hexInput.value = colorValue.toUpperCase();
+    if (window.applyThemeColors) window.applyThemeColors({ [key]: colorValue });
+  };
+
+  window.syncThemeColorInput = function(key, hexValue){
+    const value = hexValue.trim();
+    if (!/^#[0-9A-Fa-f]{6}$/.test(value)) return;
+    const suffix = capitalizeThemeKey(key);
+    const colorInput = document.getElementById("themeColor" + suffix);
+    if (colorInput) colorInput.value = value;
+    if (window.applyThemeColors) window.applyThemeColors({ [key]: value });
+  };
+
+  // ---- Save theme: writes ONLY `colors` — `defaultColors` is never touched ----
+  window.saveThemeSettings = async function(){
+    if (!window.THEME_FIELD_MAP) return;
+    const btn = document.getElementById("saveThemeBtn");
+    const label = document.getElementById("saveThemeBtnLabel");
+    const colors = {};
+    let allValid = true;
+
+    Object.keys(window.THEME_FIELD_MAP).forEach(key => {
+      const suffix = capitalizeThemeKey(key);
+      const hexInput = document.getElementById("themeHex" + suffix);
+      const val = hexInput ? hexInput.value.trim() : "";
+      if (!/^#[0-9A-Fa-f]{6}$/.test(val)) allValid = false;
+      colors[key] = val;
+    });
+
+    if (!allValid){
+      showToast("Please enter valid hex colors (e.g. #FB6A19) before saving.");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add("loading");
+    if (label) label.textContent = "Saving…";
+
+    try {
+      await waitForFirebase();
+      await updateDoc(doc(window.firebaseDb, "storeSettings", "main"), { colors });
+      window.__storeSettings = window.__storeSettings || {};
+      window.__storeSettings.colors = colors;
+      window.applyThemeColors(colors);
+      showToast("Theme updated successfully.");
+    } catch (err) {
+      console.error("Failed to save theme settings:", err);
+      showToast("Unable to save theme colors. Please try again.");
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      if (label) label.textContent = "Save Theme";
+    }
+  };
+
+  // ---- Reset: copies defaultColors → colors. defaultColors is never modified. ----
+  window.resetThemeToDefault = async function(){
+    try {
+      await waitForFirebase();
+      let settings = window.__storeSettings;
+      if (!settings || !settings.defaultColors){
+        const snap = await getDoc(doc(window.firebaseDb, "storeSettings", "main"));
+        settings = snap.exists() ? snap.data() : null;
+      }
+      if (!settings || !settings.defaultColors){
+        showToast("Default colors are not available yet.");
+        return;
+      }
+      const defaults = settings.defaultColors;
+      await updateDoc(doc(window.firebaseDb, "storeSettings", "main"), { colors: defaults });
+      window.__storeSettings = settings;
+      window.__storeSettings.colors = defaults;
+      window.applyThemeColors(defaults);
+      populateThemeForm(defaults);
+      showToast("Colors reset to default.");
+    } catch (err) {
+      console.error("Failed to reset theme colors:", err);
+      showToast("Unable to reset colors. Please try again.");
     }
   };
 </script>
