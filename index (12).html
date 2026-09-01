@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +33,7 @@
   .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:20px;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Sora';font-weight:800;font-size:20px;flex-shrink:0;}
   .logo-mark{width:28px;height:28px;border-radius:8px;background:var(--orange);display:inline-block;}
+  .store-logo-img{height:32px;width:auto;max-width:160px;object-fit:contain;display:block;}
   .navlinks{display:flex;gap:28px;font-size:14px;font-weight:500;color:var(--ink);flex-shrink:0;}
   .navlinks a{opacity:0.75;transition:opacity .2s;position:relative;}
   .navlinks a:hover{opacity:1;}
@@ -158,6 +160,24 @@
   .view-btn svg{width:15px;height:15px;stroke:var(--ink);}
   .prod-btns{display:flex;gap:8px;}
 
+  /* ---- Product Card Style variants (Admin → Store Settings → productCardStyle) ---- */
+  /* "classic" is the default/original design above — untouched. */
+  body.card-style-minimal .prod-card{border:none;box-shadow:none;border-radius:12px;}
+  body.card-style-minimal .prod-card:hover{transform:none;box-shadow:none;}
+  body.card-style-minimal .prod-thumb{border-radius:12px;}
+  body.card-style-minimal .prod-cat{display:none;}
+  body.card-style-minimal .prod-body{padding:12px 2px 16px;}
+  body.card-style-minimal .add-btn{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  body.card-style-minimal .add-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  body.card-style-modern .prod-card{border:none;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,0.07);}
+  body.card-style-modern .prod-card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,0.14);}
+  body.card-style-modern .prod-thumb{border-radius:22px 22px 0 0;}
+  body.card-style-modern .prod-cat{display:inline-block;background:var(--teal);color:#fff;padding:3px 10px;border-radius:100px;font-size:10px;letter-spacing:0.02em;}
+  body.card-style-modern .prod-name{font-size:15.5px;}
+  body.card-style-modern .prod-price{font-size:17px;}
+  body.card-style-modern .add-btn{border-radius:100px;}
+
   .section-alt{background:#FBF8F3;}
 
   /* ---- Firestore product card additions ---- */
@@ -225,6 +245,7 @@
   .cart-drawer-foot{border-top:1px solid var(--line);padding:16px 20px 22px;display:flex;flex-direction:column;gap:10px;}
   .cart-sum-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);}
   .cart-sum-row.total{font-size:16px;font-weight:800;color:var(--ink);font-family:'Sora';}
+  .checkout-col-right .cart-sum-row{margin-bottom:10px;}
   .cart-clear-btn{background:none;border:1px solid var(--line);border-radius:100px;padding:10px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--muted);transition:border-color .2s,color .2s;}
   .cart-clear-btn:hover{border-color:#B3261E;color:#B3261E;}
 
@@ -358,13 +379,14 @@
   .checkout-body h2{font-size:20px;font-weight:700;margin-bottom:18px;}
   .form-group{margin-bottom:14px;}
   .form-group label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
-  .form-group input,.form-group textarea{width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:13.5px;font-family:'Inter';color:var(--ink);transition:border-color .2s,box-shadow .2s;}
-  .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(251,106,25,0.12);}
+  .form-group input,.form-group textarea,.form-group select{width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:13.5px;font-family:'Inter';color:var(--ink);transition:border-color .2s,box-shadow .2s;}
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(251,106,25,0.12);}
   .form-group textarea{resize:vertical;min-height:70px;}
   .form-error{font-size:12px;color:#B3261E;margin-top:5px;display:none;}
   .form-error.show{display:block;}
   .form-group.invalid input,.form-group.invalid textarea{border-color:#B3261E;}
   .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .form-row-2 .form-group:only-child{grid-column:1 / -1;}
 
   /* two-column checkout layout: left = customer/delivery details, right = order summary/payment/place-order */
   .checkout-box.checkout-box-v2{max-width:920px;}
@@ -461,6 +483,24 @@
 
   .admin-panel{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:24px;}
   .admin-panel-head{padding:16px 20px;border-bottom:1px solid var(--line);font-size:15px;font-weight:700;}
+
+  /* ---- Admin: Store Settings (theme colors) ---- */
+  .settings-panel-body{padding:22px 24px 26px;}
+  .settings-hint{font-size:13px;color:var(--muted);margin:0 0 22px;max-width:640px;line-height:1.6;}
+  .theme-color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-bottom:26px;}
+  .theme-color-field label{display:block;font-size:12.5px;font-weight:700;margin-bottom:8px;color:var(--ink);}
+  .theme-color-field label span{display:block;font-size:11.5px;font-weight:500;color:var(--muted);margin-top:2px;}
+  .color-input-row{display:flex;align-items:center;gap:8px;}
+  .color-input-row input[type="color"]{width:42px;height:38px;border:1px solid var(--line);border-radius:9px;padding:2px;cursor:pointer;background:#fff;flex-shrink:0;}
+  .color-input-row input[type="text"]{flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13px;font-family:'Inter';color:var(--ink);text-transform:uppercase;}
+  .color-input-row input[type="text"]:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(251,106,25,0.12);}
+  .settings-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;}
+  .settings-actions .btn-ghost{flex:none;}
+  .settings-actions .place-order-btn{flex:none;min-width:150px;}
+  @media(max-width:560px){
+    .settings-actions{flex-direction:column-reverse;}
+    .settings-actions .btn-ghost,.settings-actions .place-order-btn{width:100%;text-align:center;}
+  }
   .admin-table-wrap{overflow-x:auto;}
   table.admin-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
   table.admin-table th{text-align:left;padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;color:var(--muted);background:#FBF8F3;white-space:nowrap;}
@@ -924,7 +964,7 @@
         <a href="#categories">Displays</a>
         <a href="#categories">Accessories</a>
       </div>
-      <div class="foot-col">
+      <div class="foot-col" id="footSupportCol">
         <h4>Support</h4>
         <a href="#">Delivery info</a>
         <a href="#">Returns policy</a>
@@ -969,6 +1009,7 @@
     <div class="cart-drawer-items" id="cartItems"></div>
     <div class="cart-drawer-foot" id="cartFoot">
       <div class="cart-sum-row"><span>Subtotal</span><span id="cartSubtotal">Rs. 0</span></div>
+      <div class="cart-sum-row"><span>Delivery</span><span id="cartDelivery">Free Delivery</span></div>
       <div class="cart-sum-row total"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
       <button class="btn-primary" id="checkoutBtn" onclick="openCheckout()" style="width:100%;">Proceed to Checkout</button>
       <button class="cart-clear-btn" id="clearCartBtn" onclick="clearCart()">Clear Cart</button>
@@ -1001,7 +1042,7 @@
         <h2>Customer / Delivery Details</h2>
 
         <form id="checkoutForm" onsubmit="return false;">
-          <div class="form-row-2">
+          <div class="form-row-2" id="rowNameFields">
             <div class="form-group" id="fieldFirstName">
               <label for="custFirstName">First Name</label>
               <input type="text" id="custFirstName" placeholder="e.g. Nimal" autocomplete="given-name">
@@ -1013,7 +1054,7 @@
               <span class="form-error" id="errLastName">Please enter your last name.</span>
             </div>
           </div>
-          <div class="form-row-2">
+          <div class="form-row-2" id="rowContactFields">
             <div class="form-group" id="fieldContact1">
               <label for="custContact1">Contact 1</label>
               <input type="tel" id="custContact1" placeholder="e.g. 0771234567" autocomplete="tel">
@@ -1043,6 +1084,8 @@
         <h2>Your Order</h2>
 
         <div class="order-summary" id="checkoutSummary"></div>
+        <div class="cart-sum-row"><span>Subtotal</span><span id="checkoutSubtotal">Rs. 0</span></div>
+        <div class="cart-sum-row"><span>Delivery</span><span id="checkoutDelivery">Free Delivery</span></div>
         <div class="order-total-row"><span>Total</span><span id="checkoutTotal">Rs. 0</span></div>
 
         <div class="payment-note">
@@ -1124,6 +1167,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         Orders
         <span class="nav-badge" id="ordersNavBadge">0</span>
+      </button>
+      <button class="admin-nav-item" data-view="settings" onclick="switchAdminView('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Store Settings
       </button>
       <div class="admin-sidebar-foot">
         <button class="admin-nav-item" onclick="adminLogout()">
@@ -1234,6 +1281,215 @@
           <div class="admin-cards" id="adminOrdersCards">
             <div class="admin-loading-row" style="text-align:center;padding:30px;color:var(--muted);">Loading orders…</div>
           </div>
+        </div>
+      </div>
+
+      <!-- ---- Settings view ---- -->
+      <div class="admin-view" id="adminViewSettings">
+        <div class="settings-hint" style="margin:0 0 22px;">Configure your store here. These settings are saved to Firestore — the customer store will start using them once Part 2 connects them; for now this only manages the data.</div>
+
+        <!-- Store Information -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Store Information</div>
+          <div class="settings-panel-body">
+            <div class="form-group">
+              <label for="settingsStoreName">Store Name</label>
+              <input type="text" id="settingsStoreName" placeholder="e.g. Northline">
+            </div>
+            <div class="form-group">
+              <label for="settingsBusinessAddress">Business Address</label>
+              <textarea id="settingsBusinessAddress" placeholder="Street, city, postal code…"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="settingsLogoUrl">Logo Image URL</label>
+              <input type="text" id="settingsLogoUrl" placeholder="https://example.com/logo.png" oninput="handleSettingsLogoUrlInput(this.value)">
+              <div class="image-url-preview" id="settingsLogoPreviewWrap" style="display:none;height:110px;max-width:220px;">
+                <img id="settingsLogoPreviewImg" src="" alt="" onload="document.getElementById('settingsLogoPreviewWrap').style.display='flex'" onerror="document.getElementById('settingsLogoPreviewWrap').style.display='none'">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Theme</div>
+          <div class="settings-panel-body">
+            <p class="settings-hint">These are the colors currently used across your storefront. Saving here only stores the setting — the live site keeps its current appearance until Part 2 connects this.</p>
+            <div class="theme-color-grid" id="themeColorGrid">
+              <div class="theme-color-field">
+                <label>Primary<span>Text, buttons &amp; headings</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorPrimary" oninput="syncThemeHexInput('primary', this.value)">
+                  <input type="text" id="themeHexPrimary" maxlength="7" oninput="syncThemeColorInput('primary', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Secondary<span>Stock badges &amp; highlights</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorSecondary" oninput="syncThemeHexInput('secondary', this.value)">
+                  <input type="text" id="themeHexSecondary" maxlength="7" oninput="syncThemeColorInput('secondary', this.value)">
+                </div>
+              </div>
+              <div class="theme-color-field">
+                <label>Accent<span>Buttons &amp; call-to-action</span></label>
+                <div class="color-input-row">
+                  <input type="color" id="themeColorAccent" oninput="syncThemeHexInput('accent', this.value)">
+                  <input type="text" id="themeHexAccent" maxlength="7" oninput="syncThemeColorInput('accent', this.value)">
+                </div>
+              </div>
+            </div>
+            <div class="settings-actions" style="border-top:none;padding-top:0;justify-content:flex-start;">
+              <button type="button" class="btn-ghost" onclick="resetThemeToDefault()">Reset Colors to Default</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Card -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Product Card</div>
+          <div class="settings-panel-body">
+            <div class="form-group" style="margin-bottom:0;max-width:320px;">
+              <label for="settingsCardStyle">Product Card Style</label>
+              <select id="settingsCardStyle">
+                <option value="classic">Classic</option>
+                <option value="minimal">Minimal</option>
+                <option value="modern">Modern</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Currency & Delivery -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Currency &amp; Delivery</div>
+          <div class="settings-panel-body">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="settingsCurrency">Currency</label>
+                <select id="settingsCurrency">
+                  <option value="LKR">LKR — Sri Lankan Rupee</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="settingsDeliveryCharge">Delivery Charge (Rs.)</label>
+                <input type="number" id="settingsDeliveryCharge" min="0" step="0.01" placeholder="0">
+              </div>
+            </div>
+            <p class="settings-hint" style="margin:0;">0 = Free Delivery. Any positive number is charged in LKR.</p>
+          </div>
+        </div>
+
+        <!-- Checkout Fields -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Checkout Fields</div>
+          <div class="settings-panel-body">
+            <div class="toggle-row">
+              <label for="cfFirstName">First Name</label>
+              <label class="switch"><input type="checkbox" id="cfFirstName" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <label for="cfLastName">Last Name</label>
+              <label class="switch"><input type="checkbox" id="cfLastName" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <label for="cfContact1">Contact 1</label>
+              <label class="switch"><input type="checkbox" id="cfContact1" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <label for="cfContact2">Contact 2</label>
+              <label class="switch"><input type="checkbox" id="cfContact2" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <label for="cfStreetAddress">Street Address</label>
+              <label class="switch"><input type="checkbox" id="cfStreetAddress" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row" style="margin-bottom:0;">
+              <label for="cfCity">City</label>
+              <label class="switch"><input type="checkbox" id="cfCity" checked><span class="switch-track"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Footer Links</div>
+          <div class="settings-panel-body">
+            <div class="form-group">
+              <label for="settingsFooterLinksTitle">Links Column Title</label>
+              <input type="text" id="settingsFooterLinksTitle" placeholder="e.g. Support">
+            </div>
+            <div class="spec-builder" id="footerLinksRows"></div>
+            <button type="button" class="spec-add-btn" onclick="addFooterLinkRow()">+ Add Link</button>
+          </div>
+        </div>
+
+        <!-- Footer Content -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Footer Content</div>
+          <div class="settings-panel-body">
+            <div class="form-group">
+              <label for="settingsFooterDescription">Brand Description</label>
+              <textarea id="settingsFooterDescription" placeholder="Short description shown under the logo in the footer"></textarea>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="settingsNewsletterTitle">Newsletter Title</label>
+                <input type="text" id="settingsNewsletterTitle" placeholder="e.g. Stay updated">
+              </div>
+              <div class="form-group">
+                <label for="settingsNewsletterText">Newsletter Text</label>
+                <input type="text" id="settingsNewsletterText" placeholder="e.g. Get notified about new arrivals and offers.">
+              </div>
+            </div>
+            <div class="form-row-2" style="margin-bottom:0;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="settingsCopyrightLeft">Copyright Text (left)</label>
+                <input type="text" id="settingsCopyrightLeft" placeholder="e.g. Northline — premium storefront layout.">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="settingsCopyrightRight">Copyright Text (right)</label>
+                <input type="text" id="settingsCopyrightRight" placeholder="e.g. © 2026">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Social Media</div>
+          <div class="settings-panel-body">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="socialFacebook">Facebook</label>
+                <input type="text" id="socialFacebook" placeholder="https://facebook.com/yourpage">
+              </div>
+              <div class="form-group">
+                <label for="socialInstagram">Instagram</label>
+                <input type="text" id="socialInstagram" placeholder="https://instagram.com/yourpage">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="socialTiktok">TikTok</label>
+                <input type="text" id="socialTiktok" placeholder="https://tiktok.com/@yourpage">
+              </div>
+              <div class="form-group">
+                <label for="socialYoutube">YouTube</label>
+                <input type="text" id="socialYoutube" placeholder="https://youtube.com/@yourpage">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;max-width:100%;">
+              <label for="socialWhatsapp">WhatsApp</label>
+              <input type="text" id="socialWhatsapp" placeholder="https://wa.me/94xxxxxxxxx">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-actions" style="border-top:none;">
+          <button class="place-order-btn" id="saveSettingsBtn" onclick="saveStoreSettings()">
+            <span class="spinner"></span>
+            <span id="saveSettingsBtnLabel">Save Store Settings</span>
+          </button>
         </div>
       </div>
     </main>
@@ -1455,6 +1711,322 @@
 </script>
 <!-- ============ END FIREBASE INITIALIZATION ============ -->
 
+<!-- ============ STORE SETTINGS (Admin-managed configuration) ============ -->
+<!-- Reads storeSettings/main from Firestore so the Admin → Store Settings
+     panel has data to load. The FIRST time this document doesn't exist,
+     the store's CURRENT, live configuration is captured directly from the
+     existing page (colors from :root, store name from the header logo,
+     existing checkout field usage, etc.) and saved as the starting point —
+     nothing is invented or guessed. PART 1: this data is only stored and
+     made editable in the Admin panel — it is NOT yet applied to the
+     customer-facing storefront (that's Part 2). -->
+<script type="module">
+  import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  // Maps each theme role to the actual CSS custom property already used
+  // throughout the existing stylesheet — no new palette is introduced.
+  const THEME_FIELD_MAP = {
+    primary: "--ink",
+    secondary: "--teal",
+    accent: "--orange"
+  };
+
+  function themeWaitForDb(){
+    return new Promise((resolve) => {
+      if (window.firebaseDb) return resolve(window.firebaseDb);
+      const iv = setInterval(() => {
+        if (window.firebaseDb) { clearInterval(iv); resolve(window.firebaseDb); }
+      }, 30);
+    });
+  }
+
+  // ---- Read the colors currently hard-coded in :root (the existing design) ----
+  function readCurrentCssColors(){
+    const styles = getComputedStyle(document.documentElement);
+    const colors = {};
+    Object.entries(THEME_FIELD_MAP).forEach(([key, cssVar]) => {
+      const value = styles.getPropertyValue(cssVar);
+      colors[key] = value ? value.trim() : "";
+    });
+    return colors;
+  }
+
+  // ---- Apply a colors object to the CURRENT page only (used by the Admin
+  //      Store Settings panel for live preview while editing — this never
+  //      runs on a normal customer page load in Part 1). ----
+  function applyThemeColors(colors){
+    if (!colors) return;
+    Object.entries(THEME_FIELD_MAP).forEach(([key, cssVar]) => {
+      if (colors[key]){
+        document.documentElement.style.setProperty(cssVar, colors[key]);
+      }
+    });
+  }
+
+  // ---- Build the full first-run defaults from what's ACTUALLY on the page today ----
+  function readCurrentSiteDefaults(){
+    const colors = readCurrentCssColors();
+
+    const logoEl = document.querySelector("header .logo");
+    const storeName = logoEl ? logoEl.textContent.trim() : "";
+
+    const socialLinks = { facebook: "", instagram: "", tiktok: "", youtube: "", whatsapp: "" };
+    const socialLabelMap = { facebook: "facebook", instagram: "instagram", tiktok: "tiktok", youtube: "youtube", whatsapp: "whatsapp" };
+    document.querySelectorAll(".foot-social a").forEach(a => {
+      const title = (a.getAttribute("title") || "").trim().toLowerCase();
+      const href = (a.getAttribute("href") || "").trim();
+      const key = Object.keys(socialLabelMap).find(k => socialLabelMap[k] === title);
+      if (key && href && href !== "#"){
+        socialLinks[key] = href;
+      }
+    });
+
+    const footBrandDescEl = document.querySelector(".foot-brand p");
+    const footHeadingEl = document.getElementById("footSupportCol") ? document.getElementById("footSupportCol").querySelector("h4") : null;
+    const newsletterHeadingEl = document.querySelector(".foot-news h4");
+    const newsletterParaEl = document.querySelector(".foot-news p");
+    const footRowSpanEls = document.querySelectorAll(".foot-row span");
+
+    return {
+      storeName,
+      businessAddress: "",
+      logoUrl: "",
+      colors,
+      defaultColors: colors,
+      productCardStyle: "classic",
+      currency: "LKR",
+      deliveryCharge: 0,
+      // Mirrors the fields the existing checkout form already collects/requires.
+      checkoutFields: {
+        firstName: true,
+        lastName: true,
+        contact1: true,
+        contact2: true,
+        streetAddress: true,
+        city: true
+      },
+      footerLinks: [],
+      footerLinksTitle: footHeadingEl ? footHeadingEl.textContent.trim() : "",
+      footerBrandDescription: footBrandDescEl ? footBrandDescEl.textContent.trim() : "",
+      newsletterTitle: newsletterHeadingEl ? newsletterHeadingEl.textContent.trim() : "",
+      newsletterText: newsletterParaEl ? newsletterParaEl.textContent.trim() : "",
+      footerCopyrightLeft: footRowSpanEls[0] ? footRowSpanEls[0].textContent.trim() : "",
+      footerCopyrightRight: footRowSpanEls[1] ? footRowSpanEls[1].textContent.trim() : "",
+      socialLinks
+    };
+  }
+
+  // ============================================================
+  // ============ PART 2: APPLY SETTINGS TO CUSTOMER STORE ======
+  // ============================================================
+
+  function isValidStoreImageUrl(url){
+    return typeof url === "string" && /^https?:\/\//i.test(url.trim());
+  }
+
+  // ---- Central price formatter — used everywhere a price is shown. ----
+  function formatStorePrice(amount){
+    const n = Number(amount);
+    const safeAmount = isNaN(n) ? 0 : n;
+    // Only LKR is currently offered in Admin → Store Settings; formatted as "Rs. 1,500".
+    return "Rs. " + safeAmount.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  }
+  window.formatStorePrice = formatStorePrice;
+
+  // ---- Delivery charge / currency getters (safe defaults if settings are missing) ----
+  window.getStoreDeliveryCharge = function(){
+    const settings = window.__storeSettings;
+    const raw = settings && typeof settings.deliveryCharge !== "undefined" ? Number(settings.deliveryCharge) : 0;
+    return isNaN(raw) || raw < 0 ? 0 : raw;
+  };
+
+  const DEFAULT_CHECKOUT_FIELDS = {
+    firstName: true, lastName: true, contact1: true, contact2: true, streetAddress: true, city: true
+  };
+  window.getCheckoutFieldsConfig = function(){
+    const settings = window.__storeSettings;
+    const cf = (settings && settings.checkoutFields) || DEFAULT_CHECKOUT_FIELDS;
+    return {
+      firstName: cf.firstName !== false,
+      lastName: cf.lastName !== false,
+      contact1: cf.contact1 !== false,
+      contact2: cf.contact2 !== false,
+      streetAddress: cf.streetAddress !== false,
+      city: cf.city !== false
+    };
+  };
+
+  // ---- Store name / logo, applied to header, mobile menu, and footer ----
+  function applyStoreBranding(settings){
+    const storeName = (settings.storeName || "").trim();
+    const logoUrl = (settings.logoUrl || "").trim();
+
+    document.querySelectorAll("header .logo, .mobile-menu-head .logo, footer .foot-brand .logo").forEach(logoEl => {
+      if (!logoEl.dataset.originalName){
+        logoEl.dataset.originalName = logoEl.textContent.trim();
+      }
+      const nameToShow = storeName || logoEl.dataset.originalName;
+
+      logoEl.innerHTML = "";
+      if (logoUrl && isValidStoreImageUrl(logoUrl)){
+        const img = document.createElement("img");
+        img.className = "store-logo-img";
+        img.alt = nameToShow;
+        img.onerror = function(){
+          // Broken/failed logo image — fall back to the existing mark + store name, never a broken icon.
+          logoEl.innerHTML = "";
+          const mark = document.createElement("span");
+          mark.className = "logo-mark";
+          logoEl.appendChild(mark);
+          logoEl.appendChild(document.createTextNode(nameToShow));
+        };
+        img.src = logoUrl;
+        logoEl.appendChild(img);
+      } else {
+        const mark = document.createElement("span");
+        mark.className = "logo-mark";
+        logoEl.appendChild(mark);
+        logoEl.appendChild(document.createTextNode(nameToShow));
+      }
+    });
+
+    if (storeName){
+      document.title = storeName;
+      const footTagline = document.querySelector(".foot-row span:first-child");
+      if (footTagline) footTagline.textContent = storeName + " — premium storefront layout.";
+    }
+  }
+
+  // ---- Footer links: only replace the "Support" column when Admin has configured real links ----
+  function applyFooterLinks(settings){
+    const links = Array.isArray(settings.footerLinks)
+      ? settings.footerLinks.filter(l => l && typeof l.title === "string" && l.title.trim() && typeof l.url === "string" && l.url.trim())
+      : [];
+    const customTitle = (settings.footerLinksTitle || "").trim();
+
+    const col = document.getElementById("footSupportCol");
+    if (!col) return;
+    const heading = col.querySelector("h4");
+    if (customTitle && heading) heading.textContent = customTitle;
+
+    if (!links.length) return; // keep the existing hardcoded Support links — clean footer, nothing broken
+
+    col.innerHTML = "";
+    col.appendChild(heading || Object.assign(document.createElement("h4"), { textContent: customTitle || "Links" }));
+
+    links.forEach(link => {
+      const url = link.url.trim();
+      const a = document.createElement("a");
+      a.textContent = link.title.trim();
+      a.href = url;
+      if (/^https?:\/\//i.test(url)){
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+      }
+      col.appendChild(a);
+    });
+  }
+
+  // ---- Brand description, newsletter title/text, and copyright bar ----
+  function applyFooterContent(settings){
+    const description = (settings.footerBrandDescription || "").trim();
+    if (description){
+      const descEl = document.querySelector(".foot-brand p");
+      if (descEl) descEl.textContent = description;
+    }
+
+    const newsletterTitle = (settings.newsletterTitle || "").trim();
+    const newsletterText = (settings.newsletterText || "").trim();
+    const newsletterHeading = document.querySelector(".foot-news h4");
+    const newsletterPara = document.querySelector(".foot-news p");
+    if (newsletterTitle && newsletterHeading) newsletterHeading.textContent = newsletterTitle;
+    if (newsletterText && newsletterPara) newsletterPara.textContent = newsletterText;
+
+    const copyLeft = (settings.footerCopyrightLeft || "").trim();
+    const copyRight = (settings.footerCopyrightRight || "").trim();
+    const footRowSpans = document.querySelectorAll(".foot-row span");
+    if (copyLeft && footRowSpans[0]) footRowSpans[0].textContent = copyLeft;
+    if (copyRight && footRowSpans[1]) footRowSpans[1].textContent = copyRight;
+  }
+
+  // ---- Social links: show only configured, valid, non-empty URLs ----
+  const SOCIAL_ICON_LABEL = { facebook: "f", instagram: "ig", tiktok: "tt", youtube: "yt", whatsapp: "wa" };
+  const SOCIAL_TITLE = { facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube", whatsapp: "WhatsApp" };
+  function applySocialLinks(settings){
+    if (!settings || !settings.socialLinks) return; // field entirely absent — keep existing footer icons untouched
+    const sl = settings.socialLinks;
+    const container = document.querySelector(".foot-social");
+    if (!container) return;
+
+    const entries = Object.keys(SOCIAL_ICON_LABEL)
+      .map(key => ({ key, url: (sl[key] || "").trim() }))
+      .filter(e => e.url && /^https?:\/\//i.test(e.url));
+
+    container.innerHTML = ""; // clean footer — no broken/placeholder icons either way
+    entries.forEach(({ key, url }) => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.title = SOCIAL_TITLE[key];
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = SOCIAL_ICON_LABEL[key];
+      container.appendChild(a);
+    });
+  }
+
+  // ---- Product card style: classic (default, untouched) / minimal / modern ----
+  function applyProductCardStyle(settings){
+    const style = settings.productCardStyle || "classic";
+    document.body.classList.remove("card-style-minimal", "card-style-modern");
+    if (style === "minimal" || style === "modern"){
+      document.body.classList.add("card-style-" + style);
+    }
+  }
+
+  // ---- Run every customer-facing application step from one place ----
+  function applySettingsToStorefront(settings){
+    if (!settings) return;
+    if (settings.colors) applyThemeColors(settings.colors);
+    applyStoreBranding(settings);
+    applyFooterLinks(settings);
+    applyFooterContent(settings);
+    applySocialLinks(settings);
+    applyProductCardStyle(settings);
+    document.dispatchEvent(new CustomEvent("storeSettings:ready", { detail: settings }));
+  }
+
+  async function initStoreSettings(){
+    try {
+      const db = await themeWaitForDb();
+      const settingsRef = doc(db, "storeSettings", "main");
+      const snap = await getDoc(settingsRef);
+
+      if (snap.exists()){
+        window.__storeSettings = snap.data();
+      } else {
+        // First run ever: capture the store's own current configuration.
+        const payload = readCurrentSiteDefaults();
+        await setDoc(settingsRef, payload);
+        window.__storeSettings = payload;
+      }
+    } catch (err) {
+      console.error("Failed to load store settings:", err);
+      // Settings failed to load entirely — the store still works using existing index.html defaults.
+    } finally {
+      // Whether settings loaded, were just created, or failed — the storefront must never be blocked.
+      applySettingsToStorefront(window.__storeSettings || {});
+    }
+  }
+
+  // ---- Expose for the Admin → Store Settings panel to reuse (no duplicate logic) ----
+  window.THEME_FIELD_MAP = THEME_FIELD_MAP;
+  window.applyThemeColors = applyThemeColors;
+  window.readCurrentCssColors = readCurrentCssColors;
+
+  initStoreSettings();
+</script>
+<!-- ============ END STORE SETTINGS ============ -->
+
 <!-- ============ FIRESTORE: LOAD PRODUCTS (customer storefront) ============ -->
 <!-- Reads the "products" collection and renders active products into the
      Featured Products and New Arrivals grids using the existing card design.
@@ -1481,6 +2053,7 @@
 
   // ---- Helpers ----
   function formatPrice(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -1737,6 +2310,7 @@
   }
 
   function pdpFormatPrice(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -2334,6 +2908,7 @@ function showToast(message){
   }
 
   function formatPriceLKR(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return 'Rs. 0';
     return 'Rs. ' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -2494,10 +3069,13 @@ function showToast(message){
     }).join('');
 
     const subtotal = cartSubtotal(cart);
+    const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
     const totalEl = document.getElementById('cartTotal');
     const subtotalEl = document.getElementById('cartSubtotal');
+    const deliveryEl = document.getElementById('cartDelivery');
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
-    if (totalEl) totalEl.textContent = formatPriceLKR(subtotal); // Total = Subtotal for now (no delivery yet)
+    if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : 'Free Delivery';
+    if (totalEl) totalEl.textContent = formatPriceLKR(subtotal + deliveryCharge);
   }
 
   function escapeHtmlCart(str){
@@ -2668,6 +3246,7 @@ function showToast(message){
   let lastOrderForWhatsapp = null;
 
   function formatPriceLKR(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -2685,6 +3264,30 @@ function showToast(message){
     return /^(?:\+94|0)(7\d{8}|[1-9]\d{8})$/.test(cleaned);
   }
 
+  // ---- Show/hide checkout fields per Admin → Store Settings → Checkout Fields ----
+  function applyCheckoutFieldVisibility(){
+    const cf = window.getCheckoutFieldsConfig ? window.getCheckoutFieldsConfig() : {
+      firstName: true, lastName: true, contact1: true, contact2: true, streetAddress: true, city: true
+    };
+    const setVisible = (id, visible) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = visible ? "" : "none";
+    };
+    setVisible("fieldFirstName", cf.firstName);
+    setVisible("fieldLastName", cf.lastName);
+    setVisible("fieldContact1", cf.contact1);
+    setVisible("fieldContact2", cf.contact2);
+    setVisible("fieldStreetAddress", cf.streetAddress);
+    setVisible("fieldCity", cf.city);
+
+    const rowName = document.getElementById("rowNameFields");
+    if (rowName) rowName.style.display = (cf.firstName || cf.lastName) ? "" : "none";
+    const rowContact = document.getElementById("rowContactFields");
+    if (rowContact) rowContact.style.display = (cf.contact1 || cf.contact2) ? "" : "none";
+
+    return cf;
+  }
+
   // ---- Checkout modal open/close ----
   window.openCheckout = function(){
     const cart = window.getCart ? window.getCart() : [];
@@ -2693,6 +3296,7 @@ function showToast(message){
       return;
     }
     window.closeCartDrawer && window.closeCartDrawer();
+    applyCheckoutFieldVisibility();
     renderCheckoutSummary();
     hideCheckoutError();
     document.getElementById("checkoutModal").classList.add("open");
@@ -2707,19 +3311,26 @@ function showToast(message){
   function renderCheckoutSummary(){
     const cart = window.getCart ? window.getCart() : [];
     const summaryEl = document.getElementById("checkoutSummary");
+    const subtotalEl = document.getElementById("checkoutSubtotal");
+    const deliveryEl = document.getElementById("checkoutDelivery");
     const totalEl = document.getElementById("checkoutTotal");
     if (!summaryEl) return;
 
     summaryEl.innerHTML = cart.map(item => {
-      const subtotal = item.price * item.qty;
+      const lineTotal = item.price * item.qty;
       return `
         <div class="order-summary-row">
           <span class="osr-name">${escapeHtmlCheckout(item.name)}</span>
-          <span class="osr-calc">${formatPriceLKR(item.price)} × ${item.qty} = ${formatPriceLKR(subtotal)}</span>
+          <span class="osr-calc">${formatPriceLKR(item.price)} × ${item.qty} = ${formatPriceLKR(lineTotal)}</span>
         </div>`;
     }).join("");
 
-    const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
+    const total = subtotal + deliveryCharge;
+
+    if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
+    if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : "Free Delivery";
     if (totalEl) totalEl.textContent = formatPriceLKR(total);
   }
 
@@ -2732,19 +3343,24 @@ function showToast(message){
   }
 
   function validateForm(){
-    const firstName = document.getElementById("custFirstName").value.trim();
-    const lastName = document.getElementById("custLastName").value.trim();
-    const contact1 = document.getElementById("custContact1").value.trim();
-    const contact2 = document.getElementById("custContact2").value.trim();
-    const streetAddress = document.getElementById("custStreetAddress").value.trim();
-    const city = document.getElementById("custCity").value.trim();
+    const cf = window.getCheckoutFieldsConfig ? window.getCheckoutFieldsConfig() : {
+      firstName: true, lastName: true, contact1: true, contact2: true, streetAddress: true, city: true
+    };
 
-    const firstNameValid = firstName.length > 0;
-    const lastNameValid = lastName.length > 0;
-    const contact1Valid = contact1.length > 0 && isValidSLPhone(contact1);
-    const contact2Valid = contact2.length > 0 && isValidSLPhone(contact2);
-    const streetAddressValid = streetAddress.length > 0;
-    const cityValid = city.length > 0;
+    const firstName = cf.firstName ? document.getElementById("custFirstName").value.trim() : "";
+    const lastName = cf.lastName ? document.getElementById("custLastName").value.trim() : "";
+    const contact1 = cf.contact1 ? document.getElementById("custContact1").value.trim() : "";
+    const contact2 = cf.contact2 ? document.getElementById("custContact2").value.trim() : "";
+    const streetAddress = cf.streetAddress ? document.getElementById("custStreetAddress").value.trim() : "";
+    const city = cf.city ? document.getElementById("custCity").value.trim() : "";
+
+    // A field that's disabled in Admin Settings is never required and never invalid.
+    const firstNameValid = !cf.firstName || firstName.length > 0;
+    const lastNameValid = !cf.lastName || lastName.length > 0;
+    const contact1Valid = !cf.contact1 || (contact1.length > 0 && isValidSLPhone(contact1));
+    const contact2Valid = !cf.contact2 || (contact2.length > 0 && isValidSLPhone(contact2));
+    const streetAddressValid = !cf.streetAddress || streetAddress.length > 0;
+    const cityValid = !cf.city || city.length > 0;
 
     setFieldError("fieldFirstName", "errFirstName", !firstNameValid);
     setFieldError("fieldLastName", "errLastName", !lastNameValid);
@@ -2756,18 +3372,19 @@ function showToast(message){
     const allValid = firstNameValid && lastNameValid && contact1Valid && contact2Valid && streetAddressValid && cityValid;
     if (!allValid) return null;
 
-    return {
-      firstName,
-      lastName,
-      contact1,
-      contact2,
-      streetAddress,
-      city,
-      // ---- compatibility fields for existing order structure ----
-      customerName: `${firstName} ${lastName}`,
-      phone: contact1,
-      address: `${streetAddress}, ${city}`
-    };
+    // ---- Build safe compatibility fields — never "undefined"/"null" text for a disabled field ----
+    const customerName = [firstName, lastName].filter(Boolean).join(" ") || "Customer";
+    const phone = contact1 || "";
+    const address = [streetAddress, city].filter(Boolean).join(", ");
+
+    const result = { customerName, phone, address };
+    if (cf.firstName) result.firstName = firstName;
+    if (cf.lastName) result.lastName = lastName;
+    if (cf.contact1) result.contact1 = contact1;
+    if (cf.contact2) result.contact2 = contact2;
+    if (cf.streetAddress) result.streetAddress = streetAddress;
+    if (cf.city) result.city = city;
+    return result;
   }
 
   function showCheckoutError(message){
@@ -2835,24 +3452,31 @@ function showToast(message){
         qty: item.qty
       }));
 
-      const totalAmount = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
+      const totalAmount = subtotal + deliveryCharge;
 
-      const orderRef = await addDoc(collection(db, "orders"), {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        contact1: formData.contact1,
-        contact2: formData.contact2,
-        streetAddress: formData.streetAddress,
-        city: formData.city,
+      // ---- Only include a field if it was actually collected (Admin may have disabled it) ----
+      const orderPayload = {
         // ---- compatibility fields for existing order structure ----
         customerName: formData.customerName,
         phone: formData.phone,
         address: formData.address,
         items: orderItems,
+        subtotal,
+        deliveryCharge,
         totalAmount,
         status: "pending",
         createdAt: serverTimestamp()
-      });
+      };
+      if (formData.firstName !== undefined) orderPayload.firstName = formData.firstName;
+      if (formData.lastName !== undefined) orderPayload.lastName = formData.lastName;
+      if (formData.contact1 !== undefined) orderPayload.contact1 = formData.contact1;
+      if (formData.contact2 !== undefined) orderPayload.contact2 = formData.contact2;
+      if (formData.streetAddress !== undefined) orderPayload.streetAddress = formData.streetAddress;
+      if (formData.city !== undefined) orderPayload.city = formData.city;
+
+      const orderRef = await addDoc(collection(db, "orders"), orderPayload);
 
       // ---- Success: clear cart, reset form, show success modal ----
       lastOrderForWhatsapp = {
@@ -2975,6 +3599,7 @@ Please confirm my order.`
     collection,
     getDocs,
     doc,
+    getDoc,
     setDoc,
     updateDoc,
     deleteDoc,
@@ -3035,6 +3660,7 @@ Please confirm my order.`
   }
 
   function formatPriceLKR(value){
+    if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
     if (isNaN(n)) return "Rs. 0";
     return "Rs. " + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -3152,10 +3778,11 @@ Please confirm my order.`
       btn.classList.toggle("active", btn.getAttribute("data-view") === view);
     });
     document.querySelectorAll(".admin-view").forEach(el => el.classList.remove("active"));
-    const titles = { overview: "Dashboard", products: "Products", orders: "Orders" };
+    const titles = { overview: "Dashboard", products: "Products", orders: "Orders", settings: "Store Settings" };
     document.getElementById("adminViewTitle").textContent = titles[view] || "Dashboard";
     document.getElementById("adminView" + view.charAt(0).toUpperCase() + view.slice(1)).classList.add("active");
     document.getElementById("adminSidebar").classList.remove("mobile-open");
+    if (view === "settings") loadStoreSettingsIntoForm();
   };
 
   window.toggleAdminSidebar = function(){
@@ -4164,6 +4791,306 @@ Please confirm my order.`
     } finally {
       btn.disabled = false;
       btn.textContent = "Delete";
+    }
+  };
+
+  // ---- Store Settings (Admin panel) ----
+  // Reuses window.THEME_FIELD_MAP / window.applyThemeColors set up by the
+  // Store Settings init script — no duplicate color logic here.
+  let footerLinkRowIdCounter = 0;
+
+  function capitalizeThemeKey(key){
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
+  function populateThemeForm(colors){
+    if (!window.THEME_FIELD_MAP) return;
+    const fallback = (window.readCurrentCssColors ? window.readCurrentCssColors() : null) || {};
+    Object.keys(window.THEME_FIELD_MAP).forEach(key => {
+      const suffix = capitalizeThemeKey(key);
+      const colorInput = document.getElementById("themeColor" + suffix);
+      const hexInput = document.getElementById("themeHex" + suffix);
+      const value = (colors && colors[key]) || fallback[key] || "#000000";
+      if (colorInput) colorInput.value = value;
+      if (hexInput) hexInput.value = value.toUpperCase();
+    });
+  }
+
+  function populateStoreInfoForm(settings){
+    document.getElementById("settingsStoreName").value = settings.storeName || "";
+    document.getElementById("settingsBusinessAddress").value = settings.businessAddress || "";
+    const logoUrl = settings.logoUrl || "";
+    document.getElementById("settingsLogoUrl").value = logoUrl;
+    handleSettingsLogoUrlInput(logoUrl);
+  }
+
+  function populateProductCardForm(settings){
+    document.getElementById("settingsCardStyle").value = settings.productCardStyle || "classic";
+  }
+
+  function populateCurrencyDeliveryForm(settings){
+    document.getElementById("settingsCurrency").value = settings.currency || "LKR";
+    document.getElementById("settingsDeliveryCharge").value = (settings.deliveryCharge ?? 0);
+  }
+
+  function populateCheckoutFieldsForm(settings){
+    const cf = settings.checkoutFields || {};
+    document.getElementById("cfFirstName").checked = cf.firstName !== false;
+    document.getElementById("cfLastName").checked = cf.lastName !== false;
+    document.getElementById("cfContact1").checked = cf.contact1 !== false;
+    document.getElementById("cfContact2").checked = cf.contact2 !== false;
+    document.getElementById("cfStreetAddress").checked = cf.streetAddress !== false;
+    document.getElementById("cfCity").checked = cf.city !== false;
+  }
+
+  function populateSocialLinksForm(settings){
+    const sl = settings.socialLinks || {};
+    document.getElementById("socialFacebook").value = sl.facebook || "";
+    document.getElementById("socialInstagram").value = sl.instagram || "";
+    document.getElementById("socialTiktok").value = sl.tiktok || "";
+    document.getElementById("socialYoutube").value = sl.youtube || "";
+    document.getElementById("socialWhatsapp").value = sl.whatsapp || "";
+  }
+
+  // ---- Footer Links: dynamic add/edit/delete rows ----
+  window.addFooterLinkRow = function(title, url){
+    const container = document.getElementById("footerLinksRows");
+    const rowId = "footerLinkRow" + (footerLinkRowIdCounter++);
+    const row = document.createElement("div");
+    row.className = "spec-row";
+    row.id = rowId;
+    row.innerHTML = `
+      <input type="text" class="footer-link-title-input" placeholder="Link Title" value="${escapeHtmlAdmin(title || "")}">
+      <input type="text" class="footer-link-url-input" placeholder="https://…" value="${escapeHtmlAdmin(url || "")}">
+      <button type="button" class="spec-remove-btn" onclick="removeFooterLinkRow('${rowId}')" aria-label="Remove link">×</button>
+    `;
+    container.appendChild(row);
+  };
+
+  window.removeFooterLinkRow = function(rowId){
+    const row = document.getElementById(rowId);
+    if (row) row.remove();
+  };
+
+  function populateFooterLinksForm(settings){
+    document.getElementById("settingsFooterLinksTitle").value = settings.footerLinksTitle || "";
+    document.getElementById("footerLinksRows").innerHTML = "";
+    footerLinkRowIdCounter = 0;
+    const links = Array.isArray(settings.footerLinks) ? settings.footerLinks : [];
+    links.forEach(link => {
+      if (link && (link.title || link.url)) window.addFooterLinkRow(link.title, link.url);
+    });
+  }
+
+  function populateFooterContentForm(settings){
+    document.getElementById("settingsFooterDescription").value = settings.footerBrandDescription || "";
+    document.getElementById("settingsNewsletterTitle").value = settings.newsletterTitle || "";
+    document.getElementById("settingsNewsletterText").value = settings.newsletterText || "";
+    document.getElementById("settingsCopyrightLeft").value = settings.footerCopyrightLeft || "";
+    document.getElementById("settingsCopyrightRight").value = settings.footerCopyrightRight || "";
+  }
+
+  function collectFooterLinksFromForm(){
+    return Array.from(document.querySelectorAll("#footerLinksRows .spec-row"))
+      .map(row => ({
+        title: row.querySelector(".footer-link-title-input").value.trim(),
+        url: row.querySelector(".footer-link-url-input").value.trim()
+      }))
+      .filter(l => l.title.length > 0 && l.url.length > 0);
+  }
+
+  // ---- Logo URL preview ----
+  window.handleSettingsLogoUrlInput = function(value){
+    const wrap = document.getElementById("settingsLogoPreviewWrap");
+    const img = document.getElementById("settingsLogoPreviewImg");
+    const url = (value || "").trim();
+    if (isValidImageUrlAdmin(url)){
+      img.src = url;
+    } else {
+      wrap.style.display = "none";
+      img.src = "";
+    }
+  };
+
+  // ---- Load ALL Store Settings into the Admin form ----
+  async function loadStoreSettingsIntoForm(){
+    let settings = window.__storeSettings;
+    if (!settings){
+      try {
+        await waitForFirebase();
+        const snap = await getDoc(doc(window.firebaseDb, "storeSettings", "main"));
+        if (snap.exists()) settings = snap.data();
+      } catch (err) {
+        console.error("Failed to load store settings:", err);
+      }
+    }
+    if (!settings) settings = {};
+    window.__storeSettings = settings;
+
+    // The stored settings document may predate the Theme feature (or a write
+    // may have failed before `colors`/`defaultColors` were saved). populateThemeForm
+    // now falls back to the colors actually applied on the page for any missing key,
+    // so the form always shows real values instead of blank/black swatches.
+    populateThemeForm(settings.colors);
+    if (!settings.defaultColors){
+      const liveCssColors = window.readCurrentCssColors ? window.readCurrentCssColors() : null;
+      if (liveCssColors) settings.defaultColors = liveCssColors;
+    }
+
+    populateStoreInfoForm(settings);
+    populateProductCardForm(settings);
+    populateCurrencyDeliveryForm(settings);
+    populateCheckoutFieldsForm(settings);
+    populateFooterLinksForm(settings);
+    populateFooterContentForm(settings);
+    populateSocialLinksForm(settings);
+  }
+
+  // Live-preview (admin panel only) as the admin edits either the color
+  // swatch or the hex text — this never touches the customer storefront.
+  window.syncThemeHexInput = function(key, colorValue){
+    const suffix = capitalizeThemeKey(key);
+    const hexInput = document.getElementById("themeHex" + suffix);
+    if (hexInput) hexInput.value = colorValue.toUpperCase();
+  };
+
+  window.syncThemeColorInput = function(key, hexValue){
+    const value = hexValue.trim();
+    if (!/^#[0-9A-Fa-f]{6}$/.test(value)) return;
+    const suffix = capitalizeThemeKey(key);
+    const colorInput = document.getElementById("themeColor" + suffix);
+    if (colorInput) colorInput.value = value;
+  };
+
+  // ---- Reset: copies defaultColors → colors right away. defaultColors is never modified. ----
+  window.resetThemeToDefault = async function(){
+    try {
+      await waitForFirebase();
+      let settings = window.__storeSettings;
+      if (!settings || !settings.defaultColors){
+        const snap = await getDoc(doc(window.firebaseDb, "storeSettings", "main"));
+        settings = snap.exists() ? snap.data() : null;
+      }
+      if (!settings || !settings.defaultColors){
+        showToast("Default colors are not available yet.");
+        return;
+      }
+      const defaults = settings.defaultColors;
+      await updateDoc(doc(window.firebaseDb, "storeSettings", "main"), { colors: defaults });
+      window.__storeSettings = settings;
+      window.__storeSettings.colors = defaults;
+      populateThemeForm(defaults);
+      showToast("Colors reset to default.");
+    } catch (err) {
+      console.error("Failed to reset theme colors:", err);
+      showToast("Unable to reset colors. Please try again.");
+    }
+  };
+
+  // ---- Save ALL Store Settings in one write. `defaultColors` is NEVER included/touched. ----
+  window.saveStoreSettings = async function(){
+    if (!window.THEME_FIELD_MAP) return;
+    const btn = document.getElementById("saveSettingsBtn");
+    const label = document.getElementById("saveSettingsBtnLabel");
+
+    // Theme colors
+    const colors = {};
+    let colorsValid = true;
+    Object.keys(window.THEME_FIELD_MAP).forEach(key => {
+      const suffix = capitalizeThemeKey(key);
+      const hexInput = document.getElementById("themeHex" + suffix);
+      const val = hexInput ? hexInput.value.trim() : "";
+      if (!/^#[0-9A-Fa-f]{6}$/.test(val)) colorsValid = false;
+      colors[key] = val;
+    });
+
+    const storeName = document.getElementById("settingsStoreName").value.trim();
+    const businessAddress = document.getElementById("settingsBusinessAddress").value.trim();
+    const logoUrlRaw = document.getElementById("settingsLogoUrl").value.trim();
+    const logoUrlValid = logoUrlRaw === "" || isValidImageUrlAdmin(logoUrlRaw);
+
+    const productCardStyle = document.getElementById("settingsCardStyle").value;
+    const currency = document.getElementById("settingsCurrency").value;
+    const deliveryChargeRaw = document.getElementById("settingsDeliveryCharge").value.trim();
+    const deliveryCharge = deliveryChargeRaw === "" ? 0 : Number(deliveryChargeRaw);
+    const deliveryChargeValid = !isNaN(deliveryCharge) && deliveryCharge >= 0;
+
+    const checkoutFields = {
+      firstName: document.getElementById("cfFirstName").checked,
+      lastName: document.getElementById("cfLastName").checked,
+      contact1: document.getElementById("cfContact1").checked,
+      contact2: document.getElementById("cfContact2").checked,
+      streetAddress: document.getElementById("cfStreetAddress").checked,
+      city: document.getElementById("cfCity").checked
+    };
+
+    const footerLinksTitle = document.getElementById("settingsFooterLinksTitle").value.trim();
+    const footerLinks = collectFooterLinksFromForm();
+
+    const footerBrandDescription = document.getElementById("settingsFooterDescription").value.trim();
+    const newsletterTitle = document.getElementById("settingsNewsletterTitle").value.trim();
+    const newsletterText = document.getElementById("settingsNewsletterText").value.trim();
+    const footerCopyrightLeft = document.getElementById("settingsCopyrightLeft").value.trim();
+    const footerCopyrightRight = document.getElementById("settingsCopyrightRight").value.trim();
+
+    const socialLinks = {
+      facebook: document.getElementById("socialFacebook").value.trim(),
+      instagram: document.getElementById("socialInstagram").value.trim(),
+      tiktok: document.getElementById("socialTiktok").value.trim(),
+      youtube: document.getElementById("socialYoutube").value.trim(),
+      whatsapp: document.getElementById("socialWhatsapp").value.trim()
+    };
+
+    if (!colorsValid){
+      showToast("Please enter valid hex colors (e.g. #FB6A19) before saving.");
+      return;
+    }
+    if (!logoUrlValid){
+      showToast("Please enter a valid logo image URL (starting with http:// or https://).");
+      return;
+    }
+    if (!deliveryChargeValid){
+      showToast("Please enter a valid delivery charge (0 or more).");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add("loading");
+    if (label) label.textContent = "Saving…";
+
+    try {
+      await waitForFirebase();
+      const settingsRef = doc(window.firebaseDb, "storeSettings", "main");
+      const updatePayload = {
+        storeName,
+        businessAddress,
+        logoUrl: logoUrlRaw,
+        colors,
+        productCardStyle,
+        currency,
+        deliveryCharge,
+        checkoutFields,
+        footerLinks,
+        footerLinksTitle,
+        footerBrandDescription,
+        newsletterTitle,
+        newsletterText,
+        footerCopyrightLeft,
+        footerCopyrightRight,
+        socialLinks
+      };
+      // `defaultColors` is intentionally never part of this payload.
+      await updateDoc(settingsRef, updatePayload);
+
+      window.__storeSettings = Object.assign({}, window.__storeSettings, updatePayload);
+      showToast("Store settings saved successfully.");
+    } catch (err) {
+      console.error("Failed to save store settings:", err);
+      showToast("Unable to save store settings. Please try again.");
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      if (label) label.textContent = "Save Store Settings";
     }
   };
 </script>
