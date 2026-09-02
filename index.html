@@ -104,8 +104,9 @@
   .hero-visual-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
 
   /* marquee */
-  .marquee-band{background:var(--ink);color:#fff;overflow:hidden;display:flex;align-items:center;min-height:52px;}
-  .marquee-track{display:flex;align-items:center;gap:64px;white-space:nowrap;animation:scroll 34s linear infinite;font-size:14px;font-weight:600;padding-right:64px;}
+  .marquee-wrap{margin:22px auto 32px;}
+  .marquee-band{background:var(--ink);color:#fff;overflow:hidden;display:flex;align-items:center;min-height:52px;width:100%;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+  .marquee-track{display:flex;align-items:center;gap:64px;white-space:nowrap;animation:scroll 34s linear infinite;font-size:14px;font-weight:600;padding:0 32px 0 32px;}
   .marquee-band:hover .marquee-track{animation-play-state:paused;}
   .marquee-track span{opacity:0.92;display:inline-flex;align-items:center;gap:9px;}
   .marquee-track span svg{width:19px;height:19px;flex-shrink:0;stroke:var(--orange);fill:none;stroke-width:1.8;}
@@ -113,9 +114,14 @@
     .marquee-track{animation:none;}
     .marquee-band{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   }
+  @media(max-width:900px){
+    .marquee-wrap{margin:18px auto 26px;}
+    .marquee-band{border-radius:12px;}
+  }
   @media(max-width:600px){
-    .marquee-band{min-height:46px;}
-    .marquee-track{gap:36px;padding-right:36px;font-size:13px;animation-duration:24s;}
+    .marquee-wrap{margin:14px auto 20px;}
+    .marquee-band{min-height:46px;border-radius:10px;}
+    .marquee-track{gap:36px;padding:0 20px;font-size:13px;animation-duration:24s;}
     .marquee-track span svg{width:17px;height:17px;}
   }
   @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
@@ -855,6 +861,8 @@
   </div>
 </section>
 
+<div class="marquee-wrap">
+<div class="wrap">
 <div class="marquee-band">
   <div class="marquee-track">
     <span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><path d="M2 17v-2a2 2 0 0 1 2-2h1v6H4a2 2 0 0 1-2-2z"/><path d="M22 17v-2a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2z"/><path d="M18 19a3 3 0 0 1-3 2h-2"/></svg>24/7 Support Always Be There for You</span>
@@ -868,6 +876,8 @@
     <span aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>Quality Products You Can Trust</span>
     <span aria-hidden="true"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><circle cx="17.5" cy="14.5" r="1.3" fill="var(--orange)" stroke="none"/></svg>Cash on Delivery Available</span>
   </div>
+</div>
+</div>
 </div>
 
 <section class="section" id="categories">
