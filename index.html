@@ -285,17 +285,16 @@
   .prod-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
   .prod-price{font-family:'Sora';font-weight:600;font-size:16px;}
   .prod-price del{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px;}
-  .prod-actions{display:flex;align-items:center;gap:8px;}
+  .prod-actions{display:flex;align-items:center;gap:0;height:48px;border:1.5px solid #1DA1F2;border-radius:100px;padding:3px;background:#fff;}
   .add-btn{flex:1;height:44px;border-radius:100px;background:var(--ink);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s;padding:0 14px;}
   .add-btn-icon{display:none;flex-shrink:0;}
   .add-btn:hover{background:var(--orange);}
-  .buy-now-btn{flex:1;height:44px;border-radius:100px;background:var(--orange);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;transition:background .2s;padding:0 14px;}
-  .buy-now-btn:hover:not([disabled]){background:var(--orange-dark,#d9540f);}
+  .buy-now-btn{flex:1;height:100%;border-radius:100px;background:#1DA1F2;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;padding:0 14px;display:flex;align-items:center;justify-content:center;}
+  .buy-now-btn:hover:not([disabled]){background:#0f8ed9;}
   .buy-now-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
-  .cart-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s;flex-shrink:0;}
-  .cart-btn:hover:not([disabled]){border-color:var(--ink);background:var(--ink);}
-  .cart-btn:hover:not([disabled]) svg{stroke:#fff;}
-  .cart-btn svg{width:17px;height:17px;stroke:var(--ink);transition:stroke .2s;}
+  .cart-btn{width:42px;height:100%;border-radius:100px;border:1.5px solid #1DA1F2;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;flex-shrink:0;margin-left:6px;}
+  .cart-btn:hover:not([disabled]){background:#eaf6fe;}
+  .cart-btn svg{width:17px;height:17px;stroke:#1DA1F2;transition:stroke .2s;}
   .cart-btn[disabled]{cursor:not-allowed;opacity:.5;}
 
   /* Mobile-only: full-width action bar flush to the card's bottom edge (desktop untouched) */
