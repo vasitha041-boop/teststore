@@ -35,7 +35,8 @@
   header{position:absolute;top:var(--announce-h);left:0;right:0;width:100%;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;}
   header.scrolled{background:transparent;backdrop-filter:none;border-bottom-color:transparent;}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:72px;gap:20px;}
-  .logo{display:flex;align-items:center;gap:8px;font-family:'Sora';font-weight:600;font-size:20px;flex-shrink:0;color:#fff;line-height:1;}
+  .logo{display:flex;align-items:center;gap:8px;font-family:'Sora';font-weight:600;font-size:20px;flex-shrink:0;color:#fff;line-height:1;opacity:1;transition:opacity .2s ease;}
+  .logo.brand-loading{opacity:0;}
   .logo-mark{width:28px;height:28px;border-radius:8px;background:var(--orange);display:inline-block;flex-shrink:0;}
   /* hard cap so an uploaded Store Settings logo can never stretch the bar */
   .logo img,
@@ -130,7 +131,7 @@
   .hero-visual-wrap{position:relative;}
   .hero-float-icon{position:absolute;bottom:-22px;left:-22px;width:68px;height:auto;z-index:3;filter:drop-shadow(0 12px 18px rgba(0,0,0,0.28));pointer-events:none;animation:heroFloatBob 3.2s ease-in-out infinite;}
   @keyframes heroFloatBob{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(-4deg);}}
-  .site-float-icon{position:fixed;right:22px;bottom:22px;width:90px;height:auto;z-index:150;pointer-events:none;filter:drop-shadow(0 12px 18px rgba(0,0,0,0.28));animation:siteFloatBob 3.2s ease-in-out infinite;}
+  .site-float-icon{position:fixed;right:22px;bottom:22px;width:90px;height:auto;z-index:150;pointer-events:none;filter:drop-shadow(0 12px 18px rgba(236,64,140,0.45));animation:siteFloatBob 3.2s ease-in-out infinite;}
   @keyframes siteFloatBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
   @media (max-width:768px){.site-float-icon{width:44px;right:12px;bottom:16px;}}
   .hero-tag{position:absolute;bottom:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:600;padding:8px 14px;border-radius:12px;display:flex;align-items:center;gap:6px;}
@@ -142,7 +143,8 @@
 
   /* ============ HERO SLIDER — UGREEN-exact structure, sizing & nav bar ============ */
   .dplex-hero-section{padding:0;}
-  .dplex-hero{position:relative;width:100%;height:100vh;max-height:800px;overflow:hidden;background:#111;}
+  .dplex-hero{position:relative;width:100%;height:100vh;max-height:800px;overflow:hidden;background:#111;opacity:1;transition:opacity .25s ease;}
+  .dplex-hero.hero-loading{opacity:0;}
   .dplex-hero-track{position:relative;width:100%;height:100%;}
   /* slides sit side-by-side off-canvas and translate in horizontally, like UGREEN's swiper */
   .dplex-hero-slide{position:absolute;inset:0;display:block;width:100%;height:100%;color:#fff;transform:translate3d(100%,0,0);pointer-events:none;transition:transform .6s cubic-bezier(0.32,0.72,0,1);background:linear-gradient(120deg,#f2f4f8,#e5e9f0,#f2f4f8);background-size:200% 200%;will-change:transform;}
@@ -221,7 +223,7 @@
 
   /* marquee */
   .marquee-wrap{margin:0 0 32px;width:100%;}
-  .marquee-band{background:var(--ink);color:#fff;overflow:hidden;display:flex;align-items:center;min-height:52px;width:100%;border-radius:0;box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+  .marquee-band{background:#000;color:#fff;overflow:hidden;display:flex;align-items:center;min-height:52px;width:100%;border-radius:0;box-shadow:0 6px 20px rgba(0,0,0,0.08);}
   .marquee-track{display:flex;align-items:center;gap:64px;white-space:nowrap;animation:scroll 34s linear infinite;font-size:14px;font-weight:500;padding:0 32px 0 32px;}
   .marquee-band:hover .marquee-track{animation-play-state:paused;}
   .marquee-track span{opacity:0.92;display:inline-flex;align-items:center;gap:9px;}
@@ -250,7 +252,8 @@
   /* categories */
   /* ---- Shop by category ---- */
   .cat-carousel{position:relative;}
-  .cat-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3*16px)/4);gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;}
+  .cat-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3*16px)/4);gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;opacity:1;transition:opacity .2s ease;}
+  .cat-track.cat-loading{opacity:0;}
   .cat-track::-webkit-scrollbar{display:none;}
   .cat-card{scroll-snap-align:start;background:#EAEAEC;border:none;border-radius:16px;padding:24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;min-height:192px;cursor:pointer;overflow:hidden;transition:background .3s ease;}
   .cat-media{flex:1;width:100%;display:flex;align-items:center;justify-content:center;transition:transform .3s ease;}
@@ -279,7 +282,7 @@
     .cat-card:hover .cat-media{transform:none;}
   }
 
-  footer{background:var(--ink);color:#D9D9D9;margin-top:0;padding:40px 0 0;}
+  footer{background:#000;color:#D9D9D9;margin-top:0;padding:40px 0 0;}
   .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.1);}
   .foot-brand .logo{color:#fff;margin-bottom:14px;}
   .foot-brand p{font-size:13px;line-height:1.6;color:#A5A5A5;max-width:260px;margin:0;}
@@ -970,7 +973,7 @@
 
 <header id="siteHeader">
   <div class="wrap nav">
-    <div class="logo"><span class="logo-mark"></span>Northline</div>
+    <div class="logo brand-loading"><span class="logo-mark"></span>Northline</div>
 
     <nav class="navlinks">
       <a href="#">Home</a>
@@ -1017,7 +1020,7 @@
   <div class="mobile-menu-overlay" onclick="toggleMobileMenu(false)"></div>
   <div class="mobile-menu-panel">
     <div class="mobile-menu-head">
-      <div class="logo"><span class="logo-mark"></span>Northline</div>
+      <div class="logo brand-loading"><span class="logo-mark"></span>Northline</div>
       <button class="mobile-menu-close" onclick="toggleMobileMenu(false)" aria-label="Close menu">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -1064,7 +1067,7 @@
 })();
 </script>
 <section class="dplex-hero-section">
-  <div class="dplex-hero" id="dplexHero" role="region" aria-roledescription="carousel" aria-label="Featured promotions">
+  <div class="dplex-hero hero-loading" id="dplexHero" role="region" aria-roledescription="carousel" aria-label="Featured promotions">
     <div class="dplex-hero-track" id="dplexHeroTrack"></div>
     <button type="button" class="dplex-hero-arrow dplex-hero-arrow-prev" id="dplexHeroPrev" aria-label="Previous slide">
       <svg viewBox="0 0 7 12" fill="none"><path d="M6 11L1 6L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1378,6 +1381,8 @@
     if (Array.isArray(settings.heroSlides) && settings.heroSlides.length > 0){
       renderDplexHeroSlides(settings.heroSlides);
     }
+    const heroEl = document.getElementById('dplexHero');
+    if (heroEl) heroEl.classList.remove('hero-loading');
   });
 </script>
 
@@ -1406,7 +1411,7 @@
       <a href="#">View all</a>
     </div>
     <div class="cat-carousel">
-      <div class="cat-track" id="catTrack">
+      <div class="cat-track cat-loading" id="catTrack">
         <div class="cat-card" role="button" tabindex="0" data-category="Audio">
           <div class="cat-media"><span class="cat-emoji">🎧</span></div>
           <span class="cat-label">Audio</span>
@@ -1466,16 +1471,17 @@
 
     async function renderStorefrontCategories(){
       const db = await waitForDb();
-      if (!db) return;
+      if (!db){ track.classList.remove("cat-loading"); return; }
       let cats;
       try {
         const snap = await getDocs(collection(db, "categories"));
         cats = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       } catch (err) {
         console.warn("Could not load categories:", err);
+        track.classList.remove("cat-loading");
         return; // keep the static fallback tiles
       }
-      if (!cats.length) return; // nothing configured yet — keep fallback
+      if (!cats.length){ track.classList.remove("cat-loading"); return; } // nothing configured yet — keep fallback
 
       cats.sort((a, b) => {
         const ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
@@ -1493,6 +1499,7 @@
           <span class="cat-label">${name}</span>
         </div>`;
       }).join("");
+      track.classList.remove("cat-loading");
 
       // dots depend on how many cards there are, so rebuild them
       document.dispatchEvent(new CustomEvent("categories:rendered"));
@@ -1636,7 +1643,7 @@
   <div class="wrap">
     <div class="foot-top">
       <div class="foot-brand">
-        <div class="logo"><span class="logo-mark"></span>Northline</div>
+        <div class="logo brand-loading"><span class="logo-mark"></span>Northline</div>
         <p>Curated tech and accessories, chosen for quality and design. Built to look and feel like a real premium storefront.</p>
         <div class="foot-social">
           <a href="#" title="Facebook">f</a>
@@ -2660,6 +2667,10 @@
           mark.className = "logo-mark";
           logoEl.appendChild(mark);
           logoEl.appendChild(document.createTextNode(nameToShow));
+          logoEl.classList.remove("brand-loading");
+        };
+        img.onload = function(){
+          logoEl.classList.remove("brand-loading");
         };
         img.src = logoUrl;
         logoEl.appendChild(img);
@@ -2668,6 +2679,7 @@
         mark.className = "logo-mark";
         logoEl.appendChild(mark);
         logoEl.appendChild(document.createTextNode(nameToShow));
+        logoEl.classList.remove("brand-loading");
       }
     });
 
