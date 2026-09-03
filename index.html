@@ -5820,7 +5820,8 @@ Please confirm my order.`
       document.dispatchEvent(new CustomEvent("categories:changed"));
     } catch (err) {
       console.error("Failed to save category:", err);
-      errBox.textContent = "Unable to save this category. Please try again.";
+      const detail = (err && (err.code || err.message)) ? " (" + (err.code || err.message) + ")" : "";
+      errBox.textContent = "Unable to save this category. Please try again." + detail;
       errBox.classList.add("show");
     } finally {
       btn.classList.remove("loading");
