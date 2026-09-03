@@ -305,7 +305,7 @@
     .buy-now-btn{flex:0 0 68%;height:100%;border-radius:0 0 0 calc(var(--radius) - 3px);background:#1DA1F2;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background .15s,opacity .15s;}
     .buy-now-btn:hover:not([disabled]),.buy-now-btn:active:not([disabled]){background:#0f8ed9;}
     .cart-btn{width:64px;height:100%;border-radius:0 0 calc(var(--radius) - 3px) 0;background:#fff;border:none;border-left:1.5px solid #1DA1F2;margin-left:auto;transition:background .15s;}
-    .cart-btn svg{width:21px;height:21px;stroke:#1DA1F2;transform:translate(1px,1px);}
+    .cart-btn svg{width:21px;height:21px;stroke:#1DA1F2;}
     .cart-btn:hover:not([disabled]),.cart-btn:active:not([disabled]){background:#eaf6fe;}
     .cart-btn:hover:not([disabled]) svg{stroke:#1DA1F2;}
   }
@@ -2748,14 +2748,7 @@
           <div class="prod-actions">
             <button class="buy-now-btn" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Buy Now"}</button>
             <button class="cart-btn" aria-label="Add to cart" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>`;
-  }
-
-  function renderSkeleton(container){
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     container.innerHTML = Array.from({ length: 4 }).map(() => `
       <div class="skel-card">
         <div class="skel-thumb"></div>
@@ -3378,7 +3371,7 @@
           <div class="prod-actions">
             <button class="buy-now-btn" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Buy Now"}</button>
             <button class="cart-btn" aria-label="Add to cart" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             </button>
           </div>
         </div>
