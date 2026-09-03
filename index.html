@@ -289,9 +289,14 @@
   .add-btn{flex:1;height:44px;border-radius:100px;background:var(--ink);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s;padding:0 14px;}
   .add-btn-icon{display:none;flex-shrink:0;}
   .add-btn:hover{background:var(--orange);}
-  .view-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;flex-shrink:0;}
-  .view-btn:hover{border-color:var(--ink);}
-  .view-btn svg{width:15px;height:15px;stroke:var(--ink);}
+  .buy-now-btn{flex:1;height:44px;border-radius:100px 0 0 100px;background:var(--orange);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;transition:background .2s;padding:0 14px;}
+  .buy-now-btn:hover:not([disabled]){background:var(--orange-dark,#d9540f);}
+  .buy-now-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
+  .cart-btn{width:44px;height:44px;border-radius:0 100px 100px 0;border:1.5px solid var(--line);border-left:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s;flex-shrink:0;}
+  .cart-btn:hover:not([disabled]){border-color:var(--ink);background:var(--ink);}
+  .cart-btn:hover:not([disabled]) svg{stroke:#fff;}
+  .cart-btn svg{width:17px;height:17px;stroke:var(--ink);transition:stroke .2s;}
+  .cart-btn[disabled]{cursor:not-allowed;opacity:.5;}
   .prod-btns{display:flex;gap:8px;}
 
   /* ---- Product Card Style variants (Admin → Store Settings → productCardStyle) ---- */
@@ -2728,12 +2733,9 @@
             <span class="prod-price">${priceRowHtml(p)}</span>
           </div>
           <div class="prod-actions">
-            <button class="add-btn" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
-              ${outOfStock ? "" : '<svg class="add-btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'}
-              <span class="add-btn-text">${outOfStock ? "Out of Stock" : "Add to Cart"}</span>
-            </button>
-            <button class="view-btn" aria-label="View details" data-id="${escapeHtml(id)}">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <button class="buy-now-btn" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Buy Now"}</button>
+            <button class="cart-btn" aria-label="Add to cart" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             </button>
           </div>
         </div>
@@ -3361,12 +3363,9 @@
             <span class="prod-price">${priceHtml}</span>
           </div>
           <div class="prod-actions">
-            <button class="add-btn" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
-              ${outOfStock ? "" : '<svg class="add-btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'}
-              <span class="add-btn-text">${outOfStock ? "Out of Stock" : "Add to Cart"}</span>
-            </button>
-            <button class="view-btn" aria-label="View details" data-id="${pdpEscapeHtml(id)}">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <button class="buy-now-btn" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Buy Now"}</button>
+            <button class="cart-btn" aria-label="Add to cart" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             </button>
           </div>
         </div>
@@ -3719,7 +3718,7 @@ function showToast(message){
   // ---- Sync add-to-cart buttons with stock/cart state ----
   function syncAddButtons(){
     const cart = getCart();
-    document.querySelectorAll('.add-btn[data-id]').forEach(btn => {
+    document.querySelectorAll('.buy-now-btn[data-id], .cart-btn[data-id]').forEach(btn => {
       const id = btn.getAttribute('data-id');
       const stock = getProductStock(id);
       const inCart = cart.find(i => i.productId === id);
@@ -3810,21 +3809,20 @@ function showToast(message){
 
   // ---- Event delegation for dynamically-rendered product cards ----
   document.addEventListener('click', (e) => {
-    const addBtn = e.target.closest('.add-btn[data-id]');
-    if (addBtn && !addBtn.disabled){
-      addToCart(addBtn.getAttribute('data-id'), 1);
+    const cartBtn = e.target.closest('.cart-btn[data-id]');
+    if (cartBtn && !cartBtn.disabled){
+      addToCart(cartBtn.getAttribute('data-id'), 1);
       return;
     }
-    const viewBtn = e.target.closest('.view-btn[data-id]');
-    if (viewBtn){
-      if (typeof window.showProductDetailView === 'function'){
-        window.showProductDetailView(viewBtn.getAttribute('data-id'));
-      } else {
-        openProductModal(viewBtn.getAttribute('data-id'));
+    const buyNowBtn = e.target.closest('.buy-now-btn[data-id]');
+    if (buyNowBtn && !buyNowBtn.disabled){
+      addToCart(buyNowBtn.getAttribute('data-id'), 1);
+      if (typeof window.openCheckout === 'function'){
+        window.openCheckout();
       }
       return;
     }
-    // Clicking anywhere else on a product card (but not the add button) opens the full detail view
+    // Clicking anywhere else on a product card (but not the action buttons) opens the full detail view
     const card = e.target.closest('.prod-card[data-id]');
     if (card && typeof window.showProductDetailView === 'function'){
       window.showProductDetailView(card.getAttribute('data-id'));
