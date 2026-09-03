@@ -1438,6 +1438,73 @@
 </section>
 
 <script type="module">
+  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  // Storefront categories. Renders from the "categories" collection; if the
+  // collection is empty or unreachable the static tiles already in the HTML
+  // are left untouched, so the section never renders blank.
+  (function(){
+    const track = document.getElementById("catTrack");
+    if (!track) return;
+
+    function escapeCat(str){
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+    function validUrl(v){
+      return typeof v === "string" && /^https?:\/\/\S+$/i.test(v.trim());
+    }
+
+    async function waitForDb(){
+      for (let i = 0; i < 100; i++){
+        if (window.firebaseDb) return window.firebaseDb;
+        await new Promise(r => setTimeout(r, 100));
+      }
+      return null;
+    }
+
+    async function renderStorefrontCategories(){
+      const db = await waitForDb();
+      if (!db) return;
+      let cats;
+      try {
+        const snap = await getDocs(collection(db, "categories"));
+        cats = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch (err) {
+        console.warn("Could not load categories:", err);
+        return; // keep the static fallback tiles
+      }
+      if (!cats.length) return; // nothing configured yet — keep fallback
+
+      cats.sort((a, b) => {
+        const ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        const tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        return tb - ta;
+      });
+
+      track.innerHTML = cats.map(c => {
+        const name = escapeCat(c.name || "");
+        const media = validUrl(c.imageUrl)
+          ? `<img src="${escapeCat(c.imageUrl)}" alt="${name}" loading="lazy">`
+          : `<span class="cat-emoji">🛍️</span>`;
+        return `<div class="cat-card" role="button" tabindex="0" data-category="${name}">
+          <div class="cat-media">${media}</div>
+          <span class="cat-label">${name}</span>
+        </div>`;
+      }).join("");
+
+      // dots depend on how many cards there are, so rebuild them
+      document.dispatchEvent(new CustomEvent("categories:rendered"));
+    }
+
+    renderStorefrontCategories();
+    // re-render after an admin add/edit/delete
+    document.addEventListener("categories:changed", renderStorefrontCategories);
+  })();
+</script>
+
+<script type="module">
   // Paging dots for the category row. Page count is derived from how many
   // cards actually fit, so it stays correct across breakpoints.
   (function(){
@@ -1485,6 +1552,11 @@
     }, { passive:true });
 
     window.addEventListener("resize", buildDots);
+    document.addEventListener("categories:rendered", function(){
+      // card count changed, so page count and dots must be recalculated
+      track.scrollLeft = 0;
+      buildDots();
+    });
     buildDots();
   })();
 </script>
@@ -1778,6 +1850,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.3 12 12l-8.5-4.7M12 12v9.5M3.5 7.3 12 2.5l8.5 4.8v9.4L12 21.5l-8.5-4.8z"/></svg>
         Products
       </button>
+      <button class="admin-nav-item" data-view="categories" onclick="switchAdminView('categories')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Categories
+      </button>
       <button class="admin-nav-item" data-view="orders" onclick="switchAdminView('orders')">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         Orders
@@ -1862,6 +1938,36 @@
           </div>
           <div class="admin-cards" id="adminProductsCards">
             <div class="admin-loading-row" style="text-align:center;padding:30px;color:var(--muted);">Loading products…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Categories view ---- -->
+      <div class="admin-view" id="adminViewCategories">
+        <div class="admin-toolbar">
+          <div class="admin-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="adminCategorySearch" placeholder="Search categories" oninput="searchAdminCategories(this.value)">
+          </div>
+          <button class="admin-add-btn" onclick="openCategoryForm('create')">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Category
+          </button>
+        </div>
+        <div class="admin-panel">
+          <div class="admin-panel-head">All Categories</div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr><th>Image</th><th>Name</th><th>Created</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="adminCategoriesTbody">
+                <tr class="admin-loading-row"><td colspan="4">Loading categories…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="admin-cards" id="adminCategoriesCards">
+            <div class="admin-loading-row" style="text-align:center;padding:30px;color:var(--muted);">Loading categories…</div>
           </div>
         </div>
       </div>
@@ -2247,6 +2353,41 @@
         <button class="place-order-btn" id="productSaveBtn" onclick="saveProduct()">
           <span class="spinner"></span>
           <span id="productSaveBtnLabel">Save Product</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CATEGORY FORM MODAL (ADMIN) ============ -->
+<div class="modal-overlay" id="categoryFormModal">
+  <div class="modal-box product-form-box">
+    <button class="modal-close" onclick="closeCategoryForm()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="product-form-body">
+      <h2 id="categoryFormTitle">Add Category</h2>
+      <div class="product-form-error" id="categoryFormError"></div>
+      <form id="categoryForm" onsubmit="return false;">
+        <div class="form-group" id="fieldCategoryName">
+          <label for="categoryName">Category Name</label>
+          <input type="text" id="categoryName" placeholder="e.g. Audio">
+          <span class="form-error" id="errCategoryName">Category name is required.</span>
+        </div>
+
+        <div class="form-group" id="fieldCategoryImageUrl">
+          <label for="categoryImageUrl">Category Image URL <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+          <input type="text" id="categoryImageUrl" placeholder="https://example.com/category.png" oninput="handleCategoryImageUrlInput()">
+          <span class="form-error" id="errCategoryImageUrl">Enter a valid image URL starting with http:// or https://</span>
+        </div>
+        <div class="image-url-preview" id="categoryImageUrlPreview"><span>Paste an image URL to preview it here.</span></div>
+      </form>
+
+      <div class="product-form-actions">
+        <button type="button" class="btn-ghost" onclick="closeCategoryForm()">Cancel</button>
+        <button class="place-order-btn" id="categorySaveBtn" onclick="saveCategory()">
+          <span class="spinner"></span>
+          <span id="categorySaveBtnLabel">Save Category</span>
         </button>
       </div>
     </div>
@@ -4326,6 +4467,7 @@ Please confirm my order.`
   import {
     collection,
     getDocs,
+    addDoc,
     doc,
     getDoc,
     setDoc,
@@ -4506,11 +4648,12 @@ Please confirm my order.`
       btn.classList.toggle("active", btn.getAttribute("data-view") === view);
     });
     document.querySelectorAll(".admin-view").forEach(el => el.classList.remove("active"));
-    const titles = { overview: "Dashboard", products: "Products", orders: "Orders", settings: "Store Settings" };
+    const titles = { overview: "Dashboard", products: "Products", categories: "Categories", orders: "Orders", settings: "Store Settings" };
     document.getElementById("adminViewTitle").textContent = titles[view] || "Dashboard";
     document.getElementById("adminView" + view.charAt(0).toUpperCase() + view.slice(1)).classList.add("active");
     document.getElementById("adminSidebar").classList.remove("mobile-open");
     if (view === "settings") loadStoreSettingsIntoForm();
+    if (view === "categories") loadAdminCategories();
   };
 
   window.toggleAdminSidebar = function(){
@@ -5490,6 +5633,212 @@ Please confirm my order.`
     document.body.style.overflow = "hidden";
   };
 
+  // ============ CATEGORIES (Admin) ============
+  let adminCategoriesCache = [];
+  let categoryFormMode = "create";
+  let categoryFormId = null;
+
+  function isValidHttpUrl(value){
+    return typeof value === "string" && /^https?:\/\/\S+$/i.test(value.trim());
+  }
+
+  function formatCategoryDate(createdAt){
+    if (!createdAt) return "—";
+    try {
+      const d = typeof createdAt.toDate === "function" ? createdAt.toDate() : new Date(createdAt);
+      if (isNaN(d.getTime())) return "—";
+      return d.toLocaleDateString();
+    } catch (e) { return "—"; }
+  }
+
+  async function loadAdminCategories(){
+    try {
+      await waitForFirebase();
+      const snap = await getDocs(collection(window.firebaseDb, "categories"));
+      adminCategoriesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // newest first, matching how the products table reads
+      adminCategoriesCache.sort((a, b) => {
+        const ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        const tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        return tb - ta;
+      });
+      const search = document.getElementById("adminCategorySearch");
+      renderAdminCategories(search && search.value.trim() ? filterCategories(search.value) : adminCategoriesCache);
+    } catch (err) {
+      console.error("Failed to load categories:", err);
+      const tbody = document.getElementById("adminCategoriesTbody");
+      if (tbody) tbody.innerHTML = '<tr class="admin-loading-row"><td colspan="4">Unable to load categories.</td></tr>';
+      const cards = document.getElementById("adminCategoriesCards");
+      if (cards) cards.innerHTML = '<div class="admin-loading-row" style="text-align:center;padding:30px;color:var(--muted);">Unable to load categories.</div>';
+    }
+  }
+  window.loadAdminCategories = loadAdminCategories;
+
+  function filterCategories(term){
+    const q = (term || "").trim().toLowerCase();
+    if (!q) return adminCategoriesCache;
+    return adminCategoriesCache.filter(c => (c.name || "").toLowerCase().includes(q));
+  }
+
+  window.searchAdminCategories = function(term){
+    renderAdminCategories(filterCategories(term));
+  };
+
+  function categoryThumb(cat){
+    return isValidHttpUrl(cat.imageUrl)
+      ? `<img src="${escapeHtmlAdmin(cat.imageUrl)}" alt="" loading="lazy">`
+      : `<div class="prod-thumb-fallback"><span class="prod-thumb-fallback-text">No image</span></div>`;
+  }
+
+  function categoryActionsHtml(cat){
+    return `
+      <div class="admin-actions">
+        <button class="admin-action-btn" title="Edit" onclick="openCategoryForm('edit','${cat.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+        </button>
+        <button class="admin-action-btn danger" title="Delete" onclick="openDeleteCategoryConfirm('${cat.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>`;
+  }
+
+  function renderAdminCategories(list){
+    const tbody = document.getElementById("adminCategoriesTbody");
+    const cards = document.getElementById("adminCategoriesCards");
+    if (!tbody || !cards) return;
+
+    if (!list.length){
+      tbody.innerHTML = '<tr class="admin-loading-row"><td colspan="4">No categories yet. Use \u201CAdd Category\u201D to create one.</td></tr>';
+      cards.innerHTML = '<div class="admin-loading-row" style="text-align:center;padding:30px;color:var(--muted);">No categories yet.</div>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td><div class="prod-thumb-cell">${categoryThumb(c)}</div></td>
+        <td>${escapeHtmlAdmin(c.name || "\u2014")}</td>
+        <td>${formatCategoryDate(c.createdAt)}</td>
+        <td>${categoryActionsHtml(c)}</td>
+      </tr>`).join("");
+
+    cards.innerHTML = list.map(c => `
+      <div class="admin-prod-card">
+        <div class="prod-thumb-cell">${categoryThumb(c)}</div>
+        <div class="admin-prod-card-body">
+          <div class="admin-prod-card-top">
+            <span class="admin-prod-card-name">${escapeHtmlAdmin(c.name || "\u2014")}</span>
+          </div>
+          <span class="admin-prod-card-meta">Added ${formatCategoryDate(c.createdAt)}</span>
+          <div class="admin-prod-card-foot">${categoryActionsHtml(c)}</div>
+        </div>
+      </div>`).join("");
+  }
+
+  window.handleCategoryImageUrlInput = function(){
+    const url = document.getElementById("categoryImageUrl").value.trim();
+    const preview = document.getElementById("categoryImageUrlPreview");
+    if (!url){
+      preview.innerHTML = "<span>Paste an image URL to preview it here.</span>";
+      return;
+    }
+    if (!isValidHttpUrl(url)){
+      preview.innerHTML = "<span>Enter a URL starting with http:// or https://</span>";
+      return;
+    }
+    preview.innerHTML =
+      `<img src="${escapeHtmlAdmin(url)}" alt="Category preview" ` +
+      `onerror="this.parentNode.innerHTML='&lt;span&gt;Could not load that image.&lt;/span&gt;'">`;
+  };
+
+  window.openCategoryForm = function(mode, categoryId){
+    categoryFormMode = mode;
+    categoryFormId = categoryId || null;
+    document.getElementById("categoryFormError").classList.remove("show");
+    document.getElementById("errCategoryName").classList.remove("show");
+    document.getElementById("errCategoryImageUrl").classList.remove("show");
+
+    const nameInput = document.getElementById("categoryName");
+    const urlInput = document.getElementById("categoryImageUrl");
+
+    if (mode === "edit"){
+      const cat = adminCategoriesCache.find(c => c.id === categoryId);
+      document.getElementById("categoryFormTitle").textContent = "Edit Category";
+      document.getElementById("categorySaveBtnLabel").textContent = "Update Category";
+      nameInput.value = cat ? (cat.name || "") : "";
+      urlInput.value = cat ? (cat.imageUrl || "") : "";
+    } else {
+      document.getElementById("categoryFormTitle").textContent = "Add Category";
+      document.getElementById("categorySaveBtnLabel").textContent = "Save Category";
+      nameInput.value = "";
+      urlInput.value = "";
+    }
+    window.handleCategoryImageUrlInput();
+    document.getElementById("categoryFormModal").classList.add("open");
+    document.body.style.overflow = "hidden";
+  };
+
+  window.closeCategoryForm = function(){
+    document.getElementById("categoryFormModal").classList.remove("open");
+    document.body.style.overflow = "";
+    categoryFormMode = "create";
+    categoryFormId = null;
+  };
+
+  window.saveCategory = async function(){
+    const errBox = document.getElementById("categoryFormError");
+    const nameErr = document.getElementById("errCategoryName");
+    const urlErr = document.getElementById("errCategoryImageUrl");
+    errBox.classList.remove("show");
+    nameErr.classList.remove("show");
+    urlErr.classList.remove("show");
+
+    const name = document.getElementById("categoryName").value.trim();
+    const imageUrl = document.getElementById("categoryImageUrl").value.trim();
+
+    let valid = true;
+    if (!name){ nameErr.classList.add("show"); valid = false; }
+    if (imageUrl && !isValidHttpUrl(imageUrl)){ urlErr.classList.add("show"); valid = false; }
+    if (!valid) return;
+
+    const btn = document.getElementById("categorySaveBtn");
+    btn.classList.add("loading");
+    btn.disabled = true;
+
+    try {
+      await waitForFirebase();
+      const db = window.firebaseDb;
+      if (categoryFormMode === "edit" && categoryFormId){
+        await updateDoc(doc(db, "categories", categoryFormId), { name, imageUrl });
+        showToast("Category updated successfully.");
+      } else {
+        await addDoc(collection(db, "categories"), { name, imageUrl, createdAt: serverTimestamp() });
+        showToast("Category added successfully.");
+      }
+      window.closeCategoryForm();
+      await loadAdminCategories();
+      // let the storefront pick the change up straight away
+      document.dispatchEvent(new CustomEvent("categories:changed"));
+    } catch (err) {
+      console.error("Failed to save category:", err);
+      errBox.textContent = "Unable to save this category. Please try again.";
+      errBox.classList.add("show");
+    } finally {
+      btn.classList.remove("loading");
+      btn.disabled = false;
+    }
+  };
+
+  window.openDeleteCategoryConfirm = function(categoryId){
+    const cat = adminCategoriesCache.find(c => c.id === categoryId);
+    deleteConfirmMode = "category";
+    deleteConfirmId = categoryId;
+    document.getElementById("deleteConfirmTitle").textContent = "Delete this category?";
+    document.getElementById("deleteConfirmText").textContent =
+      `Are you sure you want to delete "${cat ? (cat.name || "this category") : "this category"}"? This action cannot be undone.`;
+    document.getElementById("deleteConfirmModal").classList.add("open");
+    document.body.style.overflow = "hidden";
+  };
+
   // ---- Generic delete confirmation dispatch (products & orders) ----
   window.handleConfirmDelete = async function(){
     if (!deleteConfirmId || !deleteConfirmMode) return;
@@ -5512,10 +5861,20 @@ Please confirm my order.`
         window.closeDeleteConfirm();
         window.closeOrderDetails();
         // Orders list and stats refresh automatically via the real-time listener.
+      } else if (mode === "category"){
+        await deleteDoc(doc(window.firebaseDb, "categories", id));
+        showToast("Category deleted successfully.");
+        window.closeDeleteConfirm();
+        await loadAdminCategories();
+        document.dispatchEvent(new CustomEvent("categories:changed"));
       }
     } catch (err) {
       console.error("Failed to delete:", err);
-      showToast(mode === "order" ? "Unable to delete this order. Please try again." : "Unable to delete this product. Please try again.");
+      showToast(
+        mode === "order" ? "Unable to delete this order. Please try again." :
+        mode === "category" ? "Unable to delete this category. Please try again." :
+        "Unable to delete this product. Please try again."
+      );
     } finally {
       btn.disabled = false;
       btn.textContent = "Delete";
