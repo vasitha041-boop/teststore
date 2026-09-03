@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -357,7 +358,7 @@
   body.card-style-modern .prod-price{font-size:17px;}
   body.card-style-modern .add-btn{border-radius:100px;}
 
-  .section-alt{background:#FBF8F3;}
+  .section-alt{background:var(--paper);}
 
   /* ---- Firestore product card additions ---- */
   .prod-thumb{background:linear-gradient(150deg,#EFE9DF,#E2DACB);}
@@ -843,27 +844,29 @@
 
   /* ============ PROMO BANNER ============ */
   .promo{padding:0 0 40px;}
-  .promo-box{background:linear-gradient(120deg,#1E2B27,#2F6F5E);border-radius:28px;padding:56px clamp(24px,6vw,64px);display:grid;grid-template-columns:1.2fr 0.8fr;align-items:center;gap:40px;position:relative;overflow:hidden;color:#fff;}
-  .promo-box::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,0.06);top:-100px;right:60px;}
-  .promo-box::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.05);bottom:-80px;left:-40px;}
-  .promo-eyebrow{display:inline-block;background:rgba(255,255,255,0.14);font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:18px;}
+  .promo-box{background:#0f1412;border-radius:32px;padding:56px clamp(24px,6vw,64px);display:grid;grid-template-columns:1.2fr 0.8fr;align-items:center;gap:40px;position:relative;overflow:hidden;color:#fff;}
+  .promo-eyebrow{display:inline-block;background:rgba(255,255,255,0.16);font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:18px;backdrop-filter:blur(4px);}
   .promo-box h2{font-size:38px;font-weight:600;line-height:1.1;position:relative;z-index:2;}
-  .promo-box p{color:rgba(255,255,255,0.8);font-size:15.5px;line-height:1.6;margin:16px 0 26px;max-width:420px;position:relative;z-index:2;}
-  .btn-light{background:#fff;color:var(--ink);padding:14px 28px;border-radius:100px;font-weight:600;font-size:15px;border:none;cursor:pointer;transition:transform .15s;position:relative;z-index:2;}
+  .promo-box p{color:rgba(255,255,255,0.85);font-size:15.5px;line-height:1.6;margin:16px 0 26px;max-width:420px;position:relative;z-index:2;}
+  .promo-actions{display:flex;align-items:center;gap:22px;position:relative;z-index:2;}
+  .btn-light{background:#fff;color:var(--ink);padding:14px 28px;border-radius:100px;font-weight:600;font-size:15px;border:none;cursor:pointer;transition:transform .15s;}
   .btn-light:hover{transform:translateY(-2px);}
+  .promo-learnmore{display:inline-flex;align-items:center;gap:4px;color:#fff;font-weight:600;font-size:15px;text-decoration:none;}
+  .promo-learnmore svg{width:16px;height:16px;stroke:#fff;stroke-width:3;transition:transform .15s;}
+  .promo-learnmore:hover svg{transform:translateX(3px);}
   .promo-visual{position:relative;z-index:2;min-width:0;}
   .promo-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 2px 8px;scrollbar-width:none;}
   .promo-carousel::-webkit-scrollbar{display:none;}
-  .promo-carousel .prod-card{flex:0 0 138px;scroll-snap-align:start;background:rgba(255,255,255,0.09);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.16);box-shadow:none;}
-  .promo-carousel .prod-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,0.18);}
-  .promo-carousel .prod-thumb{background:rgba(255,255,255,0.06);}
+  .promo-carousel .prod-card{flex:0 0 138px;scroll-snap-align:start;background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.22);box-shadow:none;}
+  .promo-carousel .prod-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,0.25);}
+  .promo-carousel .prod-thumb{background:rgba(255,255,255,0.08);}
   .promo-carousel .prod-body{padding:10px 10px 12px;gap:6px;}
   .promo-carousel .prod-cat{display:none;}
   .promo-carousel .prod-name{font-size:12px;color:#fff;font-weight:600;}
   .promo-carousel .prod-price{font-size:13.5px;color:#fff;}
-  .promo-carousel .prod-price del{color:rgba(255,255,255,0.5);}
+  .promo-carousel .prod-price del{color:rgba(255,255,255,0.6);}
   .promo-carousel .prod-actions{display:none;}
-  .promo-carousel-msg{color:rgba(255,255,255,0.65);font-size:13.5px;font-weight:600;padding:30px 10px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:20px;width:100%;}
+  .promo-carousel-msg{color:rgba(255,255,255,0.7);font-size:13.5px;font-weight:600;padding:30px 10px;text-align:center;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:20px;width:100%;}
 
   #toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:100px;font-size:14px;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:999;}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -961,8 +964,15 @@
     .admin-btn span.admin-label{display:none;}
     .admin-btn{padding:0 12px;}
     .foot-top{grid-template-columns:1fr;gap:24px;}
-    .promo-box{padding:36px 22px;border-radius:20px;}
-    .promo-box h2{font-size:26px;}
+    .promo-box{padding:36px 20px 32px;border-radius:20px;text-align:center;justify-items:center;min-height:420px;align-content:center;}
+    .promo-box > div:first-child{display:flex;flex-direction:column;align-items:center;}
+    .promo-box h2{font-size:24px;margin:14px 0 0;max-width:280px;}
+    .promo-eyebrow{margin-bottom:0;}
+    .promo-box p{text-align:center;font-size:13.5px;margin:10px 0 20px;max-width:300px;}
+    .promo-actions{flex-direction:column;row-gap:12px;width:100%;max-width:260px;}
+    .promo-actions .btn-light{width:100%;padding:14px 20px;}
+    .promo-learnmore{justify-content:center;}
+    .promo-visual{width:100%;margin-top:22px;}
   }
 </style>
 </head>
@@ -1611,7 +1621,12 @@
         <span class="promo-eyebrow">Limited time offer</span>
         <h2>Save up to 30% on selected audio gear</h2>
         <p>Upgrade your everyday listening with our curated audio picks. Offer valid while stocks last on selected items only.</p>
-        <button class="btn-light">Shop the Sale</button>
+        <div class="promo-actions">
+          <button class="btn-light">Shop the Sale</button>
+          <a href="#products" class="promo-learnmore">Learn More
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m8.25 4.5 7.5 7.5-7.5 7.5"></path></svg>
+          </a>
+        </div>
       </div>
       <div class="promo-visual">
         <div class="promo-carousel" id="promoCarousel">
