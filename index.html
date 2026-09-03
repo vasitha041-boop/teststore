@@ -285,14 +285,14 @@
   .prod-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
   .prod-price{font-family:'Sora';font-weight:600;font-size:16px;}
   .prod-price del{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px;}
-  .prod-actions{display:flex;align-items:center;gap:4px;height:48px;border-radius:100px;background:#1DA1F2;padding:4px;}
+  .prod-actions{display:flex;align-items:center;height:48px;}
   .add-btn{flex:1;height:44px;border-radius:100px;background:var(--ink);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s;padding:0 14px;}
   .add-btn-icon{display:none;flex-shrink:0;}
   .add-btn:hover{background:var(--orange);}
-  .buy-now-btn{flex:1;height:100%;border-radius:0;background:transparent;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;padding:0 10px;display:flex;align-items:center;justify-content:center;}
-  .buy-now-btn:hover:not([disabled]){opacity:.9;}
-  .buy-now-btn[disabled]{color:#eee;cursor:not-allowed;}
-  .cart-btn{width:44px;height:100%;border-radius:14px;border:none;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;flex-shrink:0;}
+  .buy-now-btn{flex:1;height:100%;border-radius:24px 0 0 24px;background:#1DA1F2;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;padding:0 14px;display:flex;align-items:center;justify-content:center;}
+  .buy-now-btn:hover:not([disabled]){background:#0f8ed9;}
+  .buy-now-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
+  .cart-btn{width:56px;height:100%;border-radius:0 24px 24px 0;border:1.5px solid #1DA1F2;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;flex-shrink:0;}
   .cart-btn:hover:not([disabled]){background:#eaf6fe;}
   .cart-btn svg{width:17px;height:17px;stroke:#1DA1F2;transition:stroke .2s;}
   .cart-btn[disabled]{cursor:not-allowed;opacity:.5;}
