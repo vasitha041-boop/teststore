@@ -1082,7 +1082,7 @@
     }
   }
 
-  function showBubble(){
+  function showBubble(customMsg, duration){
     var rect = icon.getBoundingClientRect();
     if(!bubbleEl){
       bubbleEl = document.createElement('div');
@@ -1090,9 +1090,9 @@
       document.body.appendChild(bubbleEl);
     }
     clearTimeout(bubbleTimer);
-    var msg = pokeCount > 6
+    var msg = customMsg || (pokeCount > 6
       ? "Okay okay, that's enough 😅"
-      : messages[Math.floor(Math.random() * messages.length)];
+      : messages[Math.floor(Math.random() * messages.length)]);
     bubbleEl.textContent = msg;
     var bubbleWidth = 170; // rough estimate before layout
     var left = rect.left + rect.width / 2 - bubbleWidth;
@@ -1102,16 +1102,44 @@
     requestAnimationFrame(function(){ bubbleEl.classList.add('show'); });
     bubbleTimer = setTimeout(function(){
       if(bubbleEl) bubbleEl.classList.remove('show');
-    }, 1400);
+    }, duration || 1400);
+  }
+
+  function showSpinBubble(msg){
+    showBubble(msg, 2200);
   }
 
   icon.addEventListener('click', function(){
+    if (icon.dataset.claiming === '1') return;
     pokeCount++;
     icon.classList.remove('poked');
     void icon.offsetWidth; // restart animation
     icon.classList.add('poked');
     spawnParticles();
-    showBubble();
+
+    if (typeof window.claimSpinDiscount !== 'function'){
+      showBubble();
+      return;
+    }
+
+    icon.dataset.claiming = '1';
+    showSpinBubble('🎲 Rolling…');
+
+    window.claimSpinDiscount().then(function(result){
+      icon.dataset.claiming = '0';
+      if (result.status === 'win'){
+        showSpinBubble(`🎉 You won ${result.pct}% OFF! Applied to your cart`);
+        spawnParticles();
+        window.renderCartDrawer && window.renderCartDrawer();
+        window.renderCheckoutSummary && window.renderCheckoutSummary();
+      } else if (result.status === 'already'){
+        showSpinBubble(`You already grabbed ${result.pct}% today — come back tomorrow! 🎁`);
+      } else if (result.status === 'tryagain'){
+        showSpinBubble('So close! Try again 😅');
+      } else {
+        showSpinBubble('Oops, try again in a bit 🙈');
+      }
+    });
   });
 
   icon.addEventListener('animationend', function(e){
@@ -1862,6 +1890,7 @@
 
         <div class="order-summary" id="checkoutSummary"></div>
         <div class="cart-sum-row"><span>Subtotal</span><span id="checkoutSubtotal">Rs. 0</span></div>
+        <div class="cart-sum-row" id="checkoutBonusRow" style="display:none;color:var(--orange);"><span>🎁 Bonus Discount</span><span id="checkoutBonusAmt">-Rs. 0</span></div>
         <div class="cart-sum-row"><span>Delivery</span><span id="checkoutDelivery">Free Delivery</span></div>
         <div class="order-total-row"><span>Total</span><span id="checkoutTotal">Rs. 0</span></div>
 
@@ -1943,6 +1972,7 @@
     <div class="cart-drawer-items" id="cartItems"></div>
     <div class="cart-drawer-foot" id="cartFoot">
       <div class="cart-sum-row"><span>Subtotal</span><span id="cartSubtotal">Rs. 0</span></div>
+      <div class="cart-sum-row" id="cartBonusRow" style="display:none;color:var(--orange);"><span>🎁 Bonus Discount</span><span id="cartBonusAmt">-Rs. 0</span></div>
       <div class="cart-sum-row"><span>Delivery</span><span id="cartDelivery">Free Delivery</span></div>
       <div class="cart-sum-row total"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
       <button class="btn-primary" id="checkoutBtn" onclick="openCheckout()" style="width:100%;">Proceed to Checkout</button>
@@ -4075,6 +4105,23 @@ function showToast(message){
      No checkout/order/admin logic here. -->
 <script>
   const CART_KEY = 'dplex_cart';
+  const BONUS_KEY = 'dplex_bonus';
+
+  // ---- Spin-the-mascot bonus discount (0-5% off cart subtotal, once claimed per day) ----
+  function getBonusDiscount(){
+    try {
+      const raw = localStorage.getItem(BONUS_KEY);
+      if (!raw) return 0;
+      const data = JSON.parse(raw);
+      const todayKey = new Date().toISOString().slice(0, 10);
+      if (data.dateKey !== todayKey) return 0;
+      const pct = Number(data.pct) || 0;
+      return (pct > 0 && pct <= 5) ? pct : 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+  window.getBonusDiscount = getBonusDiscount;
 
   // ---- Cart storage helpers ----
   function getCart(){
@@ -4263,12 +4310,18 @@ function showToast(message){
 
     const subtotal = cartSubtotal(cart);
     const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
+    const bonusPct = getBonusDiscount();
+    const bonusAmt = bonusPct > 0 ? Math.round(subtotal * bonusPct / 100) : 0;
     const totalEl = document.getElementById('cartTotal');
     const subtotalEl = document.getElementById('cartSubtotal');
     const deliveryEl = document.getElementById('cartDelivery');
+    const bonusRowEl = document.getElementById('cartBonusRow');
+    const bonusAmtEl = document.getElementById('cartBonusAmt');
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : 'Free Delivery';
-    if (totalEl) totalEl.textContent = formatPriceLKR(subtotal + deliveryCharge);
+    if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? 'flex' : 'none';
+    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt) + ` (${bonusPct}%)`;
+    if (totalEl) totalEl.textContent = formatPriceLKR(subtotal - bonusAmt + deliveryCharge);
   }
 
   function escapeHtmlCart(str){
@@ -4413,6 +4466,7 @@ function showToast(message){
     collection,
     doc,
     getDoc,
+    setDoc,
     addDoc,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -4426,7 +4480,70 @@ function showToast(message){
     });
   }
 
-  // ---- WhatsApp order confirmation config ----
+  // ---- Spin-the-mascot bonus discount: Firestore-backed "once per day" claim ----
+  // Weighted pool: ~27% chance of 0% (no win, can retry), rest weighted toward
+  // smaller amounts so 5% stays rare. Tune this array to change the odds.
+  const SPIN_POOL = [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 5];
+
+  function getSpinDeviceId(){
+    try {
+      let id = localStorage.getItem("dplex_device_id");
+      if (!id){
+        id = (crypto.randomUUID ? crypto.randomUUID() : ("dev-" + Date.now() + "-" + Math.random().toString(36).slice(2)));
+        localStorage.setItem("dplex_device_id", id);
+      }
+      return id;
+    } catch (e) {
+      return "dev-fallback-" + Math.random().toString(36).slice(2);
+    }
+  }
+
+  function saveBonusLocal(pct, dateKey){
+    try {
+      localStorage.setItem("dplex_bonus", JSON.stringify({ pct, dateKey }));
+    } catch (e) { /* ignore */ }
+  }
+
+  // Called by the mascot icon's click handler (plain script, no Firestore access
+  // of its own). Returns { status: 'win'|'tryagain'|'already', pct }.
+  window.claimSpinDiscount = async function(){
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const deviceId = getSpinDeviceId();
+    const claimId = deviceId + "_" + todayKey;
+
+    try {
+      const db = await waitForDb();
+      const claimRef = doc(db, "spinClaims", claimId);
+      const existing = await getDoc(claimRef);
+
+      if (existing.exists()){
+        const pct = Number(existing.data().pct) || 0;
+        saveBonusLocal(pct, todayKey);
+        return { status: "already", pct };
+      }
+
+      const pct = SPIN_POOL[Math.floor(Math.random() * SPIN_POOL.length)];
+
+      if (pct === 0){
+        // No Firestore write on a 0% roll — doesn't use up today's attempt.
+        return { status: "tryagain", pct: 0 };
+      }
+
+      await setDoc(claimRef, {
+        deviceId,
+        dateKey: todayKey,
+        pct,
+        claimedAt: serverTimestamp()
+      });
+      saveBonusLocal(pct, todayKey);
+      return { status: "win", pct };
+    } catch (err) {
+      console.error("Spin discount claim failed:", err);
+      return { status: "error", pct: 0 };
+    }
+  };
+
+
   // Store owner: replace with your WhatsApp business number.
   // International format, digits only — NO "+", spaces, hyphens, or brackets.
   // Example: "94771234567"
@@ -4526,7 +4643,14 @@ function showToast(message){
 
     const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
     const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
-    const total = subtotal + deliveryCharge;
+    const bonusPct = window.getBonusDiscount ? window.getBonusDiscount() : 0;
+    const bonusAmt = bonusPct > 0 ? Math.round(subtotal * bonusPct / 100) : 0;
+    const total = subtotal - bonusAmt + deliveryCharge;
+
+    const bonusRowEl = document.getElementById("checkoutBonusRow");
+    const bonusAmtEl = document.getElementById("checkoutBonusAmt");
+    if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? "flex" : "none";
+    if (bonusAmtEl) bonusAmtEl.textContent = "-" + formatPriceLKR(bonusAmt) + ` (${bonusPct}%)`;
 
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : "Free Delivery";
@@ -4660,7 +4784,9 @@ function showToast(message){
 
       const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
       const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
-      const totalAmount = subtotal + deliveryCharge;
+      const bonusDiscountPct = window.getBonusDiscount ? window.getBonusDiscount() : 0;
+      const bonusDiscountAmount = bonusDiscountPct > 0 ? Math.round(subtotal * bonusDiscountPct / 100) : 0;
+      const totalAmount = subtotal - bonusDiscountAmount + deliveryCharge;
 
       // ---- Only include a field if it was actually collected (Admin may have disabled it) ----
       const orderPayload = {
@@ -4675,6 +4801,10 @@ function showToast(message){
         status: "pending",
         createdAt: serverTimestamp()
       };
+      if (bonusDiscountAmount > 0){
+        orderPayload.bonusDiscountPct = bonusDiscountPct;
+        orderPayload.bonusDiscountAmount = bonusDiscountAmount;
+      }
       if (formData.firstName !== undefined) orderPayload.firstName = formData.firstName;
       if (formData.lastName !== undefined) orderPayload.lastName = formData.lastName;
       if (formData.contact1 !== undefined) orderPayload.contact1 = formData.contact1;
