@@ -135,9 +135,33 @@
   .hero-visual-wrap{position:relative;}
   .hero-float-icon{position:absolute;bottom:-22px;left:-22px;width:68px;height:auto;z-index:3;filter:drop-shadow(0 12px 18px rgba(0,0,0,0.28));pointer-events:none;animation:heroFloatBob 3.2s ease-in-out infinite;}
   @keyframes heroFloatBob{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(-4deg);}}
-  .site-float-icon{position:fixed;right:22px;bottom:22px;width:90px;height:auto;z-index:150;pointer-events:none;filter:drop-shadow(0 12px 18px rgba(236,64,140,0.45));animation:siteFloatBob 3.2s ease-in-out infinite;}
+  .site-float-icon{position:fixed;right:22px;bottom:22px;width:90px;height:auto;z-index:150;pointer-events:auto;cursor:pointer;filter:drop-shadow(0 12px 18px rgba(236,64,140,0.45));animation:siteFloatBob 3.2s ease-in-out infinite;-webkit-tap-highlight-color:transparent;user-select:none;transition:filter .2s;}
+  .site-float-icon:hover{filter:drop-shadow(0 16px 22px rgba(236,64,140,0.55));}
+  .site-float-icon.poked{animation:siteFloatPoke .6s cubic-bezier(.34,1.56,.64,1);}
   @keyframes siteFloatBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  @keyframes siteFloatPoke{
+    0%{transform:translateY(0) scale(1) rotate(0deg);}
+    25%{transform:translateY(6px) scale(.82,1.18) rotate(-8deg);}
+    45%{transform:translateY(-22px) scale(1.12,.9) rotate(10deg);}
+    65%{transform:translateY(2px) scale(.95,1.06) rotate(-4deg);}
+    85%{transform:translateY(-6px) scale(1.03,.98) rotate(2deg);}
+    100%{transform:translateY(0) scale(1) rotate(0deg);}
+  }
   @media (max-width:768px){.site-float-icon{width:44px;right:12px;bottom:16px;}}
+
+  /* ---- fun click reaction: particle burst + speech bubble ---- */
+  .float-icon-fx-layer{position:fixed;inset:0;z-index:151;pointer-events:none;overflow:hidden;}
+  .float-icon-particle{position:fixed;font-size:20px;line-height:1;will-change:transform,opacity;animation:floatIconParticleFly .85s ease-out forwards;}
+  @keyframes floatIconParticleFly{
+    0%{transform:translate(0,0) scale(.6) rotate(0deg);opacity:1;}
+    100%{transform:translate(var(--fx),var(--fy)) scale(1.15) rotate(var(--fr));opacity:0;}
+  }
+  .float-icon-bubble{position:fixed;z-index:152;background:#fff;color:var(--ink);font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:13px;padding:9px 14px;border-radius:14px;box-shadow:0 10px 26px rgba(0,0,0,0.18);pointer-events:none;white-space:nowrap;opacity:0;transform:translateY(6px) scale(.9);transition:opacity .18s ease,transform .18s ease;}
+  .float-icon-bubble::after{content:'';position:absolute;bottom:-6px;right:22px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:2px;}
+  .float-icon-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+  @media (max-width:768px){
+    .float-icon-bubble{font-size:12px;padding:7px 12px;}
+  }
   .hero-tag{position:absolute;bottom:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:600;padding:8px 14px;border-radius:12px;display:flex;align-items:center;gap:6px;}
   .hero-visual span.big{font-family:'Sora';font-weight:600;font-size:22px;color:#fff;text-align:center;padding:0 30px;position:relative;z-index:2;}
   .hero-price-float{position:absolute;top:20px;right:20px;background:#fff;padding:10px 16px;border-radius:14px;text-align:left;box-shadow:0 8px 20px rgba(0,0,0,0.12);}
@@ -1017,7 +1041,84 @@
 </style>
 </head>
 <body>
-<img src="https://i.ibb.co/k65nCHBv/d-icon3d.png" class="site-float-icon" alt="" />
+<img src="https://i.ibb.co/k65nCHBv/d-icon3d.png" class="site-float-icon" id="siteFloatIcon" alt="Fun mascot — click me" />
+<div class="float-icon-fx-layer" id="floatIconFxLayer"></div>
+<script>
+(function(){
+  var icon = document.getElementById('siteFloatIcon');
+  var fxLayer = document.getElementById('floatIconFxLayer');
+  if(!icon || !fxLayer) return;
+
+  var messages = [
+    "Boop! 👋", "Wheee! ✨", "Tickles!", "You found me!",
+    "Hehe, again?", "Poke me more!", "🎉 Yay!", "That tickled!",
+    "Deals loading... jk 😄", "High five! ✋"
+  ];
+  var emojis = ["✨","🎉","💖","⭐","🎈","💫","🔥","🥳"];
+  var pokeCount = 0;
+  var bubbleEl = null;
+  var bubbleTimer = null;
+
+  function spawnParticles(){
+    var rect = icon.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var count = 8;
+    for(var i = 0; i < count; i++){
+      var span = document.createElement('span');
+      span.className = 'float-icon-particle';
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.6 - 0.3);
+      var dist = 60 + Math.random() * 50;
+      var fx = Math.cos(angle) * dist;
+      var fy = Math.sin(angle) * dist - 20;
+      span.style.left = cx + 'px';
+      span.style.top = cy + 'px';
+      span.style.setProperty('--fx', fx + 'px');
+      span.style.setProperty('--fy', fy + 'px');
+      span.style.setProperty('--fr', (Math.random() * 240 - 120) + 'deg');
+      fxLayer.appendChild(span);
+      (function(el){ setTimeout(function(){ el.remove(); }, 900); })(span);
+    }
+  }
+
+  function showBubble(){
+    var rect = icon.getBoundingClientRect();
+    if(!bubbleEl){
+      bubbleEl = document.createElement('div');
+      bubbleEl.className = 'float-icon-bubble';
+      document.body.appendChild(bubbleEl);
+    }
+    clearTimeout(bubbleTimer);
+    var msg = pokeCount > 6
+      ? "Okay okay, that's enough 😅"
+      : messages[Math.floor(Math.random() * messages.length)];
+    bubbleEl.textContent = msg;
+    var bubbleWidth = 170; // rough estimate before layout
+    var left = rect.left + rect.width / 2 - bubbleWidth;
+    left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 10));
+    bubbleEl.style.left = left + 'px';
+    bubbleEl.style.top = (rect.top - 54) + 'px';
+    requestAnimationFrame(function(){ bubbleEl.classList.add('show'); });
+    bubbleTimer = setTimeout(function(){
+      if(bubbleEl) bubbleEl.classList.remove('show');
+    }, 1400);
+  }
+
+  icon.addEventListener('click', function(){
+    pokeCount++;
+    icon.classList.remove('poked');
+    void icon.offsetWidth; // restart animation
+    icon.classList.add('poked');
+    spawnParticles();
+    showBubble();
+  });
+
+  icon.addEventListener('animationend', function(e){
+    if(e.animationName === 'siteFloatPoke') icon.classList.remove('poked');
+  });
+})();
+</script>
 
 <div class="announce-bar">Islandwide Delivery &nbsp;|&nbsp; Cash on Delivery Available</div>
 
