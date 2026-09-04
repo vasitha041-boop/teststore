@@ -156,11 +156,20 @@
     0%{transform:translate(0,0) scale(.6) rotate(0deg);opacity:1;}
     100%{transform:translate(var(--fx),var(--fy)) scale(1.15) rotate(var(--fr));opacity:0;}
   }
-  .float-icon-bubble{position:fixed;z-index:152;background:#fff;color:var(--ink);font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:13px;padding:9px 14px;border-radius:14px;box-shadow:0 10px 26px rgba(0,0,0,0.18);pointer-events:none;white-space:nowrap;opacity:0;transform:translateY(6px) scale(.9);transition:opacity .18s ease,transform .18s ease;}
-  .float-icon-bubble::after{content:'';position:absolute;bottom:-6px;right:22px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:2px;}
+  .float-icon-bubble{position:fixed;z-index:152;background:#fff;color:var(--ink);font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:13px;padding:10px 16px;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,0.18);pointer-events:none;white-space:normal;max-width:220px;line-height:1.35;text-align:center;opacity:0;transform:translateY(6px) scale(.85);transition:opacity .22s ease,transform .35s cubic-bezier(.34,1.56,.64,1);}
+  .float-icon-bubble::after{content:'';position:absolute;bottom:-6px;right:22px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:2px;transition:background .2s;}
   .float-icon-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+  .float-icon-bubble.win{background:linear-gradient(135deg,var(--orange),#ff8f52);color:#fff;box-shadow:0 16px 32px rgba(251,106,25,0.4);animation:bubbleWinShake .5s ease .1s;}
+  .float-icon-bubble.win::after{background:#ff8f52;}
+  .float-icon-bubble.tryagain{background:#2A2A2A;color:#fff;}
+  .float-icon-bubble.tryagain::after{background:#2A2A2A;}
+  @keyframes bubbleWinShake{
+    0%,100%{transform:translateY(0) scale(1) rotate(0deg);}
+    25%{transform:translateY(0) scale(1.04) rotate(-2deg);}
+    75%{transform:translateY(0) scale(1.04) rotate(2deg);}
+  }
   @media (max-width:768px){
-    .float-icon-bubble{font-size:12px;padding:7px 12px;}
+    .float-icon-bubble{font-size:12px;padding:8px 13px;max-width:180px;}
   }
   .hero-tag{position:absolute;bottom:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:600;padding:8px 14px;border-radius:12px;display:flex;align-items:center;gap:6px;}
   .hero-visual span.big{font-family:'Sora';font-weight:600;font-size:22px;color:#fff;text-align:center;padding:0 30px;position:relative;z-index:2;}
@@ -1082,7 +1091,7 @@
     }
   }
 
-  function showBubble(customMsg, duration){
+  function showBubble(customMsg, duration, kind){
     var rect = icon.getBoundingClientRect();
     if(!bubbleEl){
       bubbleEl = document.createElement('div');
@@ -1093,21 +1102,43 @@
     var msg = customMsg || (pokeCount > 6
       ? "Okay okay, that's enough 😅"
       : messages[Math.floor(Math.random() * messages.length)]);
+    bubbleEl.className = 'float-icon-bubble' + (kind ? (' ' + kind) : '');
     bubbleEl.textContent = msg;
-    var bubbleWidth = 170; // rough estimate before layout
-    var left = rect.left + rect.width / 2 - bubbleWidth;
+
+    // Measure the bubble's real rendered width (it can wrap onto 2 lines)
+    // instead of guessing, so long messages never overflow the screen edge.
+    bubbleEl.style.left = '-9999px';
+    bubbleEl.style.top = '-9999px';
+    var bubbleWidth = bubbleEl.getBoundingClientRect().width || 170;
+    var left = rect.left + rect.width / 2 - bubbleWidth / 2;
     left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 10));
     bubbleEl.style.left = left + 'px';
-    bubbleEl.style.top = (rect.top - 54) + 'px';
+    var bubbleHeight = bubbleEl.getBoundingClientRect().height || 40;
+    bubbleEl.style.top = (rect.top - bubbleHeight - 14) + 'px';
+
     requestAnimationFrame(function(){ bubbleEl.classList.add('show'); });
     bubbleTimer = setTimeout(function(){
       if(bubbleEl) bubbleEl.classList.remove('show');
     }, duration || 1400);
   }
 
-  function showSpinBubble(msg){
-    showBubble(msg, 2200);
+  function showSpinBubble(msg, kind){
+    showBubble(msg, 2400, kind);
   }
+
+  var rollingMsgs = ["🎲 Rolling…", "🎰 Spinning…", "🔮 Let's see…"];
+  var tryAgainMsgs = [
+    "So close! Try again 😅", "Almost! Spin again 👀",
+    "No luck — one more go! 🍀", "Ooh, so near! Try again ✨"
+  ];
+  var alreadyMsgs = function(pct){
+    return [
+      `You already snagged ${pct}% today — come back tomorrow! 🎁`,
+      `${pct}% is already yours today! See you tomorrow 😄`,
+      `Nice, ${pct}% is locked in for today. Tomorrow, try again! 🌅`
+    ];
+  };
+  function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
   icon.addEventListener('click', function(){
     if (icon.dataset.claiming === '1') return;
@@ -1123,19 +1154,20 @@
     }
 
     icon.dataset.claiming = '1';
-    showSpinBubble('🎲 Rolling…');
+    showSpinBubble(pick(rollingMsgs));
 
     window.claimSpinDiscount().then(function(result){
       icon.dataset.claiming = '0';
       if (result.status === 'win'){
-        showSpinBubble(`🎉 You won ${result.pct}% OFF! Applied to your cart`);
+        showSpinBubble(`🎉 You won ${result.pct}% OFF! Applied to your cart`, 'win');
+        spawnParticles();
         spawnParticles();
         window.renderCartDrawer && window.renderCartDrawer();
         window.renderCheckoutSummary && window.renderCheckoutSummary();
       } else if (result.status === 'already'){
-        showSpinBubble(`You already grabbed ${result.pct}% today — come back tomorrow! 🎁`);
+        showSpinBubble(pick(alreadyMsgs(result.pct)));
       } else if (result.status === 'tryagain'){
-        showSpinBubble('So close! Try again 😅');
+        showSpinBubble(pick(tryAgainMsgs), 'tryagain');
       } else {
         showSpinBubble('Oops, try again in a bit 🙈');
       }
