@@ -156,20 +156,72 @@
     0%{transform:translate(0,0) scale(.6) rotate(0deg);opacity:1;}
     100%{transform:translate(var(--fx),var(--fy)) scale(1.15) rotate(var(--fr));opacity:0;}
   }
-  .float-icon-bubble{position:fixed;z-index:152;background:#fff;color:var(--ink);font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:13px;padding:10px 16px;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,0.18);pointer-events:none;white-space:normal;max-width:220px;line-height:1.35;text-align:center;opacity:0;transform:translateY(6px) scale(.85);transition:opacity .22s ease,transform .35s cubic-bezier(.34,1.56,.64,1);}
-  .float-icon-bubble::after{content:'';position:absolute;bottom:-6px;right:22px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:2px;transition:background .2s;}
-  .float-icon-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+  .float-icon-bubble{position:fixed;z-index:152;background:#fff;color:var(--ink);font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:13px;padding:10px 16px;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,0.18);pointer-events:none;white-space:normal;max-width:210px;line-height:1.35;text-align:center;opacity:0;transform-origin:100% 50%;transform:scale(.35) translateX(10px);transition:opacity .25s ease,transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .2s ease;will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+  .float-icon-bubble::after{content:'';position:absolute;top:50%;right:-5px;width:12px;height:12px;background:#fff;transform:translateY(-50%) rotate(45deg);border-radius:2px;transition:background .2s;}
+  .float-icon-bubble.show{opacity:1;transform:scale(1) translateX(0);}
   .float-icon-bubble.win{background:linear-gradient(135deg,var(--orange),#ff8f52);color:#fff;box-shadow:0 16px 32px rgba(251,106,25,0.4);animation:bubbleWinShake .5s ease .1s;}
   .float-icon-bubble.win::after{background:#ff8f52;}
   .float-icon-bubble.tryagain{background:#2A2A2A;color:#fff;}
   .float-icon-bubble.tryagain::after{background:#2A2A2A;}
+  /* ---- Promo hint card: one design for every screen size. Sits above the
+     mascot, right-aligned so its tail points down at it. Width is capped to
+     the viewport so a long message wraps instead of running off-screen. ---- */
+  .float-icon-bubble--hint{
+    pointer-events:auto;cursor:pointer;
+    display:flex;align-items:center;gap:10px;
+    width:max-content;max-width:min(268px,calc(100vw - 32px));
+    padding:10px 12px;
+    white-space:normal;text-align:left;
+    background:#fff;
+    border:1px solid rgba(20,20,20,0.07);
+    border-radius:16px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.06);
+    transform-origin:88% 100%;
+    transform:scale(.9) translateY(8px);
+    animation:none;
+    will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    transform-style:preserve-3d;
+  }
+  .float-icon-bubble--hint.show{transform:scale(1) translateY(0);animation:bubbleHintFloat 3.2s ease-in-out infinite;}
+  .float-icon-bubble--hint::after{
+    top:auto;bottom:-5px;right:24px;left:auto;
+    width:11px;height:11px;background:#fff;
+    border-right:1px solid rgba(20,20,20,0.07);
+    border-bottom:1px solid rgba(20,20,20,0.07);
+    border-radius:0 0 3px 0;
+  }
+  .float-icon-bubble--hint:hover{box-shadow:0 16px 36px rgba(0,0,0,0.18),0 3px 10px rgba(0,0,0,0.08);}
+  .float-icon-bubble--hint-icn{
+    flex:0 0 auto;width:34px;height:34px;border-radius:11px;
+    background:linear-gradient(135deg,var(--orange),#FF9556);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(251,106,25,0.34);
+  }
+  .float-icon-bubble--hint-icn svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2;}
+  .float-icon-bubble--hint-body{display:flex;flex-direction:column;gap:1px;min-width:0;}
+  .float-icon-bubble--hint-ttl{font-family:'Sora',Arial,sans-serif;font-size:13px;font-weight:700;color:var(--ink);line-height:1.25;}
+  .float-icon-bubble--hint-sub{font-family:'Inter',Arial,sans-serif;font-size:11px;font-weight:500;color:var(--muted);line-height:1.3;}
+  .float-icon-bubble--hint-x{
+    flex:0 0 auto;width:22px;height:22px;margin-left:2px;border:none;padding:0;
+    border-radius:50%;background:rgba(20,20,20,0.05);color:var(--muted);
+    font-size:12px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;
+  }
+  .float-icon-bubble--hint-x:hover{background:rgba(20,20,20,0.11);color:var(--ink);}
+  @keyframes bubbleHintFloat{0%,100%{transform:scale(1) translateY(0);}50%{transform:scale(1) translateY(-14px);}}
   @keyframes bubbleWinShake{
     0%,100%{transform:translateY(0) scale(1) rotate(0deg);}
     25%{transform:translateY(0) scale(1.04) rotate(-2deg);}
     75%{transform:translateY(0) scale(1.04) rotate(2deg);}
   }
   @media (max-width:768px){
-    .float-icon-bubble{font-size:12px;padding:8px 13px;max-width:180px;}
+    .float-icon-bubble{font-size:12px;padding:8px 13px;max-width:170px;}
+
+    /* hint card keeps its single shared design; just tighten it slightly */
+    .float-icon-bubble--hint{padding:9px 11px;gap:9px;}
+    .float-icon-bubble--hint-icn{width:31px;height:31px;border-radius:10px;}
+    .float-icon-bubble--hint-ttl{font-size:12.5px;}
+    .float-icon-bubble--hint-sub{font-size:10.5px;}
   }
 
   /* ---- spin-the-mascot reveal modal: slot-machine style rolling number ---- */
@@ -184,7 +236,7 @@
   .spin-reel-wrap{background:linear-gradient(155deg,#FB6A19 0%,#FFB37A 100%);border-radius:18px;padding:8px 10px;margin-bottom:14px;overflow:hidden;}
   .spin-reel-row{display:flex;align-items:center;justify-content:center;}
   .spin-reel-window{height:70px;width:40px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
-  .spin-reel-window--units{margin-left:1px;transform:scaleY(-1);}
+  .spin-reel-window--units{margin-left:-10px;transform:scaleY(-1);}
   .spin-reel-track{will-change:transform;}
   .spin-reel-track.spinning{filter:blur(.5px);}
   .spin-reel-num{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;}
@@ -1115,6 +1167,16 @@
   var fxLayer = document.getElementById('floatIconFxLayer');
   if(!icon || !fxLayer) return;
 
+  // ---- DEV SWITCH ----------------------------------------------------
+  // true  = the promo card stays on screen permanently while you build,
+  //         and only disappears when the 3D mascot is clicked.
+  // false = normal shop behaviour (shows once per session, remembers a
+  //         dismissal, auto-hides after the pointer leaves).
+  // Flip this to false before going live.
+  var HINT_ALWAYS_VISIBLE = true;
+  // ---------------------------------------------------------------------
+
+
   var messages = [
     "Boop! 👋", "Wheee! ✨", "Tickles!", "You found me!",
     "Hehe, again?", "Poke me more!", "🎉 Yay!", "That tickled!",
@@ -1124,6 +1186,13 @@
   var pokeCount = 0;
   var bubbleEl = null;
   var bubbleTimer = null;
+  // The mascot icon's own bob animation (siteFloatBob) starts running the
+  // moment the page paints, with no JS hook into its timeline. Recording
+  // "now" here (script init, effectively the same moment) lets us later
+  // compute how far into its 3.2s cycle the icon currently is, so the hint
+  // bubble's bob can be phase-aligned to move up/down in lockstep with it.
+  var ICON_BOB_EPOCH = performance.now();
+  var ICON_BOB_DURATION = 3.2; // seconds — must match siteFloatBob & bubbleHintFloat
 
   function spawnParticles(){
     var rect = icon.getBoundingClientRect();
@@ -1148,35 +1217,122 @@
     }
   }
 
-  function showBubble(customMsg, duration, kind){
+  function showBubble(customMsg, duration, kind, isHint){
     var rect = icon.getBoundingClientRect();
     if(!bubbleEl){
       bubbleEl = document.createElement('div');
       bubbleEl.className = 'float-icon-bubble';
       document.body.appendChild(bubbleEl);
+      bubbleEl.addEventListener('click', function(){
+        if(!bubbleEl.classList.contains('float-icon-bubble--hint')) return;
+        triggerSpin();
+      });
+      bubbleEl.addEventListener('mouseenter', function(){ clearTimeout(bubbleTimer); });
+      bubbleEl.addEventListener('mouseleave', function(){
+        if(!bubbleEl.classList.contains('float-icon-bubble--hint')) return;
+        if (HINT_ALWAYS_VISIBLE) return;   // dev: stays put until the icon is clicked
+        bubbleTimer = setTimeout(function(){ bubbleEl.classList.remove('show'); }, 1600);
+      });
     }
     clearTimeout(bubbleTimer);
     var msg = customMsg || (pokeCount > 6
       ? "Okay okay, that's enough 😅"
       : messages[Math.floor(Math.random() * messages.length)]);
-    bubbleEl.className = 'float-icon-bubble' + (kind ? (' ' + kind) : '');
-    bubbleEl.textContent = msg;
+    bubbleEl._lastMsg = msg; // remember the plain headline for resize repositioning
+    bubbleEl.className = 'float-icon-bubble' + (kind ? (' ' + kind) : '') + (isHint ? ' float-icon-bubble--hint' : '');
 
-    // Measure the bubble's real rendered width (it can wrap onto 2 lines)
-    // instead of guessing, so long messages never overflow the screen edge.
+    // The promo hint is a small card (gift icon + headline + subline +
+    // dismiss). Every other bubble stays a plain tooltip.
+    if (isHint){
+      bubbleEl.innerHTML =
+        '<span class="float-icon-bubble--hint-icn">' +
+          '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
+            '<polyline points="20 12 20 22 4 22 4 12" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<rect x="2" y="7" width="20" height="5" rx="1"/>' +
+            '<line x1="12" y1="22" x2="12" y2="7"/>' +
+            '<path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+        '</span>' +
+        '<span class="float-icon-bubble--hint-body">' +
+          '<span class="float-icon-bubble--hint-ttl"></span>' +
+          '<span class="float-icon-bubble--hint-sub">Tap to spin &amp; save</span>' +
+        '</span>' +
+        '<button type="button" class="float-icon-bubble--hint-x" aria-label="Dismiss">\u2715</button>';
+      bubbleEl.querySelector('.float-icon-bubble--hint-ttl').textContent = msg;
+      bubbleEl.querySelector('.float-icon-bubble--hint-x').addEventListener('click', function(e){
+        e.stopPropagation();               // don't trigger the spin
+        if (HINT_ALWAYS_VISIBLE) return;   // dev: only the mascot click hides it
+        bubbleEl.classList.remove('show');
+        try{ localStorage.setItem('spinIconHintDismissed', '1'); }catch(err){}
+      });
+    } else {
+      bubbleEl.textContent = msg;
+    }
+
+    // Measure the bubble's real rendered size instead of guessing, so
+    // long messages never overflow the screen edge.
     bubbleEl.style.left = '-9999px';
     bubbleEl.style.top = '-9999px';
     var bubbleWidth = bubbleEl.getBoundingClientRect().width || 170;
-    var left = rect.left + rect.width / 2 - bubbleWidth / 2;
-    left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 10));
-    bubbleEl.style.left = left + 'px';
     var bubbleHeight = bubbleEl.getBoundingClientRect().height || 40;
-    bubbleEl.style.top = (rect.top - bubbleHeight - 14) + 'px';
+    var gap = 16;
+    var left, top;
 
-    requestAnimationFrame(function(){ bubbleEl.classList.add('show'); });
-    bubbleTimer = setTimeout(function(){
-      if(bubbleEl) bubbleEl.classList.remove('show');
-    }, duration || 1400);
+    if (isHint){
+      // Hint card sits ABOVE the icon, right-edge aligned with it so the
+      // tail points down at the mascot.
+      left = rect.right - bubbleWidth;
+      top = rect.top - bubbleHeight - gap;
+    } else {
+      // Original behaviour: bubble sits beside the icon.
+      left = rect.left - bubbleWidth - gap;
+      if (left < 10){
+        // Not enough room to the left (very narrow screen) — fall back
+        // to floating above the icon instead of overlapping it.
+        left = rect.left + rect.width / 2 - bubbleWidth / 2;
+      }
+      top = rect.top + rect.height / 2 - bubbleHeight / 2;
+    }
+    // Always clamp to the viewport, no matter which branch produced
+    // `left`/`top`, so the card can never render partly off-screen.
+    left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 16));
+    top = Math.max(20, Math.min(top, window.innerHeight - bubbleHeight - 10));
+    bubbleEl.style.left = left + 'px';
+    bubbleEl.style.top = top + 'px';
+
+    requestAnimationFrame(function(){
+      bubbleEl.classList.add('show');
+      if (isHint){
+        // Phase-align the bubble's bob with the icon's already-running
+        // bob loop, so they always crest and dip together instead of
+        // drifting in and out of sync.
+        var phase = ((performance.now() - ICON_BOB_EPOCH) / 1000) % ICON_BOB_DURATION;
+        bubbleEl.style.animationDelay = (-phase) + 's';
+      }
+    });
+    clearTimeout(bubbleTimer);
+    // A hint bubble stays on screen (fixed alongside the 3D icon) until
+    // the user actually taps the icon — no auto-hide timer for it.
+    if (!isHint){
+      bubbleTimer = setTimeout(function(){
+        if(bubbleEl) bubbleEl.classList.remove('show');
+      }, duration || 1400);
+    }
+  }
+
+  // Keep an on-screen hint bubble correctly placed beside the icon if the
+  // viewport size changes (rotation, browser chrome show/hide, etc.) so it
+  // never ends up clipped off the edge of the screen.
+  window.addEventListener('resize', function(){
+    if (bubbleEl && bubbleEl.classList.contains('show') && bubbleEl.classList.contains('float-icon-bubble--hint')){
+      showBubble(bubbleEl._lastMsg, 0, null, true);
+    }
+  });
+
+  function hideBubbleNow(){
+    clearTimeout(bubbleTimer);
+    if(bubbleEl) bubbleEl.classList.remove('show');
   }
 
   function showSpinBubble(msg, kind){
@@ -1200,19 +1356,30 @@
   };
   function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
-  var hintMsgs = ["🎁 Tap me for a surprise!", "Psst… free discount inside 👀", "Click for a chance to win! 🎉"];
+  var hintMsgs = ["Free discount inside 🎁", "Feeling lucky today?", "Win up to 5% off 🎉"];
 
   function tryShowHint(){
-    try{
-      if (localStorage.getItem('spinIconHintDismissed') === '1') return;
-      if (sessionStorage.getItem('spinIconHintShown') === '1') return;
-    }catch(e){}
-    showBubble(pick(hintMsgs), 3200);
+    if (!HINT_ALWAYS_VISIBLE){
+      try{
+        if (localStorage.getItem('spinIconHintDismissed') === '1') return;
+        if (sessionStorage.getItem('spinIconHintShown') === '1') return;
+      }catch(e){}
+    }
+    showBubble(pick(hintMsgs), 6000, null, true);
     icon.classList.add('hint-pulse');
     setTimeout(function(){ icon.classList.remove('hint-pulse'); }, 3600);
     try{ sessionStorage.setItem('spinIconHintShown', '1'); }catch(e){}
   }
-  setTimeout(tryShowHint, 1400);
+  // Wait for web fonts to finish loading before the very first measurement —
+  // otherwise getBoundingClientRect() picks up fallback-font metrics and the
+  // bubble gets positioned using a width that's wrong once Sora/Inter swap
+  // in, making it look glued to the screen edge until something (like a
+  // resize) forces a recalculation with the real fonts loaded.
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ setTimeout(tryShowHint, 1400); });
+  } else {
+    setTimeout(tryShowHint, 1400);
+  }
 
   // ---- Slot-machine style reveal modal (replaces instant bubble reveal) ----
   var spinOverlay = document.getElementById('spinModalOverlay');
@@ -1439,9 +1606,15 @@
     }
   }
 
-  icon.addEventListener('click', function(){
+  function triggerSpin(){
     if (icon.dataset.claiming === '1') return;
-    try{ localStorage.setItem('spinIconHintDismissed', '1'); }catch(e){}
+    // Clicking the mascot always hides the card. While developing we skip the
+    // persistent flag so a page reload brings the card straight back.
+    if (!HINT_ALWAYS_VISIBLE){
+      try{ localStorage.setItem('spinIconHintDismissed', '1'); }catch(e){}
+    }
+    hideBubbleNow();
+    icon.classList.remove('hint-pulse');
     pokeCount++;
     icon.classList.remove('poked');
     void icon.offsetWidth; // restart animation
@@ -1455,7 +1628,9 @@
 
     icon.dataset.claiming = '1';
     runSpin();
-  });
+  }
+
+  icon.addEventListener('click', triggerSpin);
 
   icon.addEventListener('animationend', function(e){
     if(e.animationName === 'siteFloatPoke') icon.classList.remove('poked');
