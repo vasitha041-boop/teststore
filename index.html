@@ -569,7 +569,7 @@
   .form-group input,.form-group textarea,.form-group select{width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:13.5px;font-family:'Inter';color:var(--ink);transition:border-color .2s,box-shadow .2s;}
   .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(251,106,25,0.12);}
   .warranty-select-row{display:flex;align-items:center;gap:12px;}
-  .warranty-select-row select{width:auto;flex:1;cursor:pointer;}
+  .warranty-select-row input{width:auto;flex:1;}
   .warranty-clear-btn{flex-shrink:0;background:none;border:none;padding:0;display:flex;align-items:center;gap:4px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;transition:color .2s;}
   .warranty-clear-btn span{font-size:15px;line-height:1;}
   .warranty-clear-btn:hover{color:var(--ink);}
@@ -2334,15 +2334,7 @@
         <div class="form-group" id="fieldProductWarranty">
           <label for="productWarranty">Warranty <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
           <div class="warranty-select-row">
-            <select id="productWarranty">
-              <option value="">No Warranty</option>
-              <option value="6 Month Warranty">6 Month Warranty</option>
-              <option value="1 Year Warranty">1 Year Warranty</option>
-              <option value="1 Year Official Sony Warranty">1 Year Official Sony Warranty</option>
-              <option value="2 Year Warranty">2 Year Warranty</option>
-              <option value="3 Year Warranty">3 Year Warranty</option>
-              <option value="Lifetime Warranty">Lifetime Warranty</option>
-            </select>
+            <input type="text" id="productWarranty" placeholder="e.g. 1 Year Official Sony Warranty">
             <button type="button" class="warranty-clear-btn" id="productWarrantyClearBtn" onclick="clearProductWarranty()">
               <span>×</span> Clear
             </button>
@@ -5335,34 +5327,19 @@ Please confirm my order.`
     el.classList.remove("show");
   }
 
-  // ---- Warranty select helpers ----
+  // ---- Warranty field helpers ----
   function setProductWarrantyValue(value){
-    const sel = document.getElementById("productWarranty");
-    if (!sel) return;
-    const val = value || "";
-    const hasOption = Array.from(sel.options).some(opt => opt.value === val);
-    if (val && !hasOption){
-      const opt = document.createElement("option");
-      opt.value = val;
-      opt.textContent = val;
-      sel.appendChild(opt);
-    }
-    sel.value = val;
+    const el = document.getElementById("productWarranty");
+    if (!el) return;
+    el.value = value || "";
   }
   window.clearProductWarranty = function(){
     setProductWarrantyValue("");
+    document.getElementById("productWarranty").focus();
   };
 
   function resetProductForm(){
     document.getElementById("productForm").reset();
-    const warrantySel = document.getElementById("productWarranty");
-    if (warrantySel){
-      const baseValues = ["", "6 Month Warranty", "1 Year Warranty", "1 Year Official Sony Warranty", "2 Year Warranty", "3 Year Warranty", "Lifetime Warranty"];
-      Array.from(warrantySel.options).forEach(opt => {
-        if (!baseValues.includes(opt.value)) opt.remove();
-      });
-      warrantySel.value = "";
-    }
     document.getElementById("productActive").checked = true;
     document.getElementById("productImagePreview").innerHTML = "<span>🖼</span>";
     document.getElementById("productImageInput").value = "";
