@@ -148,6 +148,8 @@
     100%{transform:translateY(0) scale(1) rotate(0deg);}
   }
   @media (max-width:768px){.site-float-icon{width:44px;right:12px;bottom:16px;}}
+  .site-float-icon.hint-pulse{animation:siteFloatBob 3.2s ease-in-out infinite,hintPulseGlow 1.1s ease-in-out 3;}
+  @keyframes hintPulseGlow{0%,100%{filter:drop-shadow(0 12px 18px rgba(236,64,140,0.45));}50%{filter:drop-shadow(0 12px 28px rgba(236,64,140,0.9)) brightness(1.08);}}
 
   /* ---- fun click reaction: particle burst + speech bubble ---- */
   .float-icon-fx-layer{position:fixed;inset:0;z-index:151;pointer-events:none;overflow:hidden;}
@@ -1140,8 +1142,23 @@
   };
   function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
+  var hintMsgs = ["🎁 Tap me for a surprise!", "Psst… free discount inside 👀", "Click for a chance to win! 🎉"];
+
+  function tryShowHint(){
+    try{
+      if (localStorage.getItem('spinIconHintDismissed') === '1') return;
+      if (sessionStorage.getItem('spinIconHintShown') === '1') return;
+    }catch(e){}
+    showBubble(pick(hintMsgs), 3200);
+    icon.classList.add('hint-pulse');
+    setTimeout(function(){ icon.classList.remove('hint-pulse'); }, 3600);
+    try{ sessionStorage.setItem('spinIconHintShown', '1'); }catch(e){}
+  }
+  setTimeout(tryShowHint, 1400);
+
   icon.addEventListener('click', function(){
     if (icon.dataset.claiming === '1') return;
+    try{ localStorage.setItem('spinIconHintDismissed', '1'); }catch(e){}
     pokeCount++;
     icon.classList.remove('poked');
     void icon.offsetWidth; // restart animation
