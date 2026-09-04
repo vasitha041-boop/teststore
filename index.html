@@ -1296,8 +1296,16 @@
     }
     // Always clamp to the viewport, no matter which branch produced
     // `left`/`top`, so the card can never render partly off-screen.
-    left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 20));
-    top = Math.max(20, Math.min(top, window.innerHeight - bubbleHeight - 20));
+    // Use clientWidth/clientHeight (viewport minus any real scrollbar), not
+    // window.innerWidth/innerHeight (which INCLUDES a desktop scrollbar's
+    // own width). Clamping against innerWidth ate part of the intended gap
+    // into the scrollbar's real estate, leaving almost nothing visible on
+    // desktop even though the same code looked fine on mobile (no scrollbar
+    // there to eat into the number).
+    var viewportW = document.documentElement.clientWidth;
+    var viewportH = document.documentElement.clientHeight;
+    left = Math.max(10, Math.min(left, viewportW - bubbleWidth - 20));
+    top = Math.max(20, Math.min(top, viewportH - bubbleHeight - 20));
     bubbleEl.style.left = left + 'px';
     bubbleEl.style.top = top + 'px';
 
