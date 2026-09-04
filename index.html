@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -182,12 +183,15 @@
   .spin-modal-close:hover{background:var(--line);}
   .spin-modal-title{font-family:'Sora';font-size:16.5px;font-weight:600;margin-bottom:2px;}
   .spin-modal-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
-  .spin-reel-wrap{background:linear-gradient(155deg,#FB6A19 0%,#FFB37A 100%);border-radius:18px;padding:20px 10px;margin-bottom:14px;overflow:hidden;}
-  .spin-reel-number{font-family:'Sora';font-size:48px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;transition:transform .12s ease;}
-  .spin-reel-number.spinning{animation:spinReelBlur .09s linear infinite;}
-  @keyframes spinReelBlur{0%{filter:blur(0);transform:translateY(0);}50%{filter:blur(2px);transform:translateY(-3px);}100%{filter:blur(0);transform:translateY(0);}}
-  .spin-reel-number.landed{animation:spinReelLand .4s cubic-bezier(.34,1.56,.64,1);}
-  @keyframes spinReelLand{0%{transform:scale(1.25);}60%{transform:scale(.94);}100%{transform:scale(1);}}
+  .spin-reel-wrap{background:linear-gradient(155deg,#FB6A19 0%,#FFB37A 100%);border-radius:18px;padding:8px 10px;margin-bottom:14px;overflow:hidden;}
+  .spin-reel-row{display:flex;align-items:center;justify-content:center;}
+  .spin-reel-window{height:70px;width:78px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
+  .spin-reel-track{will-change:transform;}
+  .spin-reel-track.spinning{filter:blur(.5px);}
+  .spin-reel-num{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;}
+  .spin-reel-num.landed{animation:spinReelLand .4s cubic-bezier(.34,1.56,.64,1);}
+  .spin-reel-percent{font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;margin-left:1px;}
+  @keyframes spinReelLand{0%{transform:scale(1.2);}60%{transform:scale(.94);}100%{transform:scale(1);}}
   .spin-modal-result{font-size:13.5px;font-weight:600;min-height:34px;margin-bottom:16px;line-height:1.4;color:var(--ink);}
   .spin-modal-result.win{color:var(--teal);}
   .spin-modal-result.lose{color:var(--muted);}
@@ -1088,7 +1092,12 @@
     <div class="spin-modal-title">🎰 Spin for a discount!</div>
     <div class="spin-modal-sub" id="spinModalSub">Good luck!</div>
     <div class="spin-reel-wrap">
-      <div class="spin-reel-number spinning" id="spinReelNumber">0%</div>
+      <div class="spin-reel-row">
+        <div class="spin-reel-window" id="spinReelWindow">
+          <div class="spin-reel-track spinning" id="spinReelTrack"></div>
+        </div>
+        <div class="spin-reel-percent" id="spinReelPercent">%</div>
+      </div>
     </div>
     <div class="spin-modal-result" id="spinModalResult">&nbsp;</div>
     <button class="spin-modal-btn" id="spinModalBtn" type="button" disabled>Spinning…</button>
@@ -1169,16 +1178,19 @@
     showBubble(msg, 2400, kind);
   }
 
+  function pad2(n){ return String(n).padStart(2, '0'); }
+
   var rollingMsgs = ["🎲 Rolling…", "🎰 Spinning…", "🔮 Let's see…"];
   var tryAgainMsgs = [
     "So close! Try again 😅", "Almost! Spin again 👀",
     "No luck — one more go! 🍀", "Ooh, so near! Try again ✨"
   ];
   var alreadyMsgs = function(pct){
+    var p = pad2(pct);
     return [
-      `You already snagged ${pct}% today — come back tomorrow! 🎁`,
-      `${pct}% is already yours today! See you tomorrow 😄`,
-      `Nice, ${pct}% is locked in for today. Tomorrow, try again! 🌅`
+      `You already snagged ${p}% today — come back tomorrow! 🎁`,
+      `${p}% is already yours today! See you tomorrow 😄`,
+      `Nice, ${p}% is locked in for today. Tomorrow, try again! 🌅`
     ];
   };
   function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
@@ -1199,65 +1211,167 @@
 
   // ---- Slot-machine style reveal modal (replaces instant bubble reveal) ----
   var spinOverlay = document.getElementById('spinModalOverlay');
-  var spinReelNumber = document.getElementById('spinReelNumber');
+  var spinReelTrack = document.getElementById('spinReelTrack');
   var spinModalResult = document.getElementById('spinModalResult');
   var spinModalBtn = document.getElementById('spinModalBtn');
   var spinModalSub = document.getElementById('spinModalSub');
   var spinModalClose = document.getElementById('spinModalClose');
+  var spinReelPercent = document.getElementById('spinReelPercent');
   var spinRollTimer = null;
+  var spinStartedAt = 0;
+
+  // ---- Reel engine: a strip of numbers that actually slides behind a
+  // fixed window, instead of text being swapped in place. ----
+  var REEL_ITEM_H = 70;
+  var reelItems = [];      // [{value, el}]
+  var reelPos = 0;         // current scroll offset in px
+  var reelRAFId = null;
+  var reelSpinning = false;
+  var reelSpeed = 1000;    // px/sec while freely spinning
+  var reelLastTs = 0;
+
+  function reelClear(){
+    spinRAFCancel();
+    spinReelTrack.innerHTML = '';
+    reelItems = [];
+    reelPos = 0;
+    spinReelTrack.style.transform = 'translateY(0px)';
+  }
+  function spinRAFCancel(){
+    if (reelRAFId) cancelAnimationFrame(reelRAFId);
+    reelRAFId = null;
+    reelSpinning = false;
+  }
+  function reelPushRandom(){
+    var v = Math.floor(Math.random() * 100);
+    var el = document.createElement('div');
+    el.className = 'spin-reel-num';
+    el.textContent = pad2(v);
+    spinReelTrack.appendChild(el);
+    reelItems.push({ value: v, el: el });
+  }
+  function reelEnsureItems(minCount){
+    while (reelItems.length < minCount) reelPushRandom();
+  }
+  function reelEnsureForPos(pos){
+    reelEnsureItems(Math.ceil((pos + REEL_ITEM_H * 2) / REEL_ITEM_H) + 1);
+  }
+  function reelRender(){
+    spinReelTrack.style.transform = 'translateY(-' + reelPos + 'px)';
+  }
+  function reelFreeSpinLoop(ts){
+    if (!reelSpinning) return;
+    if (!reelLastTs) reelLastTs = ts;
+    var dt = (ts - reelLastTs) / 1000;
+    reelLastTs = ts;
+    reelPos += reelSpeed * dt;
+    reelEnsureForPos(reelPos);
+    reelRender();
+    reelRAFId = requestAnimationFrame(reelFreeSpinLoop);
+  }
+  function reelStartFreeSpin(){
+    reelClear();
+    spinReelTrack.classList.add('spinning');
+    reelEnsureItems(6);
+    reelSpinning = true;
+    reelLastTs = 0;
+    reelRAFId = requestAnimationFrame(reelFreeSpinLoop);
+  }
+  // Decelerates the moving strip to a stop exactly on displayText, then
+  // fires callback. displayText can be a plain string like '—'.
+  function reelLandOn(displayText, callback){
+    spinRAFCancel();
+    spinReelTrack.classList.remove('spinning');
+    var targetIndex = Math.ceil(reelPos / REEL_ITEM_H) + 5;
+    reelEnsureItems(targetIndex + 1);
+    var targetItem = reelItems[targetIndex];
+    targetItem.el.textContent = displayText;
+    var targetPos = targetIndex * REEL_ITEM_H;
+    var startPos = reelPos;
+    var distance = targetPos - startPos;
+    var duration = 850;
+    var startTs = null;
+    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+    function step(ts){
+      if (!startTs) startTs = ts;
+      var t = Math.min(1, (ts - startTs) / duration);
+      reelPos = startPos + distance * easeOutCubic(t);
+      reelRender();
+      if (t < 1){
+        reelRAFId = requestAnimationFrame(step);
+      } else {
+        reelPos = targetPos;
+        reelRender();
+        targetItem.el.classList.add('landed');
+        callback && callback();
+      }
+    }
+    reelRAFId = requestAnimationFrame(step);
+  }
 
   function closeSpinModal(){
     spinOverlay.classList.remove('open');
     clearTimeout(spinRollTimer);
+    spinRAFCancel();
   }
   if (spinModalClose) spinModalClose.addEventListener('click', closeSpinModal);
   if (spinOverlay) spinOverlay.addEventListener('click', function(e){
     if (e.target === spinOverlay) closeSpinModal();
   });
   if (spinModalBtn) spinModalBtn.addEventListener('click', function(){
-    if (!spinModalBtn.disabled) closeSpinModal();
+    if (spinModalBtn.disabled) return;
+    if (spinModalBtn.dataset.retry === '1'){
+      // 0% roll — the daily claim was never used, so run the whole spin again.
+      spinModalBtn.dataset.retry = '0';
+      runSpin();
+      return;
+    }
+    closeSpinModal();
   });
 
+  // Shared by the mascot click and the "Spin Again" button.
+  function runSpin(){
+    if (typeof window.claimSpinDiscount !== 'function') return;
+    openSpinModal();
+    window.claimSpinDiscount().then(function(result){
+      icon.dataset.claiming = '0';
+      landSpinModal(result);
+    });
+  }
+
   function openSpinModal(){
-    spinReelNumber.classList.remove('landed');
-    spinReelNumber.classList.add('spinning');
-    spinReelNumber.textContent = '0%';
+    spinReelPercent.style.visibility = 'visible';
     spinModalResult.textContent = '\u00a0';
     spinModalResult.className = 'spin-modal-result';
     spinModalSub.textContent = 'Good luck!';
     spinModalBtn.textContent = 'Spinning…';
     spinModalBtn.disabled = true;
+    spinModalBtn.dataset.retry = '0';
     spinOverlay.classList.add('open');
+    spinStartedAt = Date.now();
 
-    // Rapidly cycles a random 0-5% figure, slowing down over time — a classic
-    // slot-reel feel — until landSpinModal() below stops it on the real result.
-    var delay = 55;
-    (function tick(){
-      spinReelNumber.textContent = Math.floor(Math.random() * 6) + '%';
-      delay = Math.min(delay * 1.08, 220);
-      spinRollTimer = setTimeout(tick, delay);
-    })();
+    // Reel slides continuously (real translateY motion, not text swaps)
+    // for the full 2.5s; landSpinModal() then decelerates it onto the
+    // real result instead of snapping straight to the answer.
+    reelStartFreeSpin();
   }
 
+  var SPIN_DURATION_MS = 2500;
+
   function landSpinModal(result){
+    // The Firestore round-trip can finish well before 2.5s, so wait out the
+    // remainder — the reel should always spin for the same length of time.
+    var elapsed = Date.now() - spinStartedAt;
+    var wait = Math.max(0, SPIN_DURATION_MS - elapsed);
+    spinRollTimer = setTimeout(function(){ doLand(result); }, wait);
+  }
+
+  function doLand(result){
     clearTimeout(spinRollTimer);
     var finalPct = result.pct || 0;
-    // A few more decelerating flickers before settling on the real number,
-    // so the reel doesn't just snap straight to the answer.
-    var steps = [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6), finalPct];
-    var stepDelays = [110, 190, 300];
-    var i = 0;
-    (function step(){
-      spinReelNumber.textContent = steps[i] + '%';
-      if (i < steps.length - 1){
-        i++;
-        setTimeout(step, stepDelays[i - 1]);
-      } else {
-        spinReelNumber.classList.remove('spinning');
-        spinReelNumber.classList.add('landed');
-        showFinal();
-      }
-    })();
+    var isError = (result.status === 'error');
+    spinReelPercent.style.visibility = isError ? 'hidden' : 'visible';
+    reelLandOn(isError ? '—' : pad2(finalPct), showFinal);
 
     function showFinal(){
       spinModalBtn.disabled = false;
@@ -1267,8 +1381,7 @@
       spawnParticles();
 
       if (result.status === 'win'){
-        spinReelNumber.textContent = finalPct + '%';
-        spinModalResult.textContent = '🎉 You won ' + finalPct + '% OFF! Applied to your cart.';
+        spinModalResult.textContent = '🎉 You won ' + pad2(finalPct) + '% OFF! Applied to your cart.';
         spinModalResult.classList.add('win');
         spinModalSub.textContent = 'Nice one!';
         spinModalBtn.textContent = 'Awesome!';
@@ -1276,19 +1389,17 @@
         window.renderCartDrawer && window.renderCartDrawer();
         window.renderCheckoutSummary && window.renderCheckoutSummary();
       } else if (result.status === 'already'){
-        spinReelNumber.textContent = finalPct + '%';
         spinModalResult.textContent = pick(alreadyMsgs(finalPct));
         spinModalResult.classList.add('win');
         spinModalSub.textContent = 'Already claimed today';
         spinModalBtn.textContent = 'Got it';
       } else if (result.status === 'tryagain'){
-        spinReelNumber.textContent = '0%';
         spinModalResult.textContent = pick(tryAgainMsgs);
         spinModalResult.classList.add('lose');
-        spinModalSub.textContent = 'No luck this time';
-        spinModalBtn.textContent = 'Close';
+        spinModalSub.textContent = 'You get another go!';
+        spinModalBtn.textContent = '🎰 Spin Again';
+        spinModalBtn.dataset.retry = '1';
       } else {
-        spinReelNumber.textContent = '—';
         spinModalResult.textContent = 'Oops, try again in a bit 🙈';
         spinModalResult.classList.add('lose');
         spinModalSub.textContent = 'Something went wrong';
@@ -1312,12 +1423,7 @@
     }
 
     icon.dataset.claiming = '1';
-    openSpinModal();
-
-    window.claimSpinDiscount().then(function(result){
-      icon.dataset.claiming = '0';
-      landSpinModal(result);
-    });
+    runSpin();
   });
 
   icon.addEventListener('animationend', function(e){
@@ -4498,7 +4604,7 @@ function showToast(message){
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : 'Free Delivery';
     if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? 'flex' : 'none';
-    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt) + ` (${bonusPct}%)`;
+    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt) + ` (${String(bonusPct).padStart(2,'0')}%)`;
     if (totalEl) totalEl.textContent = formatPriceLKR(subtotal - bonusAmt + deliveryCharge);
   }
 
@@ -4661,7 +4767,9 @@ function showToast(message){
   // ---- Spin-the-mascot bonus discount: Firestore-backed "once per day" claim ----
   // Weighted pool: ~27% chance of 0% (no win, can retry), rest weighted toward
   // smaller amounts so 5% stays rare. Tune this array to change the odds.
-  const SPIN_POOL = [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 5];
+  // Only these values can ever be landed on. A 0 roll costs nothing and
+  // grants another attempt, so it never uses up the one daily claim.
+  const SPIN_POOL = [0, 0, 0, 2, 2, 3, 3, 4, 5];
 
   function getSpinDeviceId(){
     try {
@@ -4828,7 +4936,7 @@ function showToast(message){
     const bonusRowEl = document.getElementById("checkoutBonusRow");
     const bonusAmtEl = document.getElementById("checkoutBonusAmt");
     if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? "flex" : "none";
-    if (bonusAmtEl) bonusAmtEl.textContent = "-" + formatPriceLKR(bonusAmt) + ` (${bonusPct}%)`;
+    if (bonusAmtEl) bonusAmtEl.textContent = "-" + formatPriceLKR(bonusAmt) + ` (${String(bonusPct).padStart(2,'0')}%)`;
 
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : "Free Delivery";
