@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,7 +151,7 @@
   @keyframes hintPulseGlow{0%,100%{filter:drop-shadow(0 12px 18px rgba(236,64,140,0.45));}50%{filter:drop-shadow(0 12px 28px rgba(236,64,140,0.9)) brightness(1.08);}}
 
   /* ---- fun click reaction: particle burst + speech bubble ---- */
-  .float-icon-fx-layer{position:fixed;inset:0;z-index:151;pointer-events:none;overflow:hidden;}
+  .float-icon-fx-layer{position:fixed;inset:0;z-index:401;pointer-events:none;overflow:hidden;}
   .float-icon-particle{position:fixed;font-size:20px;line-height:1;will-change:transform,opacity;animation:floatIconParticleFly .85s ease-out forwards;}
   @keyframes floatIconParticleFly{
     0%{transform:translate(0,0) scale(.6) rotate(0deg);opacity:1;}
@@ -173,6 +172,34 @@
   @media (max-width:768px){
     .float-icon-bubble{font-size:12px;padding:8px 13px;max-width:180px;}
   }
+
+  /* ---- spin-the-mascot reveal modal: slot-machine style rolling number ---- */
+  .spin-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(15,15,15,0.55);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .spin-modal-overlay.open{opacity:1;pointer-events:auto;}
+  .spin-modal-card{width:100%;max-width:300px;background:#fff;border-radius:24px;padding:26px 22px 22px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,0.4);position:relative;transform:scale(.82) translateY(24px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);}
+  .spin-modal-overlay.open .spin-modal-card{transform:scale(1) translateY(0);}
+  .spin-modal-close{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:var(--paper);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:15px;line-height:1;}
+  .spin-modal-close:hover{background:var(--line);}
+  .spin-modal-title{font-family:'Sora';font-size:16.5px;font-weight:600;margin-bottom:2px;}
+  .spin-modal-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+  .spin-reel-wrap{background:linear-gradient(155deg,#FB6A19 0%,#FFB37A 100%);border-radius:18px;padding:20px 10px;margin-bottom:14px;overflow:hidden;}
+  .spin-reel-number{font-family:'Sora';font-size:48px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;transition:transform .12s ease;}
+  .spin-reel-number.spinning{animation:spinReelBlur .09s linear infinite;}
+  @keyframes spinReelBlur{0%{filter:blur(0);transform:translateY(0);}50%{filter:blur(2px);transform:translateY(-3px);}100%{filter:blur(0);transform:translateY(0);}}
+  .spin-reel-number.landed{animation:spinReelLand .4s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes spinReelLand{0%{transform:scale(1.25);}60%{transform:scale(.94);}100%{transform:scale(1);}}
+  .spin-modal-result{font-size:13.5px;font-weight:600;min-height:34px;margin-bottom:16px;line-height:1.4;color:var(--ink);}
+  .spin-modal-result.win{color:var(--teal);}
+  .spin-modal-result.lose{color:var(--muted);}
+  .spin-modal-btn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:100px;padding:12px 24px;font-weight:600;font-size:13.5px;cursor:pointer;transition:background .2s;}
+  .spin-modal-btn:hover:not(:disabled){background:var(--orange-dark);}
+  .spin-modal-btn:disabled{opacity:.55;cursor:not-allowed;}
+  @media (max-width:480px){
+    .spin-modal-card{max-width:260px;padding:22px 18px 18px;border-radius:20px;}
+    .spin-reel-number{font-size:40px;}
+    .spin-modal-title{font-size:15px;}
+  }
+
   .hero-tag{position:absolute;bottom:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:600;padding:8px 14px;border-radius:12px;display:flex;align-items:center;gap:6px;}
   .hero-visual span.big{font-family:'Sora';font-weight:600;font-size:22px;color:#fff;text-align:center;padding:0 30px;position:relative;z-index:2;}
   .hero-price-float{position:absolute;top:20px;right:20px;background:#fff;padding:10px 16px;border-radius:14px;text-align:left;box-shadow:0 8px 20px rgba(0,0,0,0.12);}
@@ -1054,6 +1081,20 @@
 <body>
 <img src="https://i.ibb.co/k65nCHBv/d-icon3d.png" class="site-float-icon" id="siteFloatIcon" alt="Fun mascot — click me" />
 <div class="float-icon-fx-layer" id="floatIconFxLayer"></div>
+
+<div class="spin-modal-overlay" id="spinModalOverlay">
+  <div class="spin-modal-card">
+    <button class="spin-modal-close" id="spinModalClose" type="button" aria-label="Close">✕</button>
+    <div class="spin-modal-title">🎰 Spin for a discount!</div>
+    <div class="spin-modal-sub" id="spinModalSub">Good luck!</div>
+    <div class="spin-reel-wrap">
+      <div class="spin-reel-number spinning" id="spinReelNumber">0%</div>
+    </div>
+    <div class="spin-modal-result" id="spinModalResult">&nbsp;</div>
+    <button class="spin-modal-btn" id="spinModalBtn" type="button" disabled>Spinning…</button>
+  </div>
+</div>
+
 <script>
 (function(){
   var icon = document.getElementById('siteFloatIcon');
@@ -1156,6 +1197,106 @@
   }
   setTimeout(tryShowHint, 1400);
 
+  // ---- Slot-machine style reveal modal (replaces instant bubble reveal) ----
+  var spinOverlay = document.getElementById('spinModalOverlay');
+  var spinReelNumber = document.getElementById('spinReelNumber');
+  var spinModalResult = document.getElementById('spinModalResult');
+  var spinModalBtn = document.getElementById('spinModalBtn');
+  var spinModalSub = document.getElementById('spinModalSub');
+  var spinModalClose = document.getElementById('spinModalClose');
+  var spinRollTimer = null;
+
+  function closeSpinModal(){
+    spinOverlay.classList.remove('open');
+    clearTimeout(spinRollTimer);
+  }
+  if (spinModalClose) spinModalClose.addEventListener('click', closeSpinModal);
+  if (spinOverlay) spinOverlay.addEventListener('click', function(e){
+    if (e.target === spinOverlay) closeSpinModal();
+  });
+  if (spinModalBtn) spinModalBtn.addEventListener('click', function(){
+    if (!spinModalBtn.disabled) closeSpinModal();
+  });
+
+  function openSpinModal(){
+    spinReelNumber.classList.remove('landed');
+    spinReelNumber.classList.add('spinning');
+    spinReelNumber.textContent = '0%';
+    spinModalResult.textContent = '\u00a0';
+    spinModalResult.className = 'spin-modal-result';
+    spinModalSub.textContent = 'Good luck!';
+    spinModalBtn.textContent = 'Spinning…';
+    spinModalBtn.disabled = true;
+    spinOverlay.classList.add('open');
+
+    // Rapidly cycles a random 0-5% figure, slowing down over time — a classic
+    // slot-reel feel — until landSpinModal() below stops it on the real result.
+    var delay = 55;
+    (function tick(){
+      spinReelNumber.textContent = Math.floor(Math.random() * 6) + '%';
+      delay = Math.min(delay * 1.08, 220);
+      spinRollTimer = setTimeout(tick, delay);
+    })();
+  }
+
+  function landSpinModal(result){
+    clearTimeout(spinRollTimer);
+    var finalPct = result.pct || 0;
+    // A few more decelerating flickers before settling on the real number,
+    // so the reel doesn't just snap straight to the answer.
+    var steps = [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6), finalPct];
+    var stepDelays = [110, 190, 300];
+    var i = 0;
+    (function step(){
+      spinReelNumber.textContent = steps[i] + '%';
+      if (i < steps.length - 1){
+        i++;
+        setTimeout(step, stepDelays[i - 1]);
+      } else {
+        spinReelNumber.classList.remove('spinning');
+        spinReelNumber.classList.add('landed');
+        showFinal();
+      }
+    })();
+
+    function showFinal(){
+      spinModalBtn.disabled = false;
+      icon.classList.remove('poked');
+      void icon.offsetWidth;
+      icon.classList.add('poked');
+      spawnParticles();
+
+      if (result.status === 'win'){
+        spinReelNumber.textContent = finalPct + '%';
+        spinModalResult.textContent = '🎉 You won ' + finalPct + '% OFF! Applied to your cart.';
+        spinModalResult.classList.add('win');
+        spinModalSub.textContent = 'Nice one!';
+        spinModalBtn.textContent = 'Awesome!';
+        spawnParticles();
+        window.renderCartDrawer && window.renderCartDrawer();
+        window.renderCheckoutSummary && window.renderCheckoutSummary();
+      } else if (result.status === 'already'){
+        spinReelNumber.textContent = finalPct + '%';
+        spinModalResult.textContent = pick(alreadyMsgs(finalPct));
+        spinModalResult.classList.add('win');
+        spinModalSub.textContent = 'Already claimed today';
+        spinModalBtn.textContent = 'Got it';
+      } else if (result.status === 'tryagain'){
+        spinReelNumber.textContent = '0%';
+        spinModalResult.textContent = pick(tryAgainMsgs);
+        spinModalResult.classList.add('lose');
+        spinModalSub.textContent = 'No luck this time';
+        spinModalBtn.textContent = 'Close';
+      } else {
+        spinReelNumber.textContent = '—';
+        spinModalResult.textContent = 'Oops, try again in a bit 🙈';
+        spinModalResult.classList.add('lose');
+        spinModalSub.textContent = 'Something went wrong';
+        spinModalBtn.textContent = 'Close';
+      }
+    }
+  }
+
   icon.addEventListener('click', function(){
     if (icon.dataset.claiming === '1') return;
     try{ localStorage.setItem('spinIconHintDismissed', '1'); }catch(e){}
@@ -1171,23 +1312,11 @@
     }
 
     icon.dataset.claiming = '1';
-    showSpinBubble(pick(rollingMsgs));
+    openSpinModal();
 
     window.claimSpinDiscount().then(function(result){
       icon.dataset.claiming = '0';
-      if (result.status === 'win'){
-        showSpinBubble(`🎉 You won ${result.pct}% OFF! Applied to your cart`, 'win');
-        spawnParticles();
-        spawnParticles();
-        window.renderCartDrawer && window.renderCartDrawer();
-        window.renderCheckoutSummary && window.renderCheckoutSummary();
-      } else if (result.status === 'already'){
-        showSpinBubble(pick(alreadyMsgs(result.pct)));
-      } else if (result.status === 'tryagain'){
-        showSpinBubble(pick(tryAgainMsgs), 'tryagain');
-      } else {
-        showSpinBubble('Oops, try again in a bit 🙈');
-      }
+      landSpinModal(result);
     });
   });
 
