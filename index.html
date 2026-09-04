@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -185,13 +183,17 @@
   .spin-modal-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
   .spin-reel-wrap{background:linear-gradient(155deg,#FB6A19 0%,#FFB37A 100%);border-radius:18px;padding:8px 10px;margin-bottom:14px;overflow:hidden;}
   .spin-reel-row{display:flex;align-items:center;justify-content:center;}
-  .spin-reel-window{height:70px;width:78px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
+  .spin-reel-window{height:70px;width:40px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
+  .spin-reel-window--units{margin-left:1px;transform:scaleY(-1);}
   .spin-reel-track{will-change:transform;}
   .spin-reel-track.spinning{filter:blur(.5px);}
   .spin-reel-num{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;}
+  .spin-reel-window--units .spin-reel-num{transform:scaleY(-1);}
   .spin-reel-num.landed{animation:spinReelLand .4s cubic-bezier(.34,1.56,.64,1);}
-  .spin-reel-percent{font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;margin-left:1px;}
+  .spin-reel-window--units .spin-reel-num.landed{animation-name:spinReelLandFlipped;}
+  .spin-reel-percent{font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;margin-left:-3px;}
   @keyframes spinReelLand{0%{transform:scale(1.2);}60%{transform:scale(.94);}100%{transform:scale(1);}}
+  @keyframes spinReelLandFlipped{0%{transform:scaleY(-1) scale(1.2);}60%{transform:scaleY(-1) scale(.94);}100%{transform:scaleY(-1) scale(1);}}
   .spin-modal-result{font-size:13.5px;font-weight:600;min-height:34px;margin-bottom:16px;line-height:1.4;color:var(--ink);}
   .spin-modal-result.win{color:var(--teal);}
   .spin-modal-result.lose{color:var(--muted);}
@@ -1093,8 +1095,11 @@
     <div class="spin-modal-sub" id="spinModalSub">Good luck!</div>
     <div class="spin-reel-wrap">
       <div class="spin-reel-row">
-        <div class="spin-reel-window" id="spinReelWindow">
-          <div class="spin-reel-track spinning" id="spinReelTrack"></div>
+        <div class="spin-reel-window spin-reel-window--tens" id="spinReelWindowTens">
+          <div class="spin-reel-track spinning" id="spinReelTrackTens"></div>
+        </div>
+        <div class="spin-reel-window spin-reel-window--units" id="spinReelWindowUnits">
+          <div class="spin-reel-track spinning" id="spinReelTrackUnits"></div>
         </div>
         <div class="spin-reel-percent" id="spinReelPercent">%</div>
       </div>
@@ -1211,7 +1216,8 @@
 
   // ---- Slot-machine style reveal modal (replaces instant bubble reveal) ----
   var spinOverlay = document.getElementById('spinModalOverlay');
-  var spinReelTrack = document.getElementById('spinReelTrack');
+  var spinReelTrackTens = document.getElementById('spinReelTrackTens');
+  var spinReelTrackUnits = document.getElementById('spinReelTrackUnits');
   var spinModalResult = document.getElementById('spinModalResult');
   var spinModalBtn = document.getElementById('spinModalBtn');
   var spinModalSub = document.getElementById('spinModalSub');
@@ -1220,93 +1226,118 @@
   var spinRollTimer = null;
   var spinStartedAt = 0;
 
-  // ---- Reel engine: a strip of numbers that actually slides behind a
-  // fixed window, instead of text being swapped in place. ----
+  // ---- Reel engine: two independent digit strips (tens/units) that
+  // actually slide behind fixed windows, instead of text being swapped
+  // in place. Both run this exact same physics at the same speed — the
+  // units window is simply mirrored in CSS (scaleY(-1), digits
+  // counter-flipped to stay upright), so on screen it visibly spins the
+  // opposite way from the tens window, which reads as more realistic.
   var REEL_ITEM_H = 70;
-  var reelItems = [];      // [{value, el}]
-  var reelPos = 0;         // current scroll offset in px
-  var reelRAFId = null;
-  var reelSpinning = false;
-  var reelSpeed = 1000;    // px/sec while freely spinning
-  var reelLastTs = 0;
+  var reelSpeed = 1000;    // px/sec while freely spinning — same pace as before
 
-  function reelClear(){
-    spinRAFCancel();
-    spinReelTrack.innerHTML = '';
-    reelItems = [];
-    reelPos = 0;
-    spinReelTrack.style.transform = 'translateY(0px)';
-  }
-  function spinRAFCancel(){
-    if (reelRAFId) cancelAnimationFrame(reelRAFId);
-    reelRAFId = null;
-    reelSpinning = false;
-  }
-  function reelPushRandom(){
-    var v = Math.floor(Math.random() * 100);
-    var el = document.createElement('div');
-    el.className = 'spin-reel-num';
-    el.textContent = pad2(v);
-    spinReelTrack.appendChild(el);
-    reelItems.push({ value: v, el: el });
-  }
-  function reelEnsureItems(minCount){
-    while (reelItems.length < minCount) reelPushRandom();
-  }
-  function reelEnsureForPos(pos){
-    reelEnsureItems(Math.ceil((pos + REEL_ITEM_H * 2) / REEL_ITEM_H) + 1);
-  }
-  function reelRender(){
-    spinReelTrack.style.transform = 'translateY(-' + reelPos + 'px)';
-  }
-  function reelFreeSpinLoop(ts){
-    if (!reelSpinning) return;
-    if (!reelLastTs) reelLastTs = ts;
-    var dt = (ts - reelLastTs) / 1000;
-    reelLastTs = ts;
-    reelPos += reelSpeed * dt;
-    reelEnsureForPos(reelPos);
-    reelRender();
-    reelRAFId = requestAnimationFrame(reelFreeSpinLoop);
-  }
-  function reelStartFreeSpin(){
-    reelClear();
-    spinReelTrack.classList.add('spinning');
-    reelEnsureItems(6);
-    reelSpinning = true;
-    reelLastTs = 0;
-    reelRAFId = requestAnimationFrame(reelFreeSpinLoop);
-  }
-  // Decelerates the moving strip to a stop exactly on displayText, then
-  // fires callback. displayText can be a plain string like '—'.
-  function reelLandOn(displayText, callback){
-    spinRAFCancel();
-    spinReelTrack.classList.remove('spinning');
-    var targetIndex = Math.ceil(reelPos / REEL_ITEM_H) + 5;
-    reelEnsureItems(targetIndex + 1);
-    var targetItem = reelItems[targetIndex];
-    targetItem.el.textContent = displayText;
-    var targetPos = targetIndex * REEL_ITEM_H;
-    var startPos = reelPos;
-    var distance = targetPos - startPos;
-    var duration = 850;
-    var startTs = null;
-    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
-    function step(ts){
-      if (!startTs) startTs = ts;
-      var t = Math.min(1, (ts - startTs) / duration);
-      reelPos = startPos + distance * easeOutCubic(t);
-      reelRender();
-      if (t < 1){
-        reelRAFId = requestAnimationFrame(step);
-      } else {
-        reelPos = targetPos;
-        reelRender();
-        targetItem.el.classList.add('landed');
-        callback && callback();
-      }
+  function makeDigitReel(trackEl){
+    var items = [];   // digit elements, in strip order
+    var pos = 0;       // current scroll offset in px
+    var rafId = null;
+    var spinning = false;
+    var lastTs = 0;
+
+    function render(){
+      trackEl.style.transform = 'translateY(-' + pos + 'px)';
     }
-    reelRAFId = requestAnimationFrame(step);
+    function pushRandomDigit(){
+      var el = document.createElement('div');
+      el.className = 'spin-reel-num';
+      el.textContent = String(Math.floor(Math.random() * 10));
+      trackEl.appendChild(el);
+      items.push(el);
+    }
+    function ensureItems(minCount){
+      while (items.length < minCount) pushRandomDigit();
+    }
+    function ensureForPos(p){
+      ensureItems(Math.ceil((p + REEL_ITEM_H * 2) / REEL_ITEM_H) + 1);
+    }
+    function cancel(){
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+      spinning = false;
+    }
+    function clear(){
+      cancel();
+      trackEl.innerHTML = '';
+      items = [];
+      pos = 0;
+      trackEl.style.transform = 'translateY(0px)';
+    }
+    function loop(ts){
+      if (!spinning) return;
+      if (!lastTs) lastTs = ts;
+      var dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+      pos += reelSpeed * dt;
+      ensureForPos(pos);
+      render();
+      rafId = requestAnimationFrame(loop);
+    }
+    function startFreeSpin(){
+      clear();
+      trackEl.classList.add('spinning');
+      ensureItems(6);
+      spinning = true;
+      lastTs = 0;
+      rafId = requestAnimationFrame(loop);
+    }
+    // Decelerates the moving strip to a stop exactly on digitText, then
+    // fires callback.
+    function landOn(digitText, callback){
+      cancel();
+      trackEl.classList.remove('spinning');
+      var targetIndex = Math.ceil(pos / REEL_ITEM_H) + 5;
+      ensureItems(targetIndex + 1);
+      var targetEl = items[targetIndex];
+      targetEl.textContent = digitText;
+      var targetPos = targetIndex * REEL_ITEM_H;
+      var startPos = pos;
+      var distance = targetPos - startPos;
+      var duration = 850;
+      var startTs = null;
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function step(ts){
+        if (!startTs) startTs = ts;
+        var t = Math.min(1, (ts - startTs) / duration);
+        pos = startPos + distance * easeOutCubic(t);
+        render();
+        if (t < 1){
+          rafId = requestAnimationFrame(step);
+        } else {
+          pos = targetPos;
+          render();
+          targetEl.classList.add('landed');
+          callback && callback();
+        }
+      }
+      rafId = requestAnimationFrame(step);
+    }
+
+    return { clear: clear, cancel: cancel, startFreeSpin: startFreeSpin, landOn: landOn };
+  }
+
+  var reelTens = makeDigitReel(spinReelTrackTens);
+  var reelUnits = makeDigitReel(spinReelTrackUnits);
+
+  function reelClear(){ reelTens.clear(); reelUnits.clear(); }
+  function spinRAFCancel(){ reelTens.cancel(); reelUnits.cancel(); }
+  function reelStartFreeSpin(){ reelTens.startFreeSpin(); reelUnits.startFreeSpin(); }
+  // displayText is a 2-digit string like "04", or a placeholder such as
+  // '—' shown on both digits on error.
+  function reelLandOn(displayText, callback){
+    var d0 = displayText.length > 1 ? displayText[0] : displayText;
+    var d1 = displayText.length > 1 ? displayText[1] : displayText;
+    var doneCount = 0;
+    function onDone(){ doneCount++; if (doneCount === 2 && callback) callback(); }
+    reelTens.landOn(d0, onDone);
+    reelUnits.landOn(d1, onDone);
   }
 
   function closeSpinModal(){
