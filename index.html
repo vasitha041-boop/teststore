@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -301,8 +300,8 @@
 
   /* ============ PRODUCT CARDS ============ */
   .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-  .prod-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;cursor:pointer;}
-  .prod-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.07);}
+  .prod-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:none;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;cursor:pointer;}
+  .prod-card:hover{transform:translateY(-4px);box-shadow:none;}
   /* RULE: Product Card image area must always be 1:1 (square) — do not change. */
   .prod-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;}
   .prod-thumb span.emoji{font-size:44px;}
@@ -351,7 +350,7 @@
   body.card-style-minimal .add-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
 
   body.card-style-modern .prod-card{border:none;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,0.07);}
-  body.card-style-modern .prod-card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,0.14);}
+  body.card-style-modern .prod-card:hover{transform:translateY(-6px);box-shadow:none;}
   body.card-style-modern .prod-thumb{border-radius:22px 22px 0 0;}
   body.card-style-modern .prod-cat{display:inline-block;background:var(--teal);color:#fff;padding:3px 10px;border-radius:100px;font-size:10px;letter-spacing:0.02em;}
   body.card-style-modern .prod-name{font-size:15.5px;}
@@ -488,6 +487,7 @@
   .pdp-price-row{display:flex;align-items:center;gap:14px;margin-top:18px;}
   .pdp-price{font-family:'Sora';font-size:30px;font-weight:600;}
   .pdp-stock{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--teal);margin-top:14px;}
+  .pdp-warranty{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink);margin-top:8px;}
   .pdp-stock::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);}
   .pdp-stock.out{color:#B3261E;}
   .pdp-stock.out::before{background:#B3261E;}
@@ -500,6 +500,11 @@
   .pdp-qty-row .qty-val{font-size:16px;min-width:26px;text-align:center;}
   .pdp-qty-note{font-size:12px;color:var(--muted);}
   .pdp-add-btn{margin-top:26px;background:var(--ink);color:#fff;border:none;border-radius:100px;padding:16px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .pdp-share-btn{margin-top:12px;background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:100px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
+  .pdp-share-btn svg{width:16px;height:16px;stroke:var(--ink);}
+  .pdp-share-btn:hover{background:var(--paper);border-color:var(--ink);}
+  .pdp-share-btn.copied{background:#E4F5EC;border-color:#B7E0C8;color:var(--teal);}
+  .pdp-share-btn.copied svg{stroke:var(--teal);}
   .pdp-add-btn:hover:not(:disabled){background:var(--orange);transform:translateY(-1px);}
   .pdp-add-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
   .pdp-unavailable-note{margin-top:14px;font-size:13px;font-weight:600;color:#B3261E;background:#FDECEC;border:1px solid #F3C7C7;border-radius:12px;padding:12px 14px;}
@@ -950,7 +955,7 @@
     .hero{padding:44px 0 40px;}
     .hero h1{font-size:30px;}
     /* mobile: 2 columns x 3 rows per swipe page; grid fills down each column, then across */
-    .cat-track{grid-template-rows:repeat(3,1fr);grid-auto-columns:calc((100% - 12px)/2);gap:12px;}
+    .cat-track{display:grid;grid-auto-flow:row;grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-columns:unset;gap:12px;overflow-x:visible;}
     .cat-card{min-height:0;height:130px;padding:16px 12px 14px;border-radius:14px;gap:8px;}
     .cat-media img{max-height:72px;}
     .cat-emoji{font-size:46px;}
@@ -2319,6 +2324,11 @@
           <input type="text" id="productBrand" placeholder="e.g. Northline">
         </div>
 
+        <div class="form-group" id="fieldProductWarranty">
+          <label for="productWarranty">Warranty <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+          <input type="text" id="productWarranty" placeholder="e.g. 1 Year Local Warranty">
+        </div>
+
         <div class="form-group" id="fieldProductDescription">
           <label for="productDescription">Description</label>
           <textarea id="productDescription" placeholder="Describe the product…"></textarea>
@@ -3227,7 +3237,7 @@
     const pdp = document.getElementById("productDetailView");
     if (home) home.style.display = "none";
     if (pdp) pdp.style.display = "block";
-    window.scrollTo({ top: 0, behavior: "auto" });
+    window.scrollTo({ top: 0, behavior: "instant" });
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
     loadProductDetail(productId);
   }
@@ -3293,6 +3303,43 @@
 
   window.addEventListener("hashchange", handlePdpHashRouting);
   document.addEventListener("DOMContentLoaded", handlePdpHashRouting);
+
+  // ---- Share / copy product link ----
+  function pdpShareProduct(){
+    if (!pdpCurrentId) return;
+    const url = window.location.origin + window.location.pathname + "#product/" + encodeURIComponent(pdpCurrentId);
+    const btn = document.getElementById("pdpShareBtn");
+    const label = document.getElementById("pdpShareBtnLabel");
+    const showCopied = () => {
+      if (!btn || !label) return;
+      const prevLabel = "Copy Link";
+      btn.classList.add("copied");
+      label.textContent = "Link Copied!";
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        label.textContent = prevLabel;
+      }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(showCopied).catch(() => pdpFallbackCopy(url, showCopied));
+    } else {
+      pdpFallbackCopy(url, showCopied);
+    }
+  }
+  window.pdpShareProduct = pdpShareProduct;
+
+  function pdpFallbackCopy(text, onDone){
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    if (onDone) onDone();
+  }
 
   // ---- Breadcrumbs ----
   function renderPdpBreadcrumbs(category, name){
@@ -3407,6 +3454,7 @@
     const name = pdpEscapeHtml(product.name || "Unnamed product");
     const category = pdpEscapeHtml(product.category || "");
     const brand = product.brand ? pdpEscapeHtml(product.brand) : "";
+    const warranty = product.warranty ? pdpEscapeHtml(product.warranty) : "";
     const price = pdpFormatPrice(product.price);
     const shortDescription = product.description ? pdpEscapeHtml(product.description) : "";
 
@@ -3441,6 +3489,7 @@
             <span class="pdp-price">${price}</span>
           </div>
           <div class="pdp-stock ${outOfStock ? "out" : ""}" id="pdpStockLabel">${outOfStock ? "Out of Stock" : stock + " in stock"}</div>
+          ${warranty ? `<div class="pdp-warranty">🛡️ ${warranty}</div>` : ""}
           <div class="pdp-divider"></div>
           ${outOfStock ? `<div class="pdp-unavailable-note">This item is currently out of stock.</div>` : `
             <div class="pdp-qty-label">Quantity</div>
@@ -3452,6 +3501,10 @@
             </div>`}
           <button class="pdp-add-btn" id="pdpAddBtn" ${outOfStock ? "disabled" : ""}>
             ${outOfStock ? "Out of Stock" : "Add to Cart"}
+          </button>
+          <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span id="pdpShareBtnLabel">Copy Link</span>
           </button>
         </div>
       </div>
@@ -5357,6 +5410,7 @@ Please confirm my order.`
       document.getElementById("productFormTitle").textContent = mode === "duplicate" ? "Duplicate Product" : "Edit Product";
       document.getElementById("productName").value = mode === "duplicate" ? `Copy of ${p.name || ""}`.trim() : (p.name || "");
       document.getElementById("productBrand").value = p.brand || "";
+      document.getElementById("productWarranty").value = p.warranty || "";
       document.getElementById("productDescription").value = p.description || "";
       document.getElementById("productOverview").value = p.overview || "";
       document.getElementById("productPrice").value = p.price ?? "";
@@ -5429,6 +5483,7 @@ Please confirm my order.`
   function validateProductForm(){
     const name = document.getElementById("productName").value.trim();
     const brand = document.getElementById("productBrand").value.trim();
+    const warranty = document.getElementById("productWarranty").value.trim();
     const description = document.getElementById("productDescription").value.trim();
     const overview = document.getElementById("productOverview").value.trim();
     const priceRaw = document.getElementById("productPrice").value.trim();
@@ -5466,7 +5521,7 @@ Please confirm my order.`
     if (!(nameValid && descriptionValid && priceValid && originalPriceValid && stockValid && categoryValid && imageValid)) return null;
 
     return {
-      name, brand, description, overview, price,
+      name, brand, warranty, description, overview, price,
       originalPrice: originalPriceRaw === "" ? null : originalPrice,
       stock, category,
       specifications: collectSpecificationsFromForm(),
@@ -5562,6 +5617,7 @@ Please confirm my order.`
       const data = {
         name: formData.name,
         brand: formData.brand || "",
+        warranty: formData.warranty || "",
         description: formData.description,
         overview: formData.overview || "",
         specifications: formData.specifications,
