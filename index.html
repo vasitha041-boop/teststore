@@ -1296,8 +1296,8 @@
     }
     // Always clamp to the viewport, no matter which branch produced
     // `left`/`top`, so the card can never render partly off-screen.
-    left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 16));
-    top = Math.max(20, Math.min(top, window.innerHeight - bubbleHeight - 10));
+    left = Math.max(10, Math.min(left, window.innerWidth - bubbleWidth - 20));
+    top = Math.max(20, Math.min(top, window.innerHeight - bubbleHeight - 20));
     bubbleEl.style.left = left + 'px';
     bubbleEl.style.top = top + 'px';
 
