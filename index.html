@@ -8,7 +8,7 @@
 <title>Northline — Premium Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --orange:#FB6A19;
@@ -58,7 +58,9 @@
   .icon-btn{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,transform .15s;position:relative;flex-shrink:0;}
   .icon-btn:hover{border-color:var(--ink);transform:translateY(-1px);}
   .icon-btn svg{width:18px;height:18px;stroke:var(--ink);}
-  .icon-btn.search-toggle{display:none;}
+  .icon-btn.search-toggle{display:flex;}
+  .nav-search{display:none;}
+  .navcart > .admin-btn{display:none;}
   .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--orange);color:#fff;font-size:10px;font-weight:600;min-width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 2px;border:2px solid var(--paper);}
   .admin-btn{background:var(--ink);color:#fff;border-radius:100px;padding:0 18px;min-height:38px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;border:none;cursor:pointer;transition:background .2s;white-space:nowrap;}
   .admin-btn:hover{background:#333;}
@@ -90,7 +92,7 @@
   header.scrolled .burger{color:var(--ink);}
 
   /* account icon — mobile only (desktop keeps the Admin pill) */
-  .icon-btn.account-toggle{display:none;}
+  .icon-btn.account-toggle{display:flex;}
 
   /* cart bubble: small, and hidden entirely when the cart is empty (like UGREEN) */
   .cart-badge{top:1px;right:1px;min-width:16px;height:16px;font-size:9px;border:none;}
@@ -489,7 +491,8 @@
   .pdp-price-row{display:flex;align-items:center;gap:14px;margin-top:18px;}
   .pdp-price{font-family:'Sora';font-size:30px;font-weight:600;}
   .pdp-stock{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--teal);margin-top:14px;}
-  .pdp-warranty{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink);margin-top:8px;}
+  .pdp-warranty{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--teal);background:#E4F5EC;border:1px solid #B7E0C8;border-radius:100px;padding:6px 13px;margin-top:8px;width:fit-content;}
+  .pdp-warranty.short{color:#1F2245;background:#D6CBF5;border-color:#D6CBF5;border-radius:6px;}
   .pdp-stock::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);}
   .pdp-stock.out{color:#B3261E;}
   .pdp-stock.out::before{background:#B3261E;}
@@ -502,11 +505,31 @@
   .pdp-qty-row .qty-val{font-size:16px;min-width:26px;text-align:center;}
   .pdp-qty-note{font-size:12px;color:var(--muted);}
   .pdp-add-btn{margin-top:26px;background:var(--ink);color:#fff;border:none;border-radius:100px;padding:16px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .pdp-actions-row{display:flex;gap:12px;margin-top:26px;}
+  .pdp-actions-row .pdp-add-btn{margin-top:0;flex:1;}
+  .pdp-buy-now-btn{margin:0;flex:1;background:var(--orange);color:#fff;border:none;border-radius:100px;padding:16px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .pdp-buy-now-btn:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px);}
+  .pdp-buy-now-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
+  @media(max-width:480px){
+    .pdp-actions-row{flex-direction:column;gap:10px;}
+  }
   .pdp-share-btn{margin-top:12px;background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:100px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
   .pdp-share-btn svg{width:16px;height:16px;stroke:var(--ink);}
   .pdp-share-btn:hover{background:var(--paper);border-color:var(--ink);}
   .pdp-share-btn.copied{background:#E4F5EC;border-color:#B7E0C8;color:var(--teal);}
   .pdp-share-btn.copied svg{stroke:var(--teal);}
+  .pdp-benefits{margin-top:24px;}
+  .pdp-benefits-title{font-size:20px;font-weight:700;color:#000;margin:0 0 16px;}
+  .pdp-benefits-box{background:#F7F8FA;border-radius:16px;padding:16px 12px;}
+  .pdp-benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .pdp-benefit-item{display:flex;align-items:flex-start;gap:8px;}
+  .pdp-benefit-item svg{width:19px;height:19px;flex-shrink:0;stroke:var(--ink);margin-top:1px;}
+  .pdp-benefit-item span{font-size:16px;font-weight:500;color:var(--ink);line-height:1.35;}
+  @media(max-width:480px){
+    .pdp-benefits-grid{gap:12px;}
+    .pdp-benefits-box{padding:16px 12px;}
+    .pdp-benefit-item span{font-size:14px;}
+  }
   .pdp-add-btn:hover:not(:disabled){background:var(--orange);transform:translateY(-1px);}
   .pdp-add-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
   .pdp-unavailable-note{margin-top:14px;font-size:13px;font-weight:600;color:#B3261E;background:#FDECEC;border:1px solid #F3C7C7;border-radius:12px;padding:12px 14px;}
@@ -580,27 +603,32 @@
   .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .form-row-2 .form-group:only-child{grid-column:1 / -1;}
 
-  /* two-column checkout layout: left = customer/delivery details, right = order summary/payment/place-order */
-  .checkout-box.checkout-box-v2{max-width:920px;}
-  .checkout-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
-  .checkout-col-left{padding:28px 26px;border-right:1px solid var(--line);}
-  .checkout-col-right{padding:28px 26px;display:flex;flex-direction:column;}
-  .checkout-col-left h2,.checkout-col-right h2{font-size:20px;font-weight:600;margin-bottom:18px;}
+  /* ============ CHECKOUT PAGE ============ */
+  .checkout-page{padding:112px 0 60px;}
+  .checkout-page-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:6px 0 26px;}
+  .checkout-page-head h1{font-size:30px;font-weight:600;}
+  .checkout-secure-badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--teal);background:#E4F5EC;border:1px solid #B7E0C8;border-radius:100px;padding:7px 14px;flex-shrink:0;}
+  .checkout-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start;}
+  .checkout-col-left{padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);}
+  .checkout-col-right{padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);display:flex;flex-direction:column;position:sticky;top:130px;}
+  .checkout-col-left h2,.checkout-col-right h2{font-size:19px;font-weight:600;margin-bottom:18px;}
   @media(max-width:860px){
-    .checkout-box.checkout-box-v2{max-width:560px;}
     .checkout-grid{grid-template-columns:1fr;}
-    .checkout-col-left{border-right:none;border-bottom:1px solid var(--line);padding-bottom:20px;}
-    .checkout-col-right{padding-top:20px;}
+    .checkout-col-right{position:static;}
     .form-row-2{grid-template-columns:1fr 1fr;}
   }
   @media(max-width:480px){
     .form-row-2{grid-template-columns:1fr;}
+    .checkout-page-head h1{font-size:24px;}
+    .checkout-page{padding:100px 0 50px;}
   }
 
   .payment-note{display:flex;align-items:center;gap:10px;background:#F0FAF6;border:1px solid #CDEBDE;border-radius:12px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--teal);margin:18px 0;}
 
   .order-summary{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:16px 0;display:flex;flex-direction:column;gap:10px;max-height:220px;overflow-y:auto;}
-  .order-summary-row{display:flex;justify-content:space-between;font-size:13px;gap:10px;}
+  .order-summary-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;gap:10px;}
+  .order-summary-row .osr-thumb{width:44px;height:44px;border-radius:9px;background:linear-gradient(150deg,#EFE9DF,#E2DACB);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:16px;color:#AFA795;}
+  .order-summary-row .osr-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .order-summary-row .osr-name{color:var(--ink);font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .order-summary-row .osr-calc{color:var(--muted);flex-shrink:0;}
   .order-total-row{display:flex;justify-content:space-between;font-family:'Sora';font-weight:600;font-size:17px;margin-bottom:20px;}
@@ -1067,8 +1095,10 @@
   if(!hdr) return;
   window.updateHeaderSolidState = function(){
     var pdp = document.getElementById("productDetailView");
+    var checkoutPage = document.getElementById("checkoutPageView");
     var onPdp = pdp && pdp.style.display === "block";
-    if(onPdp || window.scrollY > 40){ hdr.classList.add("scrolled"); }
+    var onCheckout = checkoutPage && checkoutPage.style.display === "block";
+    if(onPdp || onCheckout || window.scrollY > 40){ hdr.classList.add("scrolled"); }
     else { hdr.classList.remove("scrolled"); }
   };
   window.addEventListener("scroll", window.updateHeaderSolidState, { passive:true });
@@ -1408,7 +1438,6 @@
   });
 </script>
 
-
 <div class="marquee-wrap">
 <div class="marquee-band">
   <div class="marquee-track">
@@ -1666,6 +1695,89 @@
 <!-- ============ END PRODUCT DETAIL VIEW ============ -->
 
 <!-- ============ SITE FOOTER (shown on both the home page and the product detail page) ============ -->
+<div class="checkout-page" id="checkoutPageView" style="display:none;">
+  <div class="wrap">
+    <button class="pdp-back" onclick="closeCheckout()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Cart
+    </button>
+
+    <div class="checkout-page-head">
+      <h1>Checkout</h1>
+      <span class="checkout-secure-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure Checkout
+      </span>
+    </div>
+
+    <div class="checkout-error" id="checkoutError"></div>
+
+    <div class="checkout-grid">
+      <!-- LEFT (desktop) / FIRST (mobile): Customer / Delivery Details -->
+      <div class="checkout-col-left">
+        <h2>Delivery Details</h2>
+
+        <form id="checkoutForm" onsubmit="return false;">
+          <div class="form-row-2" id="rowNameFields">
+            <div class="form-group" id="fieldFirstName">
+              <label for="custFirstName">First Name</label>
+              <input type="text" id="custFirstName" placeholder="e.g. Nimal" autocomplete="given-name">
+              <span class="form-error" id="errFirstName">Please enter your first name.</span>
+            </div>
+            <div class="form-group" id="fieldLastName">
+              <label for="custLastName">Last Name</label>
+              <input type="text" id="custLastName" placeholder="e.g. Perera" autocomplete="family-name">
+              <span class="form-error" id="errLastName">Please enter your last name.</span>
+            </div>
+          </div>
+          <div class="form-row-2" id="rowContactFields">
+            <div class="form-group" id="fieldContact1">
+              <label for="custContact1">Contact 1</label>
+              <input type="tel" id="custContact1" placeholder="e.g. 0771234567" autocomplete="tel">
+              <span class="form-error" id="errContact1">Please enter a valid Sri Lankan phone number.</span>
+            </div>
+            <div class="form-group" id="fieldContact2">
+              <label for="custContact2">Contact 2</label>
+              <input type="tel" id="custContact2" placeholder="e.g. 0112345678" autocomplete="tel">
+              <span class="form-error" id="errContact2">Please enter a valid Sri Lankan phone number.</span>
+            </div>
+          </div>
+          <div class="form-group" id="fieldStreetAddress">
+            <label for="custStreetAddress">Street Address</label>
+            <textarea id="custStreetAddress" placeholder="House / street"></textarea>
+            <span class="form-error" id="errStreetAddress">Please enter your street address.</span>
+          </div>
+          <div class="form-group" id="fieldCity">
+            <label for="custCity">City</label>
+            <input type="text" id="custCity" placeholder="e.g. Colombo" autocomplete="address-level2">
+            <span class="form-error" id="errCity">Please enter your city.</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT (desktop) / SECOND (mobile): Your Order -->
+      <div class="checkout-col-right">
+        <h2>Your Order</h2>
+
+        <div class="order-summary" id="checkoutSummary"></div>
+        <div class="cart-sum-row"><span>Subtotal</span><span id="checkoutSubtotal">Rs. 0</span></div>
+        <div class="cart-sum-row"><span>Delivery</span><span id="checkoutDelivery">Free Delivery</span></div>
+        <div class="order-total-row"><span>Total</span><span id="checkoutTotal">Rs. 0</span></div>
+
+        <div class="payment-note">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Payment Method: Cash on Delivery
+        </div>
+
+        <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
+          <span class="spinner"></span>
+          <span id="placeOrderLabel">Place Order</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
     <div class="foot-top">
@@ -1748,80 +1860,9 @@
   </div>
 </div>
 
-<!-- ============ CHECKOUT MODAL ============ -->
-<div class="modal-overlay" id="checkoutModal">
-  <div class="modal-box checkout-box checkout-box-v2">
-    <button class="modal-close" onclick="closeCheckout()" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+<!-- ============ CHECKOUT PAGE ============ -->
 
-    <div class="checkout-error" id="checkoutError" style="margin:28px 26px 0;"></div>
-
-    <div class="checkout-grid">
-      <!-- LEFT (desktop) / FIRST (mobile): Customer / Delivery Details -->
-      <div class="checkout-col-left">
-        <h2>Customer / Delivery Details</h2>
-
-        <form id="checkoutForm" onsubmit="return false;">
-          <div class="form-row-2" id="rowNameFields">
-            <div class="form-group" id="fieldFirstName">
-              <label for="custFirstName">First Name</label>
-              <input type="text" id="custFirstName" placeholder="e.g. Nimal" autocomplete="given-name">
-              <span class="form-error" id="errFirstName">Please enter your first name.</span>
-            </div>
-            <div class="form-group" id="fieldLastName">
-              <label for="custLastName">Last Name</label>
-              <input type="text" id="custLastName" placeholder="e.g. Perera" autocomplete="family-name">
-              <span class="form-error" id="errLastName">Please enter your last name.</span>
-            </div>
-          </div>
-          <div class="form-row-2" id="rowContactFields">
-            <div class="form-group" id="fieldContact1">
-              <label for="custContact1">Contact 1</label>
-              <input type="tel" id="custContact1" placeholder="e.g. 0771234567" autocomplete="tel">
-              <span class="form-error" id="errContact1">Please enter a valid Sri Lankan phone number.</span>
-            </div>
-            <div class="form-group" id="fieldContact2">
-              <label for="custContact2">Contact 2</label>
-              <input type="tel" id="custContact2" placeholder="e.g. 0112345678" autocomplete="tel">
-              <span class="form-error" id="errContact2">Please enter a valid Sri Lankan phone number.</span>
-            </div>
-          </div>
-          <div class="form-group" id="fieldStreetAddress">
-            <label for="custStreetAddress">Street Address</label>
-            <textarea id="custStreetAddress" placeholder="House / street"></textarea>
-            <span class="form-error" id="errStreetAddress">Please enter your street address.</span>
-          </div>
-          <div class="form-group" id="fieldCity">
-            <label for="custCity">City</label>
-            <input type="text" id="custCity" placeholder="e.g. Colombo" autocomplete="address-level2">
-            <span class="form-error" id="errCity">Please enter your city.</span>
-          </div>
-        </form>
-      </div>
-
-      <!-- RIGHT (desktop) / SECOND (mobile): Your Order -->
-      <div class="checkout-col-right">
-        <h2>Your Order</h2>
-
-        <div class="order-summary" id="checkoutSummary"></div>
-        <div class="cart-sum-row"><span>Subtotal</span><span id="checkoutSubtotal">Rs. 0</span></div>
-        <div class="cart-sum-row"><span>Delivery</span><span id="checkoutDelivery">Free Delivery</span></div>
-        <div class="order-total-row"><span>Total</span><span id="checkoutTotal">Rs. 0</span></div>
-
-        <div class="payment-note">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          Payment Method: Cash on Delivery
-        </div>
-
-        <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
-          <span class="spinner"></span>
-          <span id="placeOrderLabel">Place Order</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- ============ END CHECKOUT PAGE ============ -->
 
 <!-- ============ ORDER SUCCESS MODAL ============ -->
 <div class="modal-overlay" id="successModal">
@@ -3244,25 +3285,59 @@
 
   // ---- Internal show/hide (no history/hash side-effects — see the public
   //      window.showProductDetailView / closeProductDetailView wrappers below) ----
-  function openProductDetailInternal(productId){
+  function pdpUpdateHomeVisibility(){
     const home = document.getElementById("homeSections");
     const pdp = document.getElementById("productDetailView");
-    if (home) home.style.display = "none";
+    const checkoutPage = document.getElementById("checkoutPageView");
+    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block");
+    if (home) home.style.display = anyOpen ? "none" : "";
+  }
+
+  function openProductDetailInternal(productId){
+    const checkoutPage = document.getElementById("checkoutPageView");
+    const pdp = document.getElementById("productDetailView");
+    if (checkoutPage) checkoutPage.style.display = "none";
     if (pdp) pdp.style.display = "block";
+    pdpUpdateHomeVisibility();
     window.scrollTo({ top: 0, behavior: "instant" });
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
     loadProductDetail(productId);
   }
 
   function hideProductDetailInternal(){
-    const home = document.getElementById("homeSections");
     const pdp = document.getElementById("productDetailView");
     if (pdp) pdp.style.display = "none";
-    if (home) home.style.display = "";
+    pdpUpdateHomeVisibility();
     closePdpLightbox();
     pdpCurrentId = null;
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
   }
+
+  // ---- Checkout page show/hide (mirrors the PDP pattern above) ----
+  function openCheckoutPageInternal(){
+    const pdp = document.getElementById("productDetailView");
+    const checkoutPage = document.getElementById("checkoutPageView");
+    if (pdp) pdp.style.display = "none";
+    if (checkoutPage) checkoutPage.style.display = "block";
+    pdpUpdateHomeVisibility();
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+    if (window.applyCheckoutFieldVisibility) window.applyCheckoutFieldVisibility();
+    if (window.renderCheckoutSummary) window.renderCheckoutSummary();
+    if (window.hideCheckoutError) window.hideCheckoutError();
+  }
+
+  function hideCheckoutPageInternal(){
+    const checkoutPage = document.getElementById("checkoutPageView");
+    if (checkoutPage) checkoutPage.style.display = "none";
+    pdpUpdateHomeVisibility();
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+  }
+
+  // window.openCheckout / closeCheckout live in a different <script type="module">
+  // and cannot see these declarations, so expose them explicitly.
+  window.openCheckoutPageInternal = openCheckoutPageInternal;
+  window.hideCheckoutPageInternal = hideCheckoutPageInternal;
 
   // ---- Public navigation API (keeps the URL / browser history in sync) ----
   function showProductDetailView(productId){
@@ -3294,19 +3369,30 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // ---- Hash-based routing: supports #product/ID deep links + browser Back/Forward ----
+  // ---- Hash-based routing: supports #product/ID and #checkout deep links + browser Back/Forward ----
   function handlePdpHashRouting(){
     const hash = window.location.hash;
     const match = hash.match(/^#product\/(.+)$/);
     if (match){
       openProductDetailInternal(decodeURIComponent(match[1]));
+    } else if (hash === "#checkout"){
+      const cart = window.getCart ? window.getCart() : [];
+      if (!cart.length){
+        // Don't allow landing on an empty checkout page (e.g. Back button after clearing cart).
+        if (window.showToast) window.showToast("Your cart is empty");
+        hideCheckoutPageInternal();
+        return;
+      }
+      openCheckoutPageInternal();
     } else {
-      const wasOpen = document.getElementById("productDetailView").style.display === "block";
+      const wasProductOpen = document.getElementById("productDetailView").style.display === "block";
+      const wasCheckoutOpen = document.getElementById("checkoutPageView").style.display === "block";
       hideProductDetailInternal();
+      hideCheckoutPageInternal();
       // If the new hash points at a section on the home page (e.g. #products
       // from the header nav), make sure we actually scroll to it now that
       // the home content is visible again.
-      if (wasOpen && hash && hash.length > 1){
+      if ((wasProductOpen || wasCheckoutOpen) && hash && hash.length > 1){
         const el = document.querySelector(hash);
         if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 0);
       }
@@ -3501,7 +3587,7 @@
             <span class="pdp-price">${price}</span>
           </div>
           <div class="pdp-stock ${outOfStock ? "out" : ""}" id="pdpStockLabel">${outOfStock ? "Out of Stock" : stock + " in stock"}</div>
-          ${warranty ? `<div class="pdp-warranty">🛡️ ${warranty}</div>` : ""}
+          ${warranty ? `<div class="pdp-warranty ${/month/i.test(warranty) && !/year|lifetime/i.test(warranty) ? "short" : ""}">${warranty}</div>` : ""}
           <div class="pdp-divider"></div>
           ${outOfStock ? `<div class="pdp-unavailable-note">This item is currently out of stock.</div>` : `
             <div class="pdp-qty-label">Quantity</div>
@@ -3511,13 +3597,41 @@
               <button class="qty-btn" id="pdpQtyPlus" aria-label="Increase quantity">+</button>
               <span class="pdp-qty-note" id="pdpQtyNote">${stock} available</span>
             </div>`}
-          <button class="pdp-add-btn" id="pdpAddBtn" ${outOfStock ? "disabled" : ""}>
-            ${outOfStock ? "Out of Stock" : "Add to Cart"}
-          </button>
+          <div class="pdp-actions-row">
+            <button class="pdp-add-btn" id="pdpAddBtn" ${outOfStock ? "disabled" : ""}>
+              ${outOfStock ? "Out of Stock" : "Add to Cart"}
+            </button>
+            <button class="pdp-buy-now-btn" id="pdpBuyNowBtn" ${outOfStock ? "disabled" : ""}>
+              ${outOfStock ? "Out of Stock" : "Buy Now"}
+            </button>
+          </div>
           <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             <span id="pdpShareBtnLabel">Copy Link</span>
           </button>
+          <div class="pdp-benefits">
+            <p class="pdp-benefits-title">Services and benefits</p>
+            <div class="pdp-benefits-box">
+            <div class="pdp-benefits-grid">
+              <div class="pdp-benefit-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11v8H2z"/><path d="M13 11h4l4 3v2h-8z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/><path d="M2 8v-1c0-.6.4-1 1-1h6"/></svg>
+                <span>Fast, Free Shipping</span>
+              </div>
+              <div class="pdp-benefit-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.65 2.65-2-2z"/></svg>
+                <span>Hassle-Free Warranty</span>
+              </div>
+              <div class="pdp-benefit-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2 2 0 0 1 2-1.5h1a2 2 0 0 1 0 4h-1a2 2 0 0 0 0 4h1a2 2 0 0 0 2-1.5"/></svg>
+                <span>30-Day Money-Back<br>Guarantee</span>
+              </div>
+              <div class="pdp-benefit-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="4" height="6" rx="1.5"/><rect x="17.5" y="13" width="4" height="6" rx="1.5"/><path d="M20 19v.5a3 3 0 0 1-3 3h-3"/></svg>
+                <span>Lifetime Customer<br>Support</span>
+              </div>
+            </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="pdp-tabs-section">
@@ -3549,13 +3663,12 @@
       plusBtn.addEventListener("click", () => { if (pdpQty < liveStock){ pdpQty++; refreshPdpQty(); } });
     }
 
-    // ---- Add to Cart: re-verify active status + live stock before adding ----
-    const addBtn = document.getElementById("pdpAddBtn");
-    addBtn.addEventListener("click", async () => {
-      if (addBtn.disabled) return;
-      addBtn.disabled = true;
-      const originalLabel = addBtn.textContent;
-      addBtn.textContent = "Checking stock…";
+    // ---- Add to Cart / Buy Now: re-verify active status + live stock before adding ----
+    async function pdpHandleAddClick(btn, afterAdd){
+      if (btn.disabled) return;
+      btn.disabled = true;
+      const originalLabel = btn.textContent;
+      btn.textContent = "Checking stock…";
 
       try {
         const db = pdpDb || await pdpWaitForDb();
@@ -3587,24 +3700,36 @@
           if (qtyVal) qtyVal.textContent = pdpQty;
           if (stockLabel) stockLabel.textContent = freshStock + " in stock";
           if (qtyNote) qtyNote.textContent = freshStock + " available";
-          addBtn.disabled = false;
-          addBtn.textContent = originalLabel;
+          btn.disabled = false;
+          btn.textContent = originalLabel;
           return;
         }
 
         if (typeof window.addToCart === "function"){
           window.addToCart(product.id, pdpQty);
         }
+        if (typeof afterAdd === "function") afterAdd();
       } catch (err) {
         console.error("Stock check before add-to-cart failed:", err);
         if (typeof window.addToCart === "function"){
           window.addToCart(product.id, pdpQty);
         }
+        if (typeof afterAdd === "function") afterAdd();
       } finally {
-        addBtn.disabled = false;
-        addBtn.textContent = originalLabel;
+        btn.disabled = false;
+        btn.textContent = originalLabel;
       }
-    });
+    }
+
+    const addBtn = document.getElementById("pdpAddBtn");
+    addBtn.addEventListener("click", () => pdpHandleAddClick(addBtn));
+
+    const buyNowBtn = document.getElementById("pdpBuyNowBtn");
+    if (buyNowBtn){
+      buyNowBtn.addEventListener("click", () => pdpHandleAddClick(buyNowBtn, () => {
+        if (typeof window.openCheckout === "function") window.openCheckout();
+      }));
+    }
 
     pdpLoadRelated(product);
   }
@@ -3868,6 +3993,11 @@ function showToast(message){
       console.error('Failed to save cart to localStorage:', e);
     }
   }
+
+  // The checkout/order module lives in a separate <script type="module"> and
+  // cannot see these function declarations, so expose them explicitly.
+  window.getCart = getCart;
+  window.saveCart = saveCart;
 
   function formatPriceLKR(value){
     if (window.formatStorePrice) return window.formatStorePrice(value);
@@ -4249,7 +4379,7 @@ function showToast(message){
     return cf;
   }
 
-  // ---- Checkout modal open/close ----
+  // ---- Checkout page open/close (routes through #checkout, like the PDP) ----
   window.openCheckout = function(){
     const cart = window.getCart ? window.getCart() : [];
     if (!cart.length){
@@ -4257,16 +4387,19 @@ function showToast(message){
       return;
     }
     window.closeCartDrawer && window.closeCartDrawer();
-    applyCheckoutFieldVisibility();
-    renderCheckoutSummary();
-    hideCheckoutError();
-    document.getElementById("checkoutModal").classList.add("open");
-    document.body.style.overflow = "hidden";
+    if (window.location.hash === "#checkout"){
+      window.openCheckoutPageInternal && window.openCheckoutPageInternal();
+    } else {
+      window.location.hash = "checkout";
+    }
   };
 
   window.closeCheckout = function(){
-    document.getElementById("checkoutModal").classList.remove("open");
-    document.body.style.overflow = "";
+    window.hideCheckoutPageInternal && window.hideCheckoutPageInternal();
+    if (window.location.hash === "#checkout"){
+      window.location.hash = "";
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   function renderCheckoutSummary(){
@@ -4279,8 +4412,12 @@ function showToast(message){
 
     summaryEl.innerHTML = cart.map(item => {
       const lineTotal = item.price * item.qty;
+      const thumb = item.imageUrl
+        ? `<img src="${escapeHtmlCheckout(item.imageUrl)}" alt="${escapeHtmlCheckout(item.name)}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'📦'}))">`
+        : '📦';
       return `
         <div class="order-summary-row">
+          <span class="osr-thumb">${thumb}</span>
           <span class="osr-name">${escapeHtmlCheckout(item.name)}</span>
           <span class="osr-calc">${formatPriceLKR(item.price)} × ${item.qty} = ${formatPriceLKR(lineTotal)}</span>
         </div>`;
@@ -4360,6 +4497,13 @@ function showToast(message){
     el.textContent = "";
     el.classList.remove("show");
   }
+
+  // openCheckoutPageInternal() lives in a different <script type="module"> and
+  // calls these three. Without these exports its `typeof` guards silently
+  // skipped them, so the checkout summary never rendered.
+  window.applyCheckoutFieldVisibility = applyCheckoutFieldVisibility;
+  window.renderCheckoutSummary = renderCheckoutSummary;
+  window.hideCheckoutError = hideCheckoutError;
 
   function setPlacingState(isPlacing){
     const btn = document.getElementById("placeOrderBtn");
