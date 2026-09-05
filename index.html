@@ -169,7 +169,10 @@
   .float-icon-bubble--hint{
     pointer-events:auto;cursor:pointer;
     display:flex;align-items:center;gap:10px;
-    width:max-content;max-width:min(268px,calc(100vw - 32px));
+    width:max-content;
+    /* Viewport-safe width: never wider than the space left after a 16px
+       margin on both sides, so it can't force itself past the edges. */
+    max-width:min(268px,calc(100vw - 32px));
     padding:10px 12px;
     white-space:normal;text-align:left;
     background:#fff;
@@ -181,6 +184,12 @@
     animation:none;
     will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden;
     transform-style:preserve-3d;
+    /* Fixed, static 16px margin from the right edge — no JS-computed
+       `left`, so there's nothing that can drift, get eaten by a
+       scrollbar, or come out wrong on a different viewport. `top` is
+       still positioned by JS (it depends on where the icon sits), but
+       the horizontal edge is pinned here once and for all. */
+    right:16px;
   }
   .float-icon-bubble--hint.show{transform:scale(1) translateY(0);animation:bubbleHintFloat 3.2s ease-in-out infinite;}
   .float-icon-bubble--hint::after{
@@ -1280,9 +1289,11 @@
     var left, top;
 
     if (isHint){
-      // Hint card sits ABOVE the icon, right-edge aligned with it so the
-      // tail points down at the mascot.
-      left = rect.right - bubbleWidth;
+      // Hint card sits ABOVE the icon. Horizontal position is NOT
+      // computed here anymore — it's pinned by the CSS `right:16px` on
+      // .float-icon-bubble--hint, which is static and viewport-safe by
+      // construction (no rect math, no scrollbar-width bug, nothing to
+      // drift). We only need the vertical offset above the icon.
       top = rect.top - bubbleHeight - gap;
     } else {
       // Original behaviour: bubble sits beside the icon.
@@ -1294,19 +1305,27 @@
       }
       top = rect.top + rect.height / 2 - bubbleHeight / 2;
     }
-    // Always clamp to the viewport, no matter which branch produced
-    // `left`/`top`, so the card can never render partly off-screen.
-    // Use clientWidth/clientHeight (viewport minus any real scrollbar), not
-    // window.innerWidth/innerHeight (which INCLUDES a desktop scrollbar's
-    // own width). Clamping against innerWidth ate part of the intended gap
-    // into the scrollbar's real estate, leaving almost nothing visible on
-    // desktop even though the same code looked fine on mobile (no scrollbar
-    // there to eat into the number).
-    var viewportW = document.documentElement.clientWidth;
+    // Always clamp `top` to the viewport, no matter which branch produced
+    // it, so the card can never render partly off-screen vertically.
+    // Use clientHeight (viewport minus any real scrollbar), not
+    // window.innerHeight (which can include a scrollbar's own thickness
+    // on some platforms) — see the equivalent horizontal bug this
+    // replaced for the hint card.
     var viewportH = document.documentElement.clientHeight;
-    left = Math.max(10, Math.min(left, viewportW - bubbleWidth - 20));
     top = Math.max(20, Math.min(top, viewportH - bubbleHeight - 20));
-    bubbleEl.style.left = left + 'px';
+    if (isHint){
+      // Leave `left` unset (CSS `right:16px` governs horizontal position).
+      // Clearing any stale inline `left` from a previous non-hint bubble
+      // is what "fixes the JS that keeps overwriting left" — without
+      // this, an old inline left:123px would still be sitting on the
+      // element and, being more specific than the CSS rule, would win
+      // over `right:16px` and silently reintroduce the bug.
+      bubbleEl.style.left = '';
+    } else {
+      var viewportW = document.documentElement.clientWidth;
+      left = Math.max(10, Math.min(left, viewportW - bubbleWidth - 20));
+      bubbleEl.style.left = left + 'px';
+    }
     bubbleEl.style.top = top + 'px';
 
     requestAnimationFrame(function(){
