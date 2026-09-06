@@ -663,57 +663,42 @@
 
   /* ============ PRODUCT CARDS ============ */
   .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-  .prod-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:none;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;cursor:pointer;}
-  .prod-card:hover{transform:translateY(-4px);box-shadow:none;}
+  .prod-card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid rgba(0,0,0,0.03);box-shadow:0 4px 20px rgba(0,0,0,0.02);display:flex;flex-direction:column;transition:all .4s cubic-bezier(0.16,1,0.3,1);cursor:pointer;}
+  .prod-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.08);}
   /* RULE: Product Card image area must always be 1:1 (square) — do not change. */
-  .prod-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;}
+  .prod-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
   .prod-thumb span.emoji{font-size:44px;}
-  .badge{position:absolute;top:12px;left:12px;background:#fff;color:var(--ink);font-size:11px;font-weight:600;padding:4px 8px;border-radius:var(--radius-badge);}
+  .prod-thumb img{transition:transform .6s cubic-bezier(0.16,1,0.3,1);}
+  .prod-card:hover .prod-thumb img{transform:scale(1.05);}
+  .badge{position:absolute;top:12px;left:12px;z-index:10;background:#fff;color:var(--ink);font-size:11px;font-weight:600;letter-spacing:0.02em;padding:5px 10px;line-height:1;border-radius:99px;}
   .prod-body{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1;}
   .prod-cat{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
   .prod-name{font-size:15px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;}
   .prod-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
   .prod-price{font-family:'Sora';font-weight:600;font-size:16px;}
   .prod-price del{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px;}
-  .prod-actions{display:flex;align-items:center;height:48px;}
   .add-btn{flex:1;height:44px;border-radius:var(--radius-pill);background:var(--ink);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s;padding:0 14px;}
   .add-btn-icon{display:none;flex-shrink:0;}
   .add-btn:hover{background:var(--accent);}
-  .buy-now-btn{flex:1;height:100%;border-radius:24px 0 0 24px;background:var(--cta);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;padding:0 14px;display:flex;align-items:center;justify-content:center;}
-  .buy-now-btn:hover:not([disabled]){background:var(--cta-dark);}
-  .buy-now-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
-  .cart-btn{width:56px;height:100%;border-radius:0 24px 24px 0;border:1.5px solid var(--cta);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;flex-shrink:0;}
-  .cart-btn:hover:not([disabled]){background:#eaf6fe;}
+  /* ---- "Quiet Luxury" action row: soft grey pill + circle, going obsidian/brand on hover ---- */
+  .prod-actions{display:flex;align-items:center;gap:10px;height:44px;margin-top:14px;}
+  .buy-now-btn{flex:1;height:100%;border-radius:99px;background:#F5F5F7;color:#111111;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s ease;padding:0 14px;display:flex;align-items:center;justify-content:center;}
+  .buy-now-btn:hover:not([disabled]){background:#111111;color:#FFFFFF;}
+  .buy-now-btn[disabled]{background:#CFCFCF;color:#fff;cursor:not-allowed;opacity:.5;}
+  .cart-btn{width:44px;height:44px;border-radius:50%;border:none;background:#F5F5F7;color:#111111;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s ease;flex-shrink:0;}
+  .cart-btn:hover:not([disabled]){background:var(--cta);color:#FFFFFF;}
   .cart-btn .cart-icon-wrap{display:flex;align-items:center;justify-content:center;width:100%;height:100%;line-height:1;}
-  .cart-btn svg{width:17px;height:17px;stroke:var(--cta);display:block;transition:stroke .2s;}
+  .cart-btn svg{width:17px;height:17px;stroke:currentColor;display:block;transition:transform .2s ease;}
+  .cart-btn:hover:not([disabled]) svg{transform:scale(0.9);}
   .cart-btn[disabled]{cursor:not-allowed;opacity:.5;}
 
-  /* Mobile-only: full-width action bar flush to the card's bottom edge (desktop untouched) */
+  /* Mobile: same quiet-luxury pill/circle, simply scaled down (desktop untouched) */
   @media(max-width:768px){
     .prod-name{font-size:13px;}
     .prod-price{font-size:13px;}
-    /* ---- Mobile action bar: outlined split button.
-       The container draws the top/bottom/right border lines; the two
-       children sit flush inside it with no borders of their own, so the
-       only visible seam is where the blue fill meets the white cart. ---- */
-    .prod-actions{display:flex;align-items:stretch;width:calc(100% + 32px);box-sizing:border-box;margin-top:auto;margin-left:-16px;margin-right:-16px;margin-bottom:-18px;padding:0;gap:0;height:40px;background:#fff;border:1.5px solid var(--cta);border-radius:0 0 var(--radius) var(--radius);overflow:hidden;transition:border-color .15s;}
-    .buy-now-btn{flex:1 1 auto;min-width:0;width:auto;box-sizing:border-box;height:100%;padding:0 6px;border:none;border-radius:0;background:var(--cta);color:#fff;font-size:13.5px;font-weight:700;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;transition:background .15s;}
-    .buy-now-btn:hover:not([disabled]),.buy-now-btn:active:not([disabled]){background:var(--cta-dark);}
-    .cart-btn{flex:0 0 46px;width:46px;box-sizing:border-box;height:100%;border:none;border-radius:0;background:#fff;margin:0;padding:0;transition:background .15s;display:flex;align-items:center;justify-content:center;line-height:1;}
-    .cart-btn:hover:not([disabled]),.cart-btn:active:not([disabled]){background:#EAF6FE;}
-    .cart-btn .cart-icon-wrap{width:19px;height:19px;display:flex;align-items:center;justify-content:center;line-height:1;margin:0;padding:0;}
-    .cart-btn svg{width:19px;height:19px;stroke:var(--cta);display:block;margin:0;padding:0;transform:none;flex-shrink:0;}
-    .cart-btn:hover:not([disabled]) svg{stroke:var(--cta);}
-    /* Out of stock: grey the frame too, so no blue outline is left around
-       a dead button. Children are opaque, so each also greys itself. */
-    .prod-actions:has(.buy-now-btn[disabled]){border-color:#CFCFCF;}
-    .buy-now-btn[disabled]{background:#CFCFCF;color:#fff;cursor:not-allowed;}
-    .cart-btn[disabled]{background:#fff;cursor:not-allowed;opacity:.5;}
-    /* The bar sits flush at the card's outer edge (card has border:none), so
-       its corner radius must equal the card's exactly — otherwise the card's
-       overflow:hidden clips the bar's border and the arc renders thin. */
-    body.card-style-minimal .prod-actions{border-radius:0 0 12px 12px;}
-    body.card-style-modern .prod-actions{border-radius:0 0 22px 22px;}
+    .prod-actions{height:40px;}
+    .buy-now-btn{font-size:13.5px;}
+    .cart-btn{width:40px;height:40px;}
   }
   .prod-btns{display:flex;gap:8px;}
 
@@ -741,12 +726,12 @@
   .prod-thumb{background:#F0F0F2;}
   .prod-thumb img.prod-thumb-img{width:100%;height:100%;object-fit:cover;display:block;}
   .prod-thumb-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;color:#A1A1A6;}
-  .stock-badge{position:absolute;top:auto;bottom:10px;left:10px;font-size:10px;font-weight:600;padding:4px 8px;border-radius:var(--radius-badge);background:#fff;color:var(--teal);}
-  .stock-badge.low{color:var(--accent);}
-  .stock-badge.out{background:var(--ink);color:#fff;}
+  .stock-badge{top:auto;bottom:12px;left:12px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111111;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid rgba(255,255,255,0.4);}
+  .stock-badge.low{background:rgba(254,243,199,0.9);color:#B45309;border-color:rgba(251,191,36,0.3);}
+  .stock-badge.out{background:rgba(245,245,247,0.9);color:#8E8E93;border-color:rgba(0,0,0,0.05);}
   .add-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
   .add-btn[disabled]:hover{background:#CFCFCF;}
-  .discount-badge{background:var(--accent);color:#fff;}
+  .discount-badge{background:#111111;color:#FFFFFF;box-shadow:0 4px 12px rgba(0,0,0,0.12);}
   .prod-thumb-fallback-text{font-size:13px;font-weight:600;color:#A1A1A6;background:transparent;padding:0 20px;text-align:center;}
   .wishlist-btn{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1);transition:transform .15s;z-index:2;}
   .wishlist-btn:hover{transform:scale(1.08);}
