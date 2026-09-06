@@ -965,9 +965,9 @@
   .btn3d-outer{position:relative;z-index:1;display:block;width:100%;height:100%;
     border-radius:10px;padding:9px 22px;transition:transform .1s ease-in-out,background .2s,box-shadow .2s;}
   .btn3d-blue .btn3d-outer{background:linear-gradient(1turn,#0F8ED9 .8%,#1DA1F2);
-    box-shadow:0 3px 16px rgba(29,161,242,.5),inset 0 4px 3px hsla(0,0%,100%,.30);}
+    box-shadow:inset 0 4px 3px hsla(0,0%,100%,.30);}
   .btn3d-blue:hover:not(:disabled) .btn3d-outer{background:linear-gradient(1turn,#1596e6 .8%,#39aef5);
-    box-shadow:0 3px 20px rgba(29,161,242,.6),inset 0 4px 4px hsla(0,0%,100%,.37);}
+    box-shadow:inset 0 4px 4px hsla(0,0%,100%,.37);}
   .btn3d:hover:not(:disabled) .btn3d-outer{transform:translateY(-2px);}
   .btn3d:active:not(:disabled) .btn3d-outer{transform:translateY(3px);box-shadow:none;}
   .btn3d-inner{display:flex;align-items:center;justify-content:center;}
@@ -2525,7 +2525,7 @@
       <svg class="perk-art perk-art-left" viewBox="0 0 240 150" fill="none" aria-hidden="true"><defs><linearGradient id="pkA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient><linearGradient id="pkB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".78"/><stop offset="1" stop-color="#fff" stop-opacity=".34"/></linearGradient></defs><g transform="translate(14 34) rotate(-8)"><path d="M8 44 L60 30 L112 44 L112 96 L60 112 L8 96 Z" fill="url(#pkA)"/><path d="M8 44 L60 58 L112 44 L60 30 Z" fill="url(#pkB)"/><path d="M60 58 L60 112 L112 96 L112 44 Z" fill="#fff" fill-opacity=".30"/><path d="M52 34 L68 34 L68 108 L52 104 Z" fill="#fff" fill-opacity=".62"/><path d="M8 62 L112 62" stroke="#fff" stroke-opacity=".52" stroke-width="7"/><path d="M60 30 C46 12 28 18 36 30 C42 39 54 34 60 30 Z" fill="url(#pkB)"/><path d="M60 30 C74 12 92 18 84 30 C78 39 66 34 60 30 Z" fill="url(#pkB)"/><circle cx="30" cy="76" r="2" fill="#fff" fill-opacity=".3"/><circle cx="88" cy="70" r="1.6" fill="#fff" fill-opacity=".25"/></g><g transform="translate(140 26) rotate(12)"><ellipse cx="34" cy="34" rx="30" ry="30" fill="url(#pkA)"/><ellipse cx="34" cy="30" rx="30" ry="30" fill="url(#pkB)"/><ellipse cx="34" cy="30" rx="21" ry="21" fill="#fff" fill-opacity=".26"/><text x="34" y="39" text-anchor="middle" font-family="Sora,Arial" font-size="22" font-weight="700" fill="#fff" fill-opacity=".85">%</text></g></svg>
       <div class="perk-card-body">
         <span class="perk-tag">🎁 DAILY MEMBER PERK</span>
-        <p class="perk-headline">Unlock Today’s Mystery Discount 🎰</p>
+        <p class="perk-headline">Unlock Today’s Mystery Discount</p>
         <p class="perk-sub">Spin the vault reel once every 24 hours to claim up to <span>5% instant discount 🎉</span> on your cart.</p>
         <div class="perk-buttons">
           <button class="btn3d btn3d-blue" id="perkSpinBtn" type="button" onclick="triggerSpin()">
