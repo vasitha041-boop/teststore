@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,18 +11,123 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ============ PRELOADER ============ */
-  .site-preloader{position:fixed;inset:0;z-index:2000;background:#09090B;
-    display:flex;align-items:center;justify-content:center;
-    opacity:1;transition:opacity .45s ease;}
-  .site-preloader.loaded{opacity:0;pointer-events:none;}
-  .preloader-spinner{width:42px;height:42px;border-radius:50%;
-    border:2px solid rgba(255,255,255,0.15);border-top-color:#fff;
-    animation:preloaderSpin .8s linear infinite;}
-  @keyframes preloaderSpin{to{transform:rotate(360deg);}}
-  @media (prefers-reduced-motion:reduce){
-    .preloader-spinner{animation-duration:2.4s;}
+  /* ============ PRELOADER (APPLE/OBSIDIAN THEME) ============ */
+  .site-preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.65s ease;
+    will-change: opacity, transform;
   }
+
+  .site-preloader.loaded {
+    opacity: 0;
+    transform: scale(1.03);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .preloader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .preloader-spinner {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preloader-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    animation: preloaderSpin 1.6s linear infinite;
+  }
+
+  .ring-bg {
+    stroke: rgba(255, 255, 255, 0.08);
+  }
+
+  .ring-active {
+    stroke: #FFFFFF;
+    stroke-linecap: round;
+    stroke-dasharray: 125;
+    stroke-dashoffset: 95;
+    animation: ringDash 1.8s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
+  }
+
+  .preloader-core {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 0 12px #FFFFFF;
+    animation: corePulse 1.8s ease-in-out infinite;
+  }
+
+  .preloader-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Real store logo image, scaled up for the loading screen. Same asset
+     used in the header (.store-logo-img is 98x16 there) — matches the
+     header's actual aspect ratio, just larger and centered here. */
+  .preloader-logo-img {
+    width: 150px;
+    height: auto;
+    max-height: 26px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .preloader-subtitle {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: rgba(255, 255, 255, 0.35);
+    text-indent: 0.16em;
+  }
+
+  @keyframes preloaderSpin {
+    100% { transform: rotate(270deg); }
+  }
+
+  @keyframes ringDash {
+    0% { stroke-dashoffset: 110; }
+    100% { stroke-dashoffset: 35; }
+  }
+
+  @keyframes corePulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .preloader-ring,
+    .ring-active,
+    .preloader-core{animation-duration:2.4s;}
+  }
+
 
   :root{
     /* ---- Monochrome brand palette (Apple / Nike / UGREEN inspired) ---- */
@@ -69,16 +177,38 @@
   /* hard cap so an uploaded Store Settings logo can never stretch the bar */
   .logo img,
   .store-logo-img{width:98px;height:16px;max-width:98px;max-height:16px;object-fit:contain;object-position:left center;display:block;}
-  .navlinks{display:flex;gap:28px;font-size:16px;font-weight:400;color:#fff;flex-shrink:0;}
-  /* Grid stack: the hidden bold copy sets the width, the real label sits on top,
-     so the 400 -> 600 hover weight change cannot reflow the nav. */
-  .navlinks a{opacity:0.75;font-weight:400;transition:opacity .2s;position:relative;
-    display:inline-grid;place-items:center;font-size:0;}
-  .navlinks a::before{content:attr(data-label);grid-area:1/1;font-size:16px;font-weight:600;
-    visibility:hidden;pointer-events:none;}
-  .navlinks a::after{content:attr(data-label);grid-area:1/1;font-size:16px;font-weight:400;transition:font-weight .2s;}
-  .navlinks a:hover{opacity:1;}
-  .navlinks a:hover::after{font-weight:600;}
+  /* ============ UGREEN PRECISION NAV LINKS ============ */
+  .navlinks {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    flex-shrink: 0;
+  }
+  .navlinks a {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #FFFFFF;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    padding: 8px 0;
+    opacity: 0.95;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+  }
+  .navlinks a:hover {
+    opacity: 1;
+    font-weight: 600;
+  }
+  /* Scrolled solid white state */
+  header.scrolled .navlinks a {
+    color: var(--ink);
+  }
+  /* Dynamic dark content on light slides */
+  header.header-dark-content:not(.scrolled) .navlinks a {
+    color: var(--ink) !important;
+  }
 
   .nav-search{flex:1;max-width:340px;position:relative;display:flex;align-items:center;}
   .nav-search input{width:100%;background:#fff;border:1px solid var(--line);border-radius:var(--radius-pill);padding:9px 16px 9px 38px;font-size:13.5px;font-family:'Inter';color:var(--ink);transition:border-color .2s,box-shadow .2s;}
@@ -417,6 +547,13 @@
   .dplex-hero-point-progress{background-color:#fff;position:absolute;top:0;left:0;width:0;height:100%;}
   .dplex-hero-point-progress.filling{transition:width linear;}
 
+  /* Desktop: show each segment's slide-title label above its progress bar
+     (mobile keeps them hidden — .dplex-hero-point-text stays display:none
+     there, set in the max-width:768px block below). */
+  @media(min-width:769px){
+    .dplex-hero-point-text{display:block !important;}
+  }
+
   @media(prefers-reduced-motion: reduce){
     .dplex-hero-slide{transition:none;}
     .dplex-hero-point-progress.filling{transition:none;}
@@ -507,7 +644,12 @@
     .cat-card:hover .cat-media{transform:none;}
   }
 
-  footer{background:#000;color:#D9D9D9;margin-top:0;padding:40px 0 0;}
+  footer{position:relative;overflow:hidden;background:#000;color:#D9D9D9;margin-top:0;padding:40px 0 0;}
+  footer .wrap{position:relative;z-index:2;}
+  #footerLightLines{position:absolute;inset:0;z-index:1;display:flex;justify-content:center;overflow:hidden;pointer-events:none;}
+  #footerLightLines svg{position:absolute;width:100%;height:100%;}
+  #footerLightLines .lines rect{fill:#fff;}
+  #footerLightLines .lights path{fill:#fff;}
   .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.1);}
   .foot-brand .logo{color:#fff;margin-bottom:14px;}
   .foot-brand p{font-size:13px;line-height:1.6;color:#A5A5A5;max-width:260px;margin:0;}
@@ -1431,9 +1573,58 @@
 </style>
 </head>
 <body>
+<!-- ============ TIER-1 CINEMATIC PRELOADER ============ -->
 <div id="sitePreloader" class="site-preloader" role="status" aria-label="Loading">
-  <div class="preloader-spinner"></div>
+  <div class="preloader-inner">
+    <div class="preloader-spinner">
+      <svg class="preloader-ring" viewBox="0 0 48 48">
+        <circle class="ring-bg" cx="24" cy="24" r="20" fill="none" stroke-width="1.8" />
+        <circle class="ring-active" cx="24" cy="24" r="20" fill="none" stroke-width="2" />
+      </svg>
+      <div class="preloader-core"></div>
+    </div>
+    <div class="preloader-brand">
+      <img class="preloader-logo-img" alt="DPLEX" src="https://res.cloudinary.com/hzwbfomh/image/upload/Dplex_logo.svg">
+      <span class="preloader-subtitle">ENGINEERED PERFORMANCE</span>
+    </div>
+  </div>
 </div>
+<script>
+  // Exact 3-second entrance with smooth reveal. Runs immediately (first
+  // thing in <body>) so the scroll lock engages before anything else on
+  // the page has a chance to render or be interacted with.
+  (function() {
+    const preloader = document.getElementById('sitePreloader');
+    if (!preloader) return;
+
+    // Prevent background scrolling while loading
+    document.body.style.overflow = 'hidden';
+
+    const MIN_DISPLAY_TIME = 3000; // 3 Seconds
+    const startTime = performance.now();
+
+    function dismissLoader() {
+      const elapsed = performance.now() - startTime;
+      const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
+
+      setTimeout(() => {
+        preloader.classList.add('loaded');
+        document.body.style.overflow = '';
+
+        // Free DOM node after animation finishes
+        setTimeout(() => {
+          if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+        }, 700);
+      }, remainingTime);
+    }
+
+    if (document.readyState === 'complete') {
+      dismissLoader();
+    } else {
+      window.addEventListener('load', dismissLoader);
+    }
+  })();
+</script>
 <img src="https://i.ibb.co/k65nCHBv/d-icon3d.png" class="site-float-icon" id="siteFloatIcon" alt="Fun mascot — click me" />
 <div class="float-icon-fx-layer" id="floatIconFxLayer"></div>
 
@@ -2870,6 +3061,48 @@
 </div>
 
 <footer>
+  <div id="footerLightLines" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <g class="lines" style="opacity:0.05">
+        <rect class="line" x="1253.6" width="4.5" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="873.3" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1100" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1547.1" width="4.5" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="615" width="4.5" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="684.6" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1369.4" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1310.2" width="0.9" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1233.4" width="0.9" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="124.2" width="0.9" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1818.4" width="4.5" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="70.3" width="4.5" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1618.6" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="455.9" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="328.7" width="1.8" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="300.8" width="4.6" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+        <rect class="line" x="1666.4" width="0.9" height="1080" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+      </g>
+      <g class="lights" style="opacity:0.9">
+        <path class="light1 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M619.5,298.4H615v19.5h4.5V298.4z M619.5,674.8H615v9.8h4.5V674.8z M619.5,135.1H615v5.6h4.5V135.1z M619.5,55.5H615v68.7h4.5V55.5z"/>
+        <path class="light2 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1258.2,531.9h-4.5v8.1h4.5V531.9z M1258.2,497.9h-4.5v17.9h4.5V497.9z M1258.2,0h-4.5v25.3h4.5V0z M1258.2,252.2h-4.5v42.4h4.5V252.2z"/>
+        <path class="light3 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M875.1,123.8h-1.8v4h1.8V123.8z M875.1,289.4h-1.8v24.1h1.8V289.4z M875.1,0h-1.8v31.4h1.8V0z M875.1,50.2h-1.8v11.5h1.8V50.2z"/>
+        <path class="light4 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1101.8,983.8h-1.8v8.2h1.8V983.8z M1101.8,1075.9h-1.8v4.1h1.8V1075.9z M1101.8,873.7h-1.8v4.2h1.8V873.7z M1101.8,851h-1.8v18.2h1.8V851z"/>
+        <path class="light5 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M686.4,822.7h-1.8v3.8h1.8V822.7z M686.4,928.4h-1.8v23h1.8V928.4z M686.4,1043.8h-1.8v36.2h1.8V1043.8z"/>
+        <path class="light6 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1551.6,860.9h-4.4v-34.1h4.4V860.9z M1551.6,533.5h-4.4v-13.9h4.4V533.5z M1551.6,1080h-4.4v-89.1h4.4V1080z"/>
+        <path class="light7 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1311.1,707.7h-0.9V698h0.9V707.7z M1311.1,436.8h-0.9v-58.9h0.9V436.8z M1311.1,140.7h-0.9V48h0.9V140.7z"/>
+        <path class="light8 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M125.1,514.5h-0.9v-9.7h0.9V514.5z M125.1,243.6h-0.9v-58.9h0.9V243.6z"/>
+        <path class="light9 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M305.4,806.7h-4.6v-42.5h4.6V806.7z M305.4,398.5h-4.6v-17.3h4.6V398.5z M305.4,1080h-4.6V968.8h4.6V1080z"/>
+        <path class="light10 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1822.9,170.7h-4.5v13.7h4.5V170.7z M1822.9,435.1h-4.5v6.8h4.5V435.1z M1822.9,55.9h-4.5v4h4.5V55.9z M1822.9,0h-4.5v48.3h4.5V0z"/>
+        <path class="light11 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1666.4,331.5h0.9v9.7h-0.9V331.5z M1666.4,602.4h0.9v58.9h-0.9V602.4z M1666.4,898.5h0.9v92.7h-0.9V898.5z"/>
+        <path class="light12 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1620.4,200.7h-1.8v6.4h1.8V200.7z M1620.4,469.1h-1.8v39h1.8V469.1z M1620.4,0h-1.8v51h1.8V0z M1620.4,81.3h-1.8V100h1.8V81.3z"/>
+        <path class="light13 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M74.8,201h-4.5v16.2h4.5V201z M74.8,512.3h-4.5v8.1h4.5V512.3z M74.8,65.8h-4.5v4.6h4.5V65.8z M74.8,0h-4.5v56.8h4.5V0z"/>
+        <path class="light14 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1371.2,655.3h-1.8v6.3h1.8V655.3z M1371.2,829.7h-1.8v37.9h1.8V829.7z M1371.2,1020.3h-1.8v59.7h1.8V1020.3z"/>
+        <path class="light15 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M1234.3,898.1h-0.9v-4.9h0.9V898.1z M1234.3,762.5h-0.9v-29.5h0.9V762.5z M1234.3,614.4h-0.9v-46.4h0.9V614.4z"/>
+        <path class="light16 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M457.7,1010.8h-1.8v-18.1h1.8V1010.8z M457.7,507.5h-1.8V398h1.8V507.5z"/>
+        <path class="light17 light" style="fill-rule:evenodd;clip-rule:evenodd;" d="M330.5,170.7h-1.8v13.7h1.8V170.7z M330.5,435.1h-1.8v6.8h1.8V435.1z M330.5,55.9h-1.8v4h1.8V55.9z M330.5,0h-1.8v48.3h1.8V0z"/>
+      </g>
+    </svg>
+  </div>
   <div class="wrap">
     <div class="foot-top">
       <div class="foot-brand">
@@ -8294,24 +8527,78 @@ Please confirm my order.`
 </script>
 <!-- ============ END ADMIN LOGIN + ADMIN DASHBOARD ============ -->
 
+<!-- ============ FOOTER LIGHT LINES (vanilla-JS port of LightLines.tsx) ============ -->
 <script>
-  // Preloader: purely cosmetic. It runs on window "load", which fires after
-  // every other script has already been parsed and its listeners registered,
-  // so no Firebase listener or render routine is delayed or blocked by it.
-  (function(){
-    var el = document.getElementById("sitePreloader");
-    if (!el) return;
-    function dismiss(){
-      if (!el || el.dataset.done) return;
-      el.dataset.done = "1";
-      el.classList.add("loaded");
-      setTimeout(function(){ if (el.parentNode) el.remove(); }, 450);
+(function(){
+  var container = document.getElementById('footerLightLines');
+  if (!container) return;
+
+  var lightsDown = [
+    { selector: ".light4", from: -1080, to: 1080 },
+    { selector: ".light5", from: -1080, to: 1080 },
+    { selector: ".light6", from: -1080, to: 1080 },
+    { selector: ".light7", from: -1080, to: 1080 },
+    { selector: ".light8", from: -1080, to: 1080 },
+    { selector: ".light11", from: -1080, to: 1080 },
+    { selector: ".light12", from: -1080, to: 1080 },
+    { selector: ".light13", from: -1080, to: 1080 },
+    { selector: ".light14", from: -1080, to: 1080 },
+    { selector: ".light15", from: -1080, to: 1080 },
+    { selector: ".light16", from: -1080, to: 1080 }
+  ];
+  var lightsUp = [
+    { selector: ".light1", from: 1080, to: -1080 },
+    { selector: ".light2", from: 1080, to: -1080 },
+    { selector: ".light3", from: 1080, to: -1080 },
+    { selector: ".light9", from: 1080, to: -1080 },
+    { selector: ".light10", from: 1080, to: -1080 },
+    { selector: ".light17", from: 1080, to: -1080 }
+  ];
+
+  var speedMultiplier = 1;
+  var allLights = lightsDown.concat(lightsUp);
+
+  var animations = allLights.map(function(light){
+    var element = container.querySelector(light.selector);
+    var duration = ((Math.floor(Math.random() * 59) + 2) * 0.5 + 0.5) / speedMultiplier;
+    return { element: element, from: light.from, to: light.to, duration: duration };
+  });
+
+  var animationState = animations.map(function(){
+    return { startTime: performance.now() - Math.random() * 5000 }; // stagger start times
+  });
+
+  var isVisible = false;
+  var frameId = null;
+
+  function animate(time){
+    if (!isVisible){
+      frameId = requestAnimationFrame(animate);
+      return;
     }
-    if (document.readyState === "complete") dismiss();
-    else window.addEventListener("load", dismiss);
-    // Safety net: never let a slow third-party asset trap the screen.
-    setTimeout(dismiss, 6000);
-  })();
+    animations.forEach(function(ref, index){
+      if (!ref.element) return;
+      var state = animationState[index];
+      var elapsed = (time - state.startTime) / 1000;
+      var progress = (elapsed % ref.duration) / ref.duration;
+      var currentY = ref.from + (ref.to - ref.from) * progress;
+      ref.element.style.transform = 'translateY(' + currentY + 'px)';
+    });
+    frameId = requestAnimationFrame(animate);
+  }
+
+  var observer = new IntersectionObserver(function(entries){
+    isVisible = entries[0].isIntersecting;
+  }, { threshold: 0 });
+  observer.observe(container);
+
+  frameId = requestAnimationFrame(animate);
+
+  window.addEventListener('beforeunload', function(){
+    if (frameId) cancelAnimationFrame(frameId);
+    observer.disconnect();
+  });
+})();
 </script>
 </body>
 </html>
