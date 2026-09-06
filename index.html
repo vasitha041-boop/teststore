@@ -833,7 +833,7 @@
   .pdp-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:48px;align-items:flex-start;}
 
   .pdp-gallery{position:sticky;top:100px;}
-  .pdp-main-image{aspect-ratio:1/1;border-radius:var(--radius);background:#F0F0F2;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;position:relative;}
+  .pdp-main-image{aspect-ratio:1/1;border-radius:24px;background:#F5F5F7;border:1px solid rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;position:relative;}
   .pdp-main-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
   .pdp-main-image:hover img{transform:scale(1.03);}
   .pdp-main-image .prod-thumb-fallback{font-size:56px;}
@@ -846,33 +846,34 @@
   .pdp-info{display:flex;flex-direction:column;}
   .pdp-cat{font-size:12px;font-weight:500;color:var(--teal);text-transform:uppercase;letter-spacing:0.04em;}
   .pdp-brand{font-size:13px;font-weight:500;color:var(--muted);margin-top:8px;}
-  .pdp-name{font-size:32px;font-weight:600;margin-top:8px;line-height:1.15;}
+  .pdp-name{font-size:34px;font-weight:700;margin-top:8px;line-height:1.15;letter-spacing:-0.03em;color:#111111;}
   .pdp-short-desc{font-size:14.5px;color:var(--muted);line-height:1.7;margin-top:10px;max-width:520px;white-space:pre-line;}
   .pdp-price-row{display:flex;align-items:center;gap:14px;margin-top:18px;}
-  .pdp-price{font-family:'Sora';font-size:30px;font-weight:600;}
-  .pdp-stock{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--teal);margin-top:14px;}
-  .pdp-warranty{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--teal);background:#E4F5EC;border:1px solid #B7E0C8;border-radius:var(--radius-pill);padding:6px 13px;margin-top:8px;width:fit-content;}
-  .pdp-warranty.short{color:var(--ink);background:#F0F0F2;border-color:rgba(17,17,17,0.10);border-radius:var(--radius-pill);}
+  .pdp-price{font-family:'Sora';font-size:32px;font-weight:700;letter-spacing:-0.02em;color:#111111;}
+  .pdp-stock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:0.01em;color:#1F8A43;background:rgba(48,209,88,0.1);border:none;border-radius:99px;padding:6px 14px;margin-top:14px;}
+  .pdp-warranty{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:0.01em;color:#111111;background:#F5F5F7;border:none;border-radius:99px;padding:6px 14px;margin-top:8px;width:fit-content;}
+  .pdp-warranty.short{color:#111111;background:#F5F5F7;border-color:transparent;border-radius:99px;}
   /* Price sits above; stock + warranty share one compact inline row. */
   .pdp-meta-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:12px;}
   .pdp-meta-row .pdp-stock{margin-top:0;}
   .pdp-meta-row .pdp-warranty{margin-top:0;}
-  .pdp-stock::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);}
-  .pdp-stock.out{color:#B3261E;}
-  .pdp-stock.out::before{background:#B3261E;}
+  .pdp-stock::before{display:none;}
+  .pdp-stock.out{color:#8E8E93;background:#F5F5F7;}
+  .pdp-stock.out::before{display:none;}
   .pdp-divider{height:1px;background:var(--line);margin:24px 0;}
   .pdp-desc-label{font-size:13px;font-weight:600;margin-bottom:8px;}
   .pdp-desc{font-size:14.5px;color:var(--muted);line-height:1.75;white-space:pre-line;}
   .pdp-qty-label{font-size:13px;font-weight:600;margin:24px 0 10px;}
-  .pdp-qty-row{display:flex;align-items:center;gap:14px;}
-  .pdp-qty-row .qty-btn{width:38px;height:38px;border-radius:10px;font-size:17px;}
-  .pdp-qty-row .qty-val{font-size:16px;min-width:26px;text-align:center;}
+  .pdp-qty-row{display:inline-flex;align-items:center;gap:0;background:#F5F5F7;border-radius:99px;padding:4px;}
+  .pdp-qty-row .qty-btn{width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:18px;font-weight:500;color:#111111;transition:transform .2s ease,box-shadow .2s ease;}
+  .pdp-qty-row .qty-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+  .pdp-qty-row .qty-val{font-size:15px;font-weight:600;min-width:44px;text-align:center;color:#111111;}
   .pdp-qty-note{font-size:12px;color:var(--muted);}
-  .pdp-add-btn{margin-top:26px;background:var(--ink);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-  .pdp-actions-row{display:flex;gap:12px;margin-top:24px;}
+  .pdp-add-btn{margin-top:26px;background:#F5F5F7;color:#111111;border:none;border-radius:99px;padding:12px 24px;min-height:56px;font-size:15px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:all .3s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;justify-content:center;gap:8px;}
+  .pdp-actions-row{display:flex;gap:14px;margin-top:32px;}
   .pdp-actions-row .pdp-add-btn{margin-top:0;flex:1;}
-  .pdp-buy-now-btn{margin:0;flex:1;background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-  .pdp-buy-now-btn:hover:not(:disabled){background:var(--cta-dark);transform:translateY(-1px);}
+  .pdp-buy-now-btn{margin:0;flex:1.2;background:#111111;color:#FFFFFF;border:none;border-radius:99px;padding:12px 24px;min-height:56px;font-size:15px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:all .3s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:none;}
+  .pdp-buy-now-btn:hover:not(:disabled){background:#000000;transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,0.12);}
   .pdp-buy-now-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
   /* ---- Mobile sticky purchase bar (PDP) ----
      Hidden on desktop entirely; on mobile it slides up once the main
@@ -965,7 +966,7 @@
 
   .pdp-benefits{margin-top:24px;}
   .pdp-benefits-title{font-size:20px;font-weight:700;color:#000;margin:0 0 16px;}
-  .pdp-benefits-box{background:#F7F8FA;border-radius:16px;padding:20px 16px;}
+  .pdp-benefits-box{background:transparent;border:1px solid rgba(0,0,0,0.06);border-radius:20px;padding:24px;}
   .pdp-benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
   .pdp-benefit-item{display:flex;align-items:flex-start;gap:8px;}
   .pdp-benefit-item svg{width:19px;height:19px;flex-shrink:0;stroke:var(--ink);margin-top:1px;}
@@ -977,7 +978,7 @@
     .pdp-benefit-item svg{width:16px;height:16px;margin-top:1px;}
     .pdp-benefit-item span{font-size:13px;font-weight:500;line-height:1.25;}
   }
-  .pdp-add-btn:hover:not(:disabled){background:#000;transform:translateY(-1px);}
+  .pdp-add-btn:hover:not(:disabled){background:#E5E5EA;transform:translateY(-2px);}
   .pdp-add-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
   .pdp-unavailable-note{margin-top:14px;font-size:13px;font-weight:600;color:#B3261E;background:#FDECEC;border:1px solid #F3C7C7;border-radius:12px;padding:12px 14px;}
 
