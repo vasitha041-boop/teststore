@@ -515,29 +515,23 @@
   @media(max-width:768px){
     .prod-name{font-size:13px;}
     .prod-price{font-size:13px;}
-    /* ---- Mobile action bar: one solid blue slab, split by a hairline.
-       The card already clips its corners (overflow:hidden), so the bar
-       needs no radius of its own — that also removes the old seam where
-       the container border met the white cart button. ---- */
-    .prod-actions{display:flex;align-items:stretch;width:calc(100% + 32px);box-sizing:border-box;margin-top:auto;margin-left:-16px;margin-right:-16px;margin-bottom:-18px;padding:0;gap:0;height:42px;background:var(--cta);border:none;border-radius:0;overflow:hidden;transition:background .15s;}
-    .buy-now-btn{flex:1 1 auto;min-width:0;width:auto;box-sizing:border-box;height:100%;border:none;border-radius:0;background:transparent;color:#fff;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;justify-content:center;transition:background .15s;}
-    .buy-now-btn:hover:not([disabled]),.buy-now-btn:active:not([disabled]){background:rgba(0,0,0,0.12);}
-    .cart-btn{flex:0 0 62px;width:62px;box-sizing:border-box;height:100%;border:none;border-left:1px solid rgba(255,255,255,0.25);border-radius:0;background:transparent;margin:0;padding:0;transition:background .15s;display:flex;align-items:center;justify-content:center;line-height:1;}
-    .cart-btn:hover:not([disabled]),.cart-btn:active:not([disabled]){background:rgba(0,0,0,0.12);}
-    .cart-btn .cart-icon-wrap{width:20px;height:20px;display:flex;align-items:center;justify-content:center;line-height:1;margin:0;padding:0;}
-    .cart-btn svg{width:20px;height:20px;stroke:#FFFFFF;display:block;margin:0;padding:0;transform:none;flex-shrink:0;}
-    .cart-btn:hover:not([disabled]) svg{stroke:#FFFFFF;}
-    /* Out of stock: the whole slab greys out as one piece. Children are
-       transparent, so the container carries the disabled colour. */
-    .prod-actions:has(.buy-now-btn[disabled]){background:#CFCFCF;}
-    .buy-now-btn[disabled]{background:transparent;color:#fff;cursor:not-allowed;}
-    .cart-btn[disabled]{background:transparent;cursor:not-allowed;opacity:1;}
-    .cart-btn[disabled] svg{stroke:rgba(255,255,255,0.75);}
-    /* Fallback for engines without :has() — grey the children directly. */
-    @supports not selector(:has(*)){
-      .buy-now-btn[disabled]{background:#CFCFCF;}
-      .cart-btn[disabled]{background:#CFCFCF;}
-    }
+    /* ---- Mobile action bar: outlined split button.
+       The container draws the top/bottom/right border lines; the two
+       children sit flush inside it with no borders of their own, so the
+       only visible seam is where the blue fill meets the white cart. ---- */
+    .prod-actions{display:flex;align-items:stretch;width:calc(100% + 32px);box-sizing:border-box;margin-top:auto;margin-left:-16px;margin-right:-16px;margin-bottom:-18px;padding:0;gap:0;height:40px;background:#fff;border:1.5px solid var(--cta);border-radius:0 0 calc(var(--radius) - 1.5px) calc(var(--radius) - 1.5px);overflow:hidden;transition:border-color .15s;}
+    .buy-now-btn{flex:1 1 auto;min-width:0;width:auto;box-sizing:border-box;height:100%;padding:0 6px;border:none;border-radius:0;background:var(--cta);color:#fff;font-size:13.5px;font-weight:700;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+    .buy-now-btn:hover:not([disabled]),.buy-now-btn:active:not([disabled]){background:var(--cta-dark);}
+    .cart-btn{flex:0 0 46px;width:46px;box-sizing:border-box;height:100%;border:none;border-radius:0;background:#fff;margin:0;padding:0;transition:background .15s;display:flex;align-items:center;justify-content:center;line-height:1;}
+    .cart-btn:hover:not([disabled]),.cart-btn:active:not([disabled]){background:#EAF6FE;}
+    .cart-btn .cart-icon-wrap{width:19px;height:19px;display:flex;align-items:center;justify-content:center;line-height:1;margin:0;padding:0;}
+    .cart-btn svg{width:19px;height:19px;stroke:var(--cta);display:block;margin:0;padding:0;transform:none;flex-shrink:0;}
+    .cart-btn:hover:not([disabled]) svg{stroke:var(--cta);}
+    /* Out of stock: grey the frame too, so no blue outline is left around
+       a dead button. Children are opaque, so each also greys itself. */
+    .prod-actions:has(.buy-now-btn[disabled]){border-color:#CFCFCF;}
+    .buy-now-btn[disabled]{background:#CFCFCF;color:#fff;cursor:not-allowed;}
+    .cart-btn[disabled]{background:#fff;cursor:not-allowed;opacity:.5;}
   }
   .prod-btns{display:flex;gap:8px;}
 
