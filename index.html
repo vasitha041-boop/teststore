@@ -29,6 +29,7 @@
     /* ---- 8-point control sizing ---- */
     --control-h:44px;
     --announce-h:36px;
+    --header-height:60px;
   }
   *{box-sizing:border-box;}
   html{overflow-x:hidden;scroll-behavior:smooth;}
@@ -39,21 +40,32 @@
   .wrap{max-width:1320px;margin:0 auto;padding:0 clamp(18px,5vw,24px);}
 
   /* ============ ANNOUNCEMENT BAR ============ */
+  /* Gold gradient highlight, e.g. <span class="announce-gold">50% OFF</span> */
+  .announce-gold{background:linear-gradient(180deg,#fde07b 0%,#d9a748 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    color:#fde07b;font-weight:700;}
   .announce-bar{position:relative;z-index:120;height:var(--announce-h);display:flex;align-items:center;justify-content:center;text-align:center;background:#111;color:#fff;font-size:12px;font-weight:500;line-height:1.3;padding:0 14px;}
 
   /* ============ HEADER ============ */
   header{position:absolute;top:var(--announce-h);left:0;right:0;width:100%;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;}
   header.scrolled{background:transparent;backdrop-filter:none;border-bottom-color:transparent;}
-  .nav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:72px;gap:20px;}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:var(--header-height);gap:20px;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Sora';font-weight:600;font-size:20px;flex-shrink:0;color:#fff;line-height:1;opacity:1;transition:opacity .2s ease;}
   .logo.brand-loading{opacity:0;}
   .logo-mark{width:28px;height:28px;border-radius:8px;background:var(--accent);display:inline-block;flex-shrink:0;}
   /* hard cap so an uploaded Store Settings logo can never stretch the bar */
   .logo img,
-  .store-logo-img{height:30px;max-height:30px;width:auto;max-width:160px;object-fit:contain;display:block;}
-  .navlinks{display:flex;gap:28px;font-size:14px;font-weight:500;color:#fff;flex-shrink:0;}
-  .navlinks a{opacity:0.75;transition:opacity .2s;position:relative;}
+  .store-logo-img{width:98px;height:16px;max-width:98px;max-height:16px;object-fit:contain;object-position:left center;display:block;}
+  .navlinks{display:flex;gap:28px;font-size:16px;font-weight:400;color:#fff;flex-shrink:0;}
+  /* Grid stack: the hidden bold copy sets the width, the real label sits on top,
+     so the 400 -> 600 hover weight change cannot reflow the nav. */
+  .navlinks a{opacity:0.75;font-weight:400;transition:opacity .2s;position:relative;
+    display:inline-grid;place-items:center;font-size:0;}
+  .navlinks a::before{content:attr(data-label);grid-area:1/1;font-size:16px;font-weight:600;
+    visibility:hidden;pointer-events:none;}
+  .navlinks a::after{content:attr(data-label);grid-area:1/1;font-size:16px;font-weight:400;transition:font-weight .2s;}
   .navlinks a:hover{opacity:1;}
+  .navlinks a:hover::after{font-weight:600;}
 
   .nav-search{flex:1;max-width:340px;position:relative;display:flex;align-items:center;}
   .nav-search input{width:100%;background:#fff;border:1px solid var(--line);border-radius:var(--radius-pill);padding:9px 16px 9px 38px;font-size:13.5px;font-family:'Inter';color:var(--ink);transition:border-color .2s,box-shadow .2s;}
@@ -430,7 +442,8 @@
   @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
   /* section heading */
-  .section{padding:40px 0;}
+  .section{padding:64px 0;}
+  @media(max-width:768px){.section{padding:40px 0;}}
   .section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;}
   .section-head h2{font-size:30px;font-weight:600;}
   .section-head a{font-size:14px;font-weight:600;border-bottom:1.5px solid var(--ink);padding-bottom:2px;}
@@ -492,7 +505,7 @@
   .prod-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;}
   .prod-thumb span.emoji{font-size:44px;}
   .badge{position:absolute;top:12px;left:12px;background:#fff;color:var(--ink);font-size:11px;font-weight:600;padding:4px 8px;border-radius:var(--radius-badge);}
-  .prod-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;flex:1;}
+  .prod-body{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1;}
   .prod-cat{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
   .prod-name{font-size:15px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;}
   .prod-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
@@ -697,7 +710,7 @@
   .pdp-stock::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);}
   .pdp-stock.out{color:#B3261E;}
   .pdp-stock.out::before{background:#B3261E;}
-  .pdp-divider{height:1px;background:var(--line);margin:22px 0;}
+  .pdp-divider{height:1px;background:var(--line);margin:24px 0;}
   .pdp-desc-label{font-size:13px;font-weight:600;margin-bottom:8px;}
   .pdp-desc{font-size:14.5px;color:var(--muted);line-height:1.75;white-space:pre-line;}
   .pdp-qty-label{font-size:13px;font-weight:600;margin:24px 0 10px;}
@@ -706,7 +719,7 @@
   .pdp-qty-row .qty-val{font-size:16px;min-width:26px;text-align:center;}
   .pdp-qty-note{font-size:12px;color:var(--muted);}
   .pdp-add-btn{margin-top:26px;background:var(--ink);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-  .pdp-actions-row{display:flex;gap:12px;margin-top:26px;}
+  .pdp-actions-row{display:flex;gap:12px;margin-top:24px;}
   .pdp-actions-row .pdp-add-btn{margin-top:0;flex:1;}
   .pdp-buy-now-btn{margin:0;flex:1;background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
   .pdp-buy-now-btn:hover:not(:disabled){background:var(--cta-dark);transform:translateY(-1px);}
@@ -802,14 +815,14 @@
 
   .pdp-benefits{margin-top:24px;}
   .pdp-benefits-title{font-size:20px;font-weight:700;color:#000;margin:0 0 16px;}
-  .pdp-benefits-box{background:#F7F8FA;border-radius:16px;padding:16px 12px;}
+  .pdp-benefits-box{background:#F7F8FA;border-radius:16px;padding:20px 16px;}
   .pdp-benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
   .pdp-benefit-item{display:flex;align-items:flex-start;gap:8px;}
   .pdp-benefit-item svg{width:19px;height:19px;flex-shrink:0;stroke:var(--ink);margin-top:1px;}
   .pdp-benefit-item span{font-size:16px;font-weight:500;color:var(--ink);line-height:1.35;}
   @media(max-width:480px){
     .pdp-benefits-grid{gap:14px 12px;}
-    .pdp-benefits-box{padding:16px 12px;}
+    .pdp-benefits-box{padding:16px;}
     .pdp-benefit-item{gap:8px;align-items:flex-start;}
     .pdp-benefit-item svg{width:16px;height:16px;margin-top:1px;}
     .pdp-benefit-item span{font-size:13px;font-weight:500;line-height:1.25;}
@@ -862,7 +875,7 @@
     .pdp-grid{grid-template-columns:1fr;gap:26px;}
     /* Room at the bottom so the floating mascot and sticky bar never
        sit on top of the last block of content. */
-    .pdp-view{padding-bottom:96px;}
+    .pdp-view{padding-bottom:112px;}
     .pdp-title-row{gap:10px;}
     .pdp-share-btn{width:36px;height:36px;margin-top:6px;}
     .pdp-share-btn svg{width:15px;height:15px;}
@@ -878,7 +891,7 @@
   .checkout-box{max-width:560px;}
   .checkout-body{padding:28px 26px;}
   .checkout-body h2{font-size:20px;font-weight:600;margin-bottom:18px;}
-  .form-group{margin-bottom:14px;}
+  .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
   .form-group input,.form-group textarea,.form-group select{width:100%;background:#fff;border:1px solid var(--line);border-radius:var(--radius-input);padding:12px 14px;min-height:var(--control-h);font-size:13.5px;font-family:'Inter';color:var(--ink);transition:border-color .2s,box-shadow .2s;}
   .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(17,17,17,0.10);}
@@ -936,9 +949,9 @@
   /* ---- Daily Member Perk banner (homepage spin entry point) ----
      Layered layout: decorative art flanks a centred text column, and the
      CTA is a 3D 'pressable' button built from a shadow layer + face. ---- */
-  .perk-section{padding-top:0;}
+  .perk-section{padding:8px 0 48px;}
   .perk-card{position:relative;display:flex;align-items:center;justify-content:center;
-    min-height:172px;padding:28px 24px;border-radius:var(--radius-card);overflow:hidden;
+    min-height:172px;padding:32px 36px;border-radius:var(--radius-card);overflow:hidden;
     background:linear-gradient(135deg,#161618 0%,#26262A 100%);
     border:1px solid hsla(0,0%,100%,.08);
     box-shadow:0 18px 40px rgba(0,0,0,0.18);}
@@ -976,7 +989,8 @@
     .btn3d:hover:not(:disabled) .btn3d-outer,.btn3d:active:not(:disabled) .btn3d-outer{transform:none;}}
   @media(max-width:900px){.perk-art{width:180px;opacity:.75;}}
   @media(max-width:768px){
-    .perk-card{min-height:0;padding:26px 20px;}
+    .perk-section{padding:0 0 32px;}
+    .perk-card{min-height:0;padding:24px 20px;}
     .perk-art{display:none;}
     .perk-headline{font-size:20px;line-height:27px;}
     .perk-sub{font-size:13px;margin-bottom:18px;}
@@ -1347,6 +1361,8 @@
 
   @media(max-width:900px){
     .hero-inner{grid-template-columns:1fr;}
+    /* clears announce bar (32px) + mobile header (56px) with breathing room */
+    .hero{padding:96px 0 40px;}
     .hero h1{font-size:38px;}
     .navlinks{display:none;}
     .icon-btn.account-toggle{display:flex;}
@@ -1361,7 +1377,7 @@
     .logo-mark{width:22px;height:22px;border-radius:6px;}
     /* cap the Store Settings logo image — this is what was stretching the bar to 120px */
     .logo img,
-    .store-logo-img{height:22px;max-height:22px;max-width:120px;width:auto;object-fit:contain;}
+    .store-logo-img{width:74px;height:12px;max-width:74px;max-height:12px;object-fit:contain;object-position:left center;}
     .foot-top{grid-template-columns:1fr 1fr;}
     .foot-row{flex-direction:column;gap:6px;align-items:flex-start;}
   }
@@ -1369,7 +1385,7 @@
     :root{--announce-h:32px;}
     .announce-bar{font-size:11px;}
     .wrap{padding:0 20px;}
-    .hero{padding:44px 0 40px;}
+    .hero{padding:96px 0 40px;}
     .hero h1{font-size:30px;}
     /* mobile: 2 columns x 3 rows per swipe page; grid fills down each column, then across */
     .cat-track{display:grid;grid-auto-flow:row;grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-columns:unset;gap:12px;overflow-x:visible;}
@@ -1382,7 +1398,7 @@
     .hero-float-icon{width:46px;bottom:-12px;left:-8px;}
     .add-btn:not([disabled]) .add-btn-text{display:none;}
     .add-btn:not([disabled]) .add-btn-icon{display:inline-flex;}
-    .section{padding:44px 0;}
+    .section{padding:40px 0;}
     .admin-btn span.admin-label{display:none;}
     .admin-btn{padding:0 12px;}
     .foot-top{grid-template-columns:1fr;gap:24px;}
@@ -2058,10 +2074,10 @@
     <div class="logo brand-loading"><span class="logo-mark"></span>Northline</div>
 
     <nav class="navlinks">
-      <a href="#">Home</a>
-      <a href="#products">Products</a>
-      <a href="#categories">Categories</a>
-      <a href="#">About</a>
+      <a href="#" data-label="Home">Home</a>
+      <a href="#products" data-label="Products">Products</a>
+      <a href="#categories" data-label="Categories">Categories</a>
+      <a href="#" data-label="About">About</a>
     </nav>
 
     <div class="nav-search">
