@@ -300,37 +300,41 @@
   }
 
   /* ---- spin-the-mascot reveal modal: slot-machine style rolling number ---- */
-  .spin-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(6,6,8,0.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .spin-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(10,10,12,0.78);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .spin-modal-overlay.open{opacity:1;pointer-events:auto;}
-  .spin-modal-card{width:100%;max-width:300px;background:rgba(22,22,24,0.86);border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:26px 22px 22px;text-align:center;color:#fff;box-shadow:0 40px 90px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.06);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);position:relative;transform:scale(.82) translateY(24px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);}
+  .spin-modal-card{width:100%;max-width:320px;background:rgba(22,22,24,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:28px;padding:36px 28px 28px;text-align:center;color:#fff;box-shadow:0 40px 100px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);position:relative;transform:scale(.82) translateY(24px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);}
   .spin-modal-overlay.open .spin-modal-card{transform:scale(1) translateY(0);}
-  .spin-modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.7);font-size:14px;line-height:1;transition:background .2s,color .2s;}
-  .spin-modal-close:hover{background:rgba(255,255,255,0.16);color:#fff;}
-  .spin-modal-title{font-family:'Sora';font-size:17px;font-weight:600;color:#fff;letter-spacing:-0.01em;margin-bottom:4px;}
-  .spin-modal-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px;}
-  .spin-reel-wrap{background:#0A0A0C;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:10px 10px;margin-bottom:16px;overflow:hidden;box-shadow:inset 0 2px 14px rgba(0,0,0,0.9),inset 0 0 0 1px rgba(0,0,0,0.6);}
+  .spin-modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.7);font-size:14px;line-height:1;transition:background .2s,color .2s,transform .2s cubic-bezier(.34,1.56,.64,1);}
+  .spin-modal-close:hover{background:rgba(255,255,255,0.16);color:#fff;transform:scale(1.08);}
+  .spin-modal-close:active{transform:scale(.94);}
+  .spin-modal-close:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:2px;}
+  .spin-modal-title{font-family:'Sora';font-size:21px;font-weight:700;color:#fff;letter-spacing:-0.02em;line-height:1.25;margin-bottom:6px;}
+  .spin-modal-sub{font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.4;margin-bottom:24px;}
+  .spin-reel-wrap{background:#0D0D0F;border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:16px 10px;margin-bottom:24px;overflow:hidden;box-shadow:inset 0 2px 18px rgba(0,0,0,0.95),inset 0 0 0 1px rgba(0,0,0,0.6),inset 0 -1px 0 rgba(255,255,255,0.04);}
   .spin-reel-row{display:flex;align-items:center;justify-content:center;}
   .spin-reel-window{height:70px;width:40px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
   .spin-reel-window--units{margin-left:-10px;transform:scaleY(-1);}
   .spin-reel-track{will-change:transform;}
   .spin-reel-track.spinning{filter:blur(.5px);}
-  .spin-reel-num{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;text-shadow:0 0 20px rgba(255,255,255,0.14);}
+  .spin-reel-num{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-size:48px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.03em;text-shadow:0 0 24px rgba(255,255,255,0.18);}
   .spin-reel-window--units .spin-reel-num{transform:scaleY(-1);}
   .spin-reel-num.landed{animation:spinReelLand .4s cubic-bezier(.34,1.56,.64,1);}
   .spin-reel-window--units .spin-reel-num.landed{animation-name:spinReelLandFlipped;}
-  .spin-reel-percent{font-family:'Sora';font-size:44px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.02em;margin-left:-3px;text-shadow:0 0 20px rgba(255,255,255,0.14);}
+  .spin-reel-percent{font-family:'Sora';font-size:48px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.03em;margin-left:-2px;text-shadow:0 0 24px rgba(255,255,255,0.18);}
   @keyframes spinReelLand{0%{transform:scale(1.2);}60%{transform:scale(.94);}100%{transform:scale(1);}}
   @keyframes spinReelLandFlipped{0%{transform:scaleY(-1) scale(1.2);}60%{transform:scaleY(-1) scale(.94);}100%{transform:scaleY(-1) scale(1);}}
-  .spin-modal-result{font-size:13.5px;font-weight:600;min-height:34px;margin-bottom:16px;line-height:1.4;color:rgba(255,255,255,0.9);}
+  .spin-modal-result{font-size:14px;font-weight:600;min-height:34px;margin-bottom:24px;line-height:1.4;color:rgba(255,255,255,0.9);}
   .spin-modal-result.win{color:#30D158;}
   .spin-modal-result.lose{color:rgba(255,255,255,0.5);}
-  .spin-modal-btn{width:100%;min-height:var(--control-h);background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;font-weight:600;font-size:14px;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 8px 22px rgba(29,161,242,0.35);}
-  .spin-modal-btn:hover:not(:disabled){background:var(--cta-dark);transform:translateY(-1px);box-shadow:0 12px 28px rgba(29,161,242,0.45);}
+  .spin-modal-btn{width:100%;min-height:48px;background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:15px;letter-spacing:-.01em;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 8px 24px rgba(29,161,242,0.35);}
+  .spin-modal-btn:hover:not(:disabled){background:var(--cta-dark);transform:translateY(-1px);box-shadow:0 14px 32px rgba(29,161,242,0.48);}
+  .spin-modal-btn:active:not(:disabled){transform:translateY(0);}
+  .spin-modal-btn:focus-visible{outline:2px solid #fff;outline-offset:3px;}
   .spin-modal-btn:disabled{opacity:.55;cursor:not-allowed;}
   @media (max-width:480px){
-    .spin-modal-card{max-width:260px;padding:22px 18px 18px;border-radius:20px;}
+    .spin-modal-card{max-width:290px;padding:28px 20px 20px;border-radius:24px;}
     .spin-reel-number{font-size:40px;}
-    .spin-modal-title{font-size:15px;}
+    .spin-modal-title{font-size:18px;}
   }
 
   .hero-tag{position:absolute;bottom:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:600;padding:8px 14px;border-radius:12px;display:flex;align-items:center;gap:6px;}
@@ -420,8 +424,8 @@
   @keyframes dplexPlaceholderGradient{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
   /* marquee */
-  .marquee-wrap{margin:0 0 32px;width:100%;}
-  .marquee-band{background:#000;color:#fff;overflow:hidden;display:flex;align-items:center;min-height:52px;width:100%;border-radius:0;box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+  .marquee-wrap{margin:0;width:100%;}
+  .marquee-band{background:#000;color:#fff;overflow:hidden;display:flex;align-items:center;min-height:52px;width:100%;border-radius:0;box-shadow:none;}
   .marquee-track{display:flex;align-items:center;gap:64px;white-space:nowrap;animation:scroll 34s linear infinite;font-size:14px;font-weight:500;padding:0 32px 0 32px;}
   .marquee-band:hover .marquee-track{animation-play-state:paused;}
   .marquee-track span{opacity:0.92;display:inline-flex;align-items:center;gap:9px;}
@@ -431,10 +435,10 @@
     .marquee-band{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   }
   @media(max-width:900px){
-    .marquee-wrap{margin:0 0 26px;}
+    .marquee-wrap{margin:0;}
   }
   @media(max-width:600px){
-    .marquee-wrap{margin:0 0 20px;}
+    .marquee-wrap{margin:0;}
     .marquee-band{min-height:46px;}
     .marquee-track{gap:36px;padding:0 20px;font-size:13px;animation-duration:24s;}
     .marquee-track span svg{width:17px;height:17px;}
@@ -949,53 +953,43 @@
   /* ---- Daily Member Perk banner (homepage spin entry point) ----
      Layered layout: decorative art flanks a centred text column, and the
      CTA is a 3D 'pressable' button built from a shadow layer + face. ---- */
-  .perk-section{padding:8px 0 48px;}
-  .perk-card{position:relative;display:flex;align-items:center;justify-content:center;
-    min-height:172px;padding:32px 36px;border-radius:var(--radius-card);overflow:hidden;
-    background:linear-gradient(135deg,#161618 0%,#26262A 100%);
-    border:1px solid hsla(0,0%,100%,.08);
-    box-shadow:0 18px 40px rgba(0,0,0,0.18);}
-  .perk-art{position:absolute;top:0;height:100%;width:240px;pointer-events:none;
-    filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));}
-  .perk-art-left{left:0;}
-  .perk-art-right{right:0;}
-  .perk-card-body{position:relative;z-index:1;width:100%;max-width:474px;text-align:center;}
-  .perk-tag{display:inline-block;font-family:'Sora',Arial,sans-serif;font-size:11px;font-weight:700;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--cta);margin-bottom:8px;}
-  .perk-headline{font-family:'Sora',Arial,sans-serif;font-size:24px;font-weight:700;
-    letter-spacing:-.02em;line-height:32px;color:#fff;margin:0 0 6px;}
-  .perk-sub{font-size:14px;font-weight:500;line-height:20px;color:rgba(255,255,255,0.62);margin:0 0 20px;}
-  .perk-sub span{color:#fff;font-weight:600;}
-  .perk-buttons{display:flex;gap:8px;justify-content:center;}
-  /* 3D button: .btn3d holds the dark base (::after), .btn3d-outer is the
-     coloured face that lifts on hover and presses flat on click. */
-  .btn3d{position:relative;display:inline-block;padding:0 0 3px;border:none;background:none;
-    font-family:inherit;cursor:pointer;text-align:center;white-space:nowrap;
-    -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
-  .btn3d::after{content:'';position:absolute;left:0;right:0;bottom:0;height:36px;
-    border-radius:10px;z-index:0;pointer-events:none;}
-  .btn3d-blue::after{background-color:#0B5C93;}
-  .btn3d-outer{position:relative;z-index:1;display:block;width:100%;height:100%;
-    border-radius:10px;padding:9px 22px;transition:transform .1s ease-in-out,background .2s,box-shadow .2s;}
-  .btn3d-blue .btn3d-outer{background:linear-gradient(1turn,#0F8ED9 .8%,#1DA1F2);
-    box-shadow:inset 0 4px 3px hsla(0,0%,100%,.30);}
-  .btn3d-blue:hover:not(:disabled) .btn3d-outer{background:linear-gradient(1turn,#1596e6 .8%,#39aef5);
-    box-shadow:inset 0 4px 4px hsla(0,0%,100%,.37);}
-  .btn3d:hover:not(:disabled) .btn3d-outer{transform:translateY(-2px);}
-  .btn3d:active:not(:disabled) .btn3d-outer{transform:translateY(3px);box-shadow:none;}
-  .btn3d-inner{display:flex;align-items:center;justify-content:center;}
-  .btn3d-text{font-family:'Sora',Arial,sans-serif;font-size:14px;font-weight:600;color:#fff;line-height:18px;}
-  @media (prefers-reduced-motion:reduce){.btn3d-outer{transition:background .2s;}
-    .btn3d:hover:not(:disabled) .btn3d-outer,.btn3d:active:not(:disabled) .btn3d-outer{transform:none;}}
-  @media(max-width:900px){.perk-art{width:180px;opacity:.75;}}
-  @media(max-width:768px){
-    .perk-section{padding:0 0 32px;}
-    .perk-card{min-height:0;padding:24px 20px;}
-    .perk-art{display:none;}
-    .perk-headline{font-size:20px;line-height:27px;}
-    .perk-sub{font-size:13px;margin-bottom:18px;}
-    .perk-buttons{width:100%;}
-    .btn3d{width:100%;}
+  /* ---- Daily Perk: minimal full-bleed single-line banner ---- */
+  .perk-fullwidth-section{width:100%;margin:0 0 48px;padding:18px 0;background:#09090B;
+    border-top:1px solid rgba(255,255,255,0.08);
+    border-bottom:1px solid rgba(255,255,255,0.08);}
+  .perk-strip-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .perk-strip-content{display:flex;align-items:center;gap:16px;min-width:0;}
+  .perk-badge{flex-shrink:0;display:inline-flex;align-items:center;background:#fff;color:#09090B;
+    font-family:'Sora',Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;
+    line-height:1;padding:6px 12px;border-radius:var(--radius-pill);white-space:nowrap;}
+  .perk-headline{font-family:'Sora',Arial,sans-serif;font-size:16px;font-weight:500;
+    letter-spacing:-.01em;line-height:1.3;color:#fff;margin:0;min-width:0;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .perk-strip-action{flex-shrink:0;display:flex;}
+  .perk-minimal-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-height:40px;padding:10px 20px;border-radius:var(--radius-pill);
+    background:transparent;border:1px solid rgba(255,255,255,0.3);color:#fff;
+    font-family:'Sora',Arial,sans-serif;font-size:14px;font-weight:600;line-height:1;
+    cursor:pointer;white-space:nowrap;
+    transition:background .25s cubic-bezier(.16,1,.3,1),color .25s cubic-bezier(.16,1,.3,1),border-color .25s;}
+  .perk-minimal-cta svg{width:16px;height:16px;flex-shrink:0;
+    transition:transform .25s cubic-bezier(.16,1,.3,1);}
+  .perk-minimal-cta:hover{background:#fff;border-color:#fff;color:#09090B;}
+  .perk-minimal-cta:hover svg{transform:translateX(4px);}
+  .perk-minimal-cta:active{transform:scale(.98);}
+  .perk-minimal-cta:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+  @media (prefers-reduced-motion:reduce){
+    .perk-minimal-cta,.perk-minimal-cta svg{transition:background .2s,color .2s,border-color .2s;}
+    .perk-minimal-cta:hover svg{transform:none;}
+    .perk-minimal-cta:active{transform:none;}
+  }
+  @media(max-width:860px){
+    .perk-fullwidth-section{margin:0 0 32px;padding:20px 0;}
+    .perk-strip-inner{flex-direction:column;align-items:center;text-align:center;gap:14px;}
+    .perk-strip-content{flex-direction:column;gap:10px;}
+    .perk-headline{white-space:normal;overflow:visible;text-overflow:clip;font-size:15px;}
+    .perk-strip-action{width:100%;}
+    .perk-minimal-cta{width:100%;}
   }
   /* ---- Floating mascot retired: the perk card is now the sole spin entry
      point. The #siteFloatIcon element stays in the DOM because the whole
@@ -2496,6 +2490,22 @@
 </div>
 </div>
 
+<!-- ============ DAILY MEMBER PERK (minimal single-line banner) ============ -->
+<section class="perk-fullwidth-section" id="perkSection">
+  <div class="perk-strip-inner wrap">
+    <div class="perk-strip-content">
+      <span class="perk-badge">Daily Perk</span>
+      <p class="perk-headline">Unlock up to 5% off your cart today</p>
+    </div>
+    <div class="perk-strip-action">
+      <button class="perk-minimal-cta" id="perkSpinBtn" type="button" onclick="triggerSpin()">
+        <span>Spin &amp; Claim</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="categories">
   <div class="wrap">
     <div class="section-head">
@@ -2535,25 +2545,6 @@
 </section>
 
 <!-- ============ DAILY MEMBER PERK ============ -->
-<section class="section perk-section" id="perkSection">
-  <div class="wrap">
-    <div class="perk-card">
-      <svg class="perk-art perk-art-left" viewBox="0 0 240 150" fill="none" aria-hidden="true"><defs><linearGradient id="pkA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient><linearGradient id="pkB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".78"/><stop offset="1" stop-color="#fff" stop-opacity=".34"/></linearGradient></defs><g transform="translate(14 34) rotate(-8)"><path d="M8 44 L60 30 L112 44 L112 96 L60 112 L8 96 Z" fill="url(#pkA)"/><path d="M8 44 L60 58 L112 44 L60 30 Z" fill="url(#pkB)"/><path d="M60 58 L60 112 L112 96 L112 44 Z" fill="#fff" fill-opacity=".30"/><path d="M52 34 L68 34 L68 108 L52 104 Z" fill="#fff" fill-opacity=".62"/><path d="M8 62 L112 62" stroke="#fff" stroke-opacity=".52" stroke-width="7"/><path d="M60 30 C46 12 28 18 36 30 C42 39 54 34 60 30 Z" fill="url(#pkB)"/><path d="M60 30 C74 12 92 18 84 30 C78 39 66 34 60 30 Z" fill="url(#pkB)"/><circle cx="30" cy="76" r="2" fill="#fff" fill-opacity=".3"/><circle cx="88" cy="70" r="1.6" fill="#fff" fill-opacity=".25"/></g><g transform="translate(140 26) rotate(12)"><ellipse cx="34" cy="34" rx="30" ry="30" fill="url(#pkA)"/><ellipse cx="34" cy="30" rx="30" ry="30" fill="url(#pkB)"/><ellipse cx="34" cy="30" rx="21" ry="21" fill="#fff" fill-opacity=".26"/><text x="34" y="39" text-anchor="middle" font-family="Sora,Arial" font-size="22" font-weight="700" fill="#fff" fill-opacity=".85">%</text></g></svg>
-      <div class="perk-card-body">
-        <span class="perk-tag">🎁 DAILY MEMBER PERK</span>
-        <p class="perk-headline">Unlock Today’s Mystery Discount</p>
-        <p class="perk-sub">Spin the vault reel once every 24 hours to claim up to <span>5% instant discount 🎉</span> on your cart.</p>
-        <div class="perk-buttons">
-          <button class="btn3d btn3d-blue" id="perkSpinBtn" type="button" onclick="triggerSpin()">
-            <span class="btn3d-outer"><span class="btn3d-inner"><span class="btn3d-text">🎰 Spin &amp; Claim</span></span></span>
-          </button>
-        </div>
-      </div>
-      <svg class="perk-art perk-art-right" viewBox="0 0 240 150" fill="none" aria-hidden="true"><g transform="translate(24 40) rotate(-10)"><ellipse cx="30" cy="60" rx="28" ry="11" fill="#fff" fill-opacity=".34"/><ellipse cx="30" cy="50" rx="28" ry="11" fill="#fff" fill-opacity=".46"/><ellipse cx="30" cy="40" rx="28" ry="11" fill="url(#pkB)"/><ellipse cx="30" cy="40" rx="16" ry="6" fill="#fff" fill-opacity=".30"/></g><g transform="translate(104 20) rotate(6)"><path d="M10 54 L58 40 L106 54 L106 100 L58 116 L10 100 Z" fill="url(#pkA)"/><path d="M10 54 L58 68 L106 54 L58 40 Z" fill="url(#pkB)"/><path d="M58 68 L58 116 L106 100 L106 54 Z" fill="#fff" fill-opacity=".30"/><g transform="translate(2 6) rotate(-12 58 27)"><path d="M6 20 L58 6 L110 20 L110 32 L58 46 L6 32 Z" fill="url(#pkB)"/><path d="M6 20 L58 34 L110 20 L58 6 Z" fill="#fff" fill-opacity=".55"/></g><circle cx="58" cy="60" r="9" fill="#fff" fill-opacity=".72"/><circle cx="34" cy="88" r="2" fill="#fff" fill-opacity=".26"/><circle cx="86" cy="80" r="1.6" fill="#fff" fill-opacity=".22"/></g></svg>
-    </div>
-  </div>
-</section>
-
 <script type="module">
   import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
