@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1221,15 +1224,21 @@
   @keyframes spin{to{transform:rotate(360deg);}}
 
   /* ============ ORDER SUCCESS MODAL ============ */
-  .success-box{max-width:420px;text-align:center;padding:40px 30px;}
-  .success-icon{width:64px;height:64px;border-radius:50%;background:#E4F5EC;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
-  .success-icon svg{width:30px;height:30px;stroke:var(--teal);}
-  .success-box h2{font-size:21px;font-weight:600;margin-bottom:6px;}
-  .success-box p.success-sub{color:var(--muted);font-size:13.5px;margin-bottom:22px;}
-  .success-detail{background:#FBF8F3;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:left;display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
-  .success-detail-row{display:flex;justify-content:space-between;font-size:13px;}
-  .success-detail-row span:first-child{color:var(--muted);font-weight:500;}
-  .success-detail-row span:last-child{font-weight:600;color:var(--ink);}
+  .success-box{max-width:420px;text-align:center;padding:40px 32px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 10px 40px rgba(0,0,0,0.08);}
+  .success-icon{width:72px;height:72px;border-radius:50%;background:#111111;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 8px 24px rgba(0,0,0,0.12);}
+  .success-icon svg{width:32px;height:32px;stroke:#FFFFFF;}
+  .success-box h2{font-size:24px;font-weight:700;letter-spacing:-0.02em;color:#111111;margin-bottom:8px;}
+  .success-box p.success-sub{color:#8E8E93;font-size:14px;margin-bottom:28px;}
+  .success-detail{background:#F5F5F7;border:none;border-radius:16px;padding:20px;text-align:left;display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
+  .success-detail-row{display:flex;justify-content:space-between;font-size:14px;}
+  .success-detail-row span:first-child{color:#8E8E93;font-weight:500;}
+  .success-detail-row span:last-child{font-weight:600;color:#111111;}
+  /* Modal Buttons Formatting (scoped via attribute selectors so global .btn-primary is untouched) */
+  .success-box .btn-primary{border-radius:99px;min-height:56px;font-size:15px;font-weight:600;letter-spacing:-0.01em;border:none;transition:all .2s ease;display:flex;align-items:center;justify-content:center;}
+  .success-box .btn-primary[onclick="confirmViaWhatsapp()"]{background:#25D366 !important;color:#FFFFFF !important;box-shadow:0 4px 14px rgba(37,211,102,0.25);}
+  .success-box .btn-primary[onclick="confirmViaWhatsapp()"]:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,0.4);}
+  .success-box .btn-primary[onclick="closeSuccessModal()"]{background:#F5F5F7 !important;color:#111111 !important;}
+  .success-box .btn-primary[onclick="closeSuccessModal()"]:hover{background:#E5E5EA !important;}
 
   /* ============ ADMIN LOGIN ============ */
   .admin-screen{display:none;position:fixed;inset:0;z-index:500;background:var(--paper);overflow-y:auto;}
