@@ -198,7 +198,7 @@
     85%{transform:translateY(-6px) scale(1.03,.98) rotate(2deg);}
     100%{transform:translateY(0) scale(1) rotate(0deg);}
   }
-  @media (max-width:768px){.site-float-icon{width:44px;right:12px;bottom:16px;}}
+  @media (max-width:768px){.site-float-icon{width:40px;right:10px;bottom:20px;}}
   .site-float-icon.hint-pulse{animation:siteFloatBob 3.2s ease-in-out infinite,hintPulseGlow 1.1s ease-in-out 3;}
   @keyframes hintPulseGlow{0%,100%{filter:drop-shadow(0 12px 18px rgba(0,0,0,0.45));}50%{filter:drop-shadow(0 12px 28px rgba(0,0,0,0.9)) brightness(1.08);}}
 
@@ -689,7 +689,11 @@
   .pdp-price{font-family:'Sora';font-size:30px;font-weight:600;}
   .pdp-stock{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--teal);margin-top:14px;}
   .pdp-warranty{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--teal);background:#E4F5EC;border:1px solid #B7E0C8;border-radius:var(--radius-pill);padding:6px 13px;margin-top:8px;width:fit-content;}
-  .pdp-warranty.short{color:#1F2245;background:#D6CBF5;border-color:#D6CBF5;border-radius:6px;}
+  .pdp-warranty.short{color:var(--ink);background:#F0F0F2;border-color:rgba(17,17,17,0.10);border-radius:var(--radius-pill);}
+  /* Price sits above; stock + warranty share one compact inline row. */
+  .pdp-meta-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:12px;}
+  .pdp-meta-row .pdp-stock{margin-top:0;}
+  .pdp-meta-row .pdp-warranty{margin-top:0;}
   .pdp-stock::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);}
   .pdp-stock.out{color:#B3261E;}
   .pdp-stock.out::before{background:#B3261E;}
@@ -701,10 +705,10 @@
   .pdp-qty-row .qty-btn{width:38px;height:38px;border-radius:10px;font-size:17px;}
   .pdp-qty-row .qty-val{font-size:16px;min-width:26px;text-align:center;}
   .pdp-qty-note{font-size:12px;color:var(--muted);}
-  .pdp-add-btn{margin-top:26px;background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .pdp-add-btn{margin-top:26px;background:var(--ink);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
   .pdp-actions-row{display:flex;gap:12px;margin-top:26px;}
   .pdp-actions-row .pdp-add-btn{margin-top:0;flex:1;}
-  .pdp-buy-now-btn{margin:0;flex:1;background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .pdp-buy-now-btn{margin:0;flex:1;background:var(--cta);color:#fff;border:none;border-radius:var(--radius-pill);padding:12px 24px;min-height:var(--control-h);font-size:15px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
   .pdp-buy-now-btn:hover:not(:disabled){background:var(--cta-dark);transform:translateY(-1px);}
   .pdp-buy-now-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
   /* ---- Mobile sticky purchase bar (PDP) ----
@@ -745,11 +749,21 @@
   @media(max-width:480px){
     .pdp-actions-row{flex-direction:column;gap:10px;}
   }
-  .pdp-share-btn{margin-top:12px;background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:var(--radius-pill);padding:14px;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
-  .pdp-share-btn svg{width:16px;height:16px;stroke:var(--ink);}
+  /* Title + compact icon-only share control */
+  .pdp-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .pdp-title-row .pdp-name{flex:1;min-width:0;}
+  .pdp-share-btn{flex-shrink:0;margin-top:10px;width:40px;height:40px;padding:0;
+    background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:var(--radius-pill);
+    font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    transition:background .2s,border-color .2s,color .2s,width .25s ease;}
+  .pdp-share-btn svg{width:16px;height:16px;stroke:var(--ink);flex-shrink:0;transition:stroke .2s;}
+  /* Label is present for the existing copy handler, revealed only on success. */
+  .pdp-share-label{display:none;white-space:nowrap;}
   .pdp-share-btn:hover{background:var(--paper);border-color:var(--ink);}
-  .pdp-share-btn.copied{background:#E4F5EC;border-color:#B7E0C8;color:var(--teal);}
+  .pdp-share-btn.copied{width:auto;padding:0 14px;background:#E4F5EC;border-color:#B7E0C8;color:var(--teal);}
   .pdp-share-btn.copied svg{stroke:var(--teal);}
+  .pdp-share-btn.copied .pdp-share-label{display:inline;}
   /* ---- Free-gift banner (per-product, admin toggle) ---- */
   .pdp-freebie-banner{
     display:flex;align-items:center;gap:12px;
@@ -794,11 +808,13 @@
   .pdp-benefit-item svg{width:19px;height:19px;flex-shrink:0;stroke:var(--ink);margin-top:1px;}
   .pdp-benefit-item span{font-size:16px;font-weight:500;color:var(--ink);line-height:1.35;}
   @media(max-width:480px){
-    .pdp-benefits-grid{gap:12px;}
+    .pdp-benefits-grid{gap:14px 12px;}
     .pdp-benefits-box{padding:16px 12px;}
-    .pdp-benefit-item span{font-size:14px;}
+    .pdp-benefit-item{gap:8px;align-items:flex-start;}
+    .pdp-benefit-item svg{width:16px;height:16px;margin-top:1px;}
+    .pdp-benefit-item span{font-size:13px;font-weight:500;line-height:1.25;}
   }
-  .pdp-add-btn:hover:not(:disabled){background:var(--cta-dark);transform:translateY(-1px);}
+  .pdp-add-btn:hover:not(:disabled){background:#000;transform:translateY(-1px);}
   .pdp-add-btn:disabled{background:#CFCFCF;cursor:not-allowed;}
   .pdp-unavailable-note{margin-top:14px;font-size:13px;font-weight:600;color:#B3261E;background:#FDECEC;border:1px solid #F3C7C7;border-radius:12px;padding:12px 14px;}
 
@@ -844,6 +860,13 @@
 
   @media(max-width:860px){
     .pdp-grid{grid-template-columns:1fr;gap:26px;}
+    /* Room at the bottom so the floating mascot and sticky bar never
+       sit on top of the last block of content. */
+    .pdp-view{padding-bottom:96px;}
+    .pdp-title-row{gap:10px;}
+    .pdp-share-btn{width:36px;height:36px;margin-top:6px;}
+    .pdp-share-btn svg{width:15px;height:15px;}
+    .pdp-meta-row{gap:8px 10px;margin-top:10px;}
     .pdp-gallery{position:static;}
     .pdp-name{font-size:25px;}
     .pdp-price{font-size:24px;}
@@ -4800,13 +4823,21 @@
         <div class="pdp-info">
           <span class="pdp-cat">${category}</span>
           ${brand ? `<span class="pdp-brand">${brand}</span>` : ""}
-          <h1 class="pdp-name">${name}</h1>
+          <div class="pdp-title-row">
+            <h1 class="pdp-name">${name}</h1>
+            <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button" aria-label="Copy link to this product" title="Copy link">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              <span class="pdp-share-label" id="pdpShareBtnLabel">Copy Link</span>
+            </button>
+          </div>
           ${shortDescription ? `<p class="pdp-short-desc">${shortDescription}</p>` : ""}
           <div class="pdp-price-row">
             <span class="pdp-price">${price}</span>
           </div>
-          <div class="pdp-stock ${outOfStock ? "out" : ""}" id="pdpStockLabel">${outOfStock ? "Out of Stock" : stock + " in stock"}</div>
-          ${warranty ? `<div class="pdp-warranty ${/month/i.test(warranty) && !/year|lifetime/i.test(warranty) ? "short" : ""}">${warranty}</div>` : ""}
+          <div class="pdp-meta-row">
+            <div class="pdp-stock ${outOfStock ? "out" : ""}" id="pdpStockLabel">${outOfStock ? "Out of Stock" : stock + " in stock"}</div>
+            ${warranty ? `<div class="pdp-warranty ${/month/i.test(warranty) && !/year|lifetime/i.test(warranty) ? "short" : ""}">${warranty}</div>` : ""}
+          </div>
           ${product.freeBackCover ? `
             <div class="pdp-freebie-banner">
               <div class="pdp-freebie-icon">🎁</div>
@@ -4826,17 +4857,13 @@
               <span class="pdp-qty-note" id="pdpQtyNote">${stock} available</span>
             </div>`}
           <div class="pdp-actions-row">
-            <button class="pdp-add-btn" id="pdpAddBtn" ${outOfStock ? "disabled" : ""}>
-              ${outOfStock ? "Out of Stock" : "Add to Cart"}
-            </button>
             <button class="pdp-buy-now-btn" id="pdpBuyNowBtn" ${outOfStock ? "disabled" : ""}>
               ${outOfStock ? "Out of Stock" : "Buy Now"}
             </button>
+            <button class="pdp-add-btn" id="pdpAddBtn" ${outOfStock ? "disabled" : ""}>
+              ${outOfStock ? "Out of Stock" : "Add to Cart"}
+            </button>
           </div>
-          <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            <span id="pdpShareBtnLabel">Copy Link</span>
-          </button>
           <div class="pdp-benefits">
             <p class="pdp-benefits-title">Services and benefits</p>
             <div class="pdp-benefits-box">
@@ -4851,11 +4878,11 @@
               </div>
               <div class="pdp-benefit-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2 2 0 0 1 2-1.5h1a2 2 0 0 1 0 4h-1a2 2 0 0 0 0 4h1a2 2 0 0 0 2-1.5"/></svg>
-                <span>30-Day Money-Back<br>Guarantee</span>
+                <span>30-Day Money-Back Guarantee</span>
               </div>
               <div class="pdp-benefit-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="4" height="6" rx="1.5"/><rect x="17.5" y="13" width="4" height="6" rx="1.5"/><path d="M20 19v.5a3 3 0 0 1-3 3h-3"/></svg>
-                <span>Lifetime Customer<br>Support</span>
+                <span>Lifetime Customer Support</span>
               </div>
             </div>
             </div>
