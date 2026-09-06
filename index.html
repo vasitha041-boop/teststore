@@ -933,6 +933,61 @@
   /* ---- Unified conversion CTAs: drawer 'Proceed to Checkout' matches product Buy Now ---- */
   #checkoutBtn{background:var(--cta);}
   #checkoutBtn:hover{background:var(--cta-dark);}
+  /* ---- Daily Member Perk banner (homepage spin entry point) ----
+     Layered layout: decorative art flanks a centred text column, and the
+     CTA is a 3D 'pressable' button built from a shadow layer + face. ---- */
+  .perk-section{padding-top:0;}
+  .perk-card{position:relative;display:flex;align-items:center;justify-content:center;
+    min-height:172px;padding:28px 24px;border-radius:var(--radius-card);overflow:hidden;
+    background:linear-gradient(135deg,#161618 0%,#26262A 100%);
+    border:1px solid hsla(0,0%,100%,.08);
+    box-shadow:0 18px 40px rgba(0,0,0,0.18);}
+  .perk-art{position:absolute;top:0;height:100%;width:240px;pointer-events:none;
+    filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));}
+  .perk-art-left{left:0;}
+  .perk-art-right{right:0;}
+  .perk-card-body{position:relative;z-index:1;width:100%;max-width:474px;text-align:center;}
+  .perk-tag{display:inline-block;font-family:'Sora',Arial,sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cta);margin-bottom:8px;}
+  .perk-headline{font-family:'Sora',Arial,sans-serif;font-size:24px;font-weight:700;
+    letter-spacing:-.02em;line-height:32px;color:#fff;margin:0 0 6px;}
+  .perk-sub{font-size:14px;font-weight:500;line-height:20px;color:rgba(255,255,255,0.62);margin:0 0 20px;}
+  .perk-sub span{color:#fff;font-weight:600;}
+  .perk-buttons{display:flex;gap:8px;justify-content:center;}
+  /* 3D button: .btn3d holds the dark base (::after), .btn3d-outer is the
+     coloured face that lifts on hover and presses flat on click. */
+  .btn3d{position:relative;display:inline-block;padding:0 0 3px;border:none;background:none;
+    font-family:inherit;cursor:pointer;text-align:center;white-space:nowrap;
+    -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
+  .btn3d::after{content:'';position:absolute;left:0;right:0;bottom:0;height:36px;
+    border-radius:10px;z-index:0;pointer-events:none;}
+  .btn3d-blue::after{background-color:#0B5C93;}
+  .btn3d-outer{position:relative;z-index:1;display:block;width:100%;height:100%;
+    border-radius:10px;padding:9px 22px;transition:transform .1s ease-in-out,background .2s,box-shadow .2s;}
+  .btn3d-blue .btn3d-outer{background:linear-gradient(1turn,#0F8ED9 .8%,#1DA1F2);
+    box-shadow:0 3px 16px rgba(29,161,242,.5),inset 0 4px 3px hsla(0,0%,100%,.30);}
+  .btn3d-blue:hover:not(:disabled) .btn3d-outer{background:linear-gradient(1turn,#1596e6 .8%,#39aef5);
+    box-shadow:0 3px 20px rgba(29,161,242,.6),inset 0 4px 4px hsla(0,0%,100%,.37);}
+  .btn3d:hover:not(:disabled) .btn3d-outer{transform:translateY(-2px);}
+  .btn3d:active:not(:disabled) .btn3d-outer{transform:translateY(3px);box-shadow:none;}
+  .btn3d-inner{display:flex;align-items:center;justify-content:center;}
+  .btn3d-text{font-family:'Sora',Arial,sans-serif;font-size:14px;font-weight:600;color:#fff;line-height:18px;}
+  @media (prefers-reduced-motion:reduce){.btn3d-outer{transition:background .2s;}
+    .btn3d:hover:not(:disabled) .btn3d-outer,.btn3d:active:not(:disabled) .btn3d-outer{transform:none;}}
+  @media(max-width:900px){.perk-art{width:180px;opacity:.75;}}
+  @media(max-width:768px){
+    .perk-card{min-height:0;padding:26px 20px;}
+    .perk-art{display:none;}
+    .perk-headline{font-size:20px;line-height:27px;}
+    .perk-sub{font-size:13px;margin-bottom:18px;}
+    .perk-buttons{width:100%;}
+    .btn3d{width:100%;}
+  }
+  /* ---- Floating mascot retired: the perk card is now the sole spin entry
+     point. The #siteFloatIcon element stays in the DOM because the whole
+     spin module is scoped to it (`if(!icon || !fxLayer) return;`) — removing
+     it would disable the spin logic entirely. It is hidden instead. ---- */
+  .site-float-icon,.float-icon-bubble,#floatIconFxLayer{display:none;}
   /* ---- Post-spin feedback: header cart pulses when a perk lands in the cart ---- */
   @keyframes cartPerkPulse{0%{transform:scale(1);}30%{transform:scale(1.18);}55%{transform:scale(.94);}100%{transform:scale(1);}}
   .icon-btn.cart-perk-pulse{animation:cartPerkPulse .6s cubic-bezier(.34,1.56,.64,1) 2;}
@@ -1403,6 +1458,9 @@
 
   function spawnParticles(){
     var rect = icon.getBoundingClientRect();
+    // Mascot is hidden, so there is no anchor point — skip the burst rather
+    // than firing emoji into the top-left corner.
+    if (!rect.width && !rect.height) return;
     var cx = rect.left + rect.width / 2;
     var cy = rect.top + rect.height / 2;
     var count = 8;
@@ -1949,6 +2007,8 @@
     runSpin();
   }
 
+  // The mascot is hidden, but the perk card button calls this by name.
+  window.triggerSpin = triggerSpin;
   icon.addEventListener('click', triggerSpin);
 
   icon.addEventListener('animationend', function(e){
@@ -2454,6 +2514,26 @@
         </div>
       </div>
       <div class="cat-dots" id="catDots" role="tablist" aria-label="Category pages"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DAILY MEMBER PERK ============ -->
+<section class="section perk-section" id="perkSection">
+  <div class="wrap">
+    <div class="perk-card">
+      <svg class="perk-art perk-art-left" viewBox="0 0 240 150" fill="none" aria-hidden="true"><defs><linearGradient id="pkA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient><linearGradient id="pkB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".78"/><stop offset="1" stop-color="#fff" stop-opacity=".34"/></linearGradient></defs><g transform="translate(14 34) rotate(-8)"><path d="M8 44 L60 30 L112 44 L112 96 L60 112 L8 96 Z" fill="url(#pkA)"/><path d="M8 44 L60 58 L112 44 L60 30 Z" fill="url(#pkB)"/><path d="M60 58 L60 112 L112 96 L112 44 Z" fill="#fff" fill-opacity=".30"/><path d="M52 34 L68 34 L68 108 L52 104 Z" fill="#fff" fill-opacity=".62"/><path d="M8 62 L112 62" stroke="#fff" stroke-opacity=".52" stroke-width="7"/><path d="M60 30 C46 12 28 18 36 30 C42 39 54 34 60 30 Z" fill="url(#pkB)"/><path d="M60 30 C74 12 92 18 84 30 C78 39 66 34 60 30 Z" fill="url(#pkB)"/><circle cx="30" cy="76" r="2" fill="#fff" fill-opacity=".3"/><circle cx="88" cy="70" r="1.6" fill="#fff" fill-opacity=".25"/></g><g transform="translate(140 26) rotate(12)"><ellipse cx="34" cy="34" rx="30" ry="30" fill="url(#pkA)"/><ellipse cx="34" cy="30" rx="30" ry="30" fill="url(#pkB)"/><ellipse cx="34" cy="30" rx="21" ry="21" fill="#fff" fill-opacity=".26"/><text x="34" y="39" text-anchor="middle" font-family="Sora,Arial" font-size="22" font-weight="700" fill="#fff" fill-opacity=".85">%</text></g></svg>
+      <div class="perk-card-body">
+        <span class="perk-tag">🎁 DAILY MEMBER PERK</span>
+        <p class="perk-headline">Unlock Today’s Mystery Discount 🎰</p>
+        <p class="perk-sub">Spin the vault reel once every 24 hours to claim up to <span>5% instant discount 🎉</span> on your cart.</p>
+        <div class="perk-buttons">
+          <button class="btn3d btn3d-blue" id="perkSpinBtn" type="button" onclick="triggerSpin()">
+            <span class="btn3d-outer"><span class="btn3d-inner"><span class="btn3d-text">🎰 Spin &amp; Claim</span></span></span>
+          </button>
+        </div>
+      </div>
+      <svg class="perk-art perk-art-right" viewBox="0 0 240 150" fill="none" aria-hidden="true"><g transform="translate(24 40) rotate(-10)"><ellipse cx="30" cy="60" rx="28" ry="11" fill="#fff" fill-opacity=".34"/><ellipse cx="30" cy="50" rx="28" ry="11" fill="#fff" fill-opacity=".46"/><ellipse cx="30" cy="40" rx="28" ry="11" fill="url(#pkB)"/><ellipse cx="30" cy="40" rx="16" ry="6" fill="#fff" fill-opacity=".30"/></g><g transform="translate(104 20) rotate(6)"><path d="M10 54 L58 40 L106 54 L106 100 L58 116 L10 100 Z" fill="url(#pkA)"/><path d="M10 54 L58 68 L106 54 L58 40 Z" fill="url(#pkB)"/><path d="M58 68 L58 116 L106 100 L106 54 Z" fill="#fff" fill-opacity=".30"/><g transform="translate(2 6) rotate(-12 58 27)"><path d="M6 20 L58 6 L110 20 L110 32 L58 46 L6 32 Z" fill="url(#pkB)"/><path d="M6 20 L58 34 L110 20 L58 6 Z" fill="#fff" fill-opacity=".55"/></g><circle cx="58" cy="60" r="9" fill="#fff" fill-opacity=".72"/><circle cx="34" cy="88" r="2" fill="#fff" fill-opacity=".26"/><circle cx="86" cy="80" r="1.6" fill="#fff" fill-opacity=".22"/></g></svg>
     </div>
   </div>
 </section>
