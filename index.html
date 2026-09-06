@@ -8,6 +8,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* ============ PRELOADER ============ */
+  .site-preloader{position:fixed;inset:0;z-index:2000;background:#09090B;
+    display:flex;align-items:center;justify-content:center;
+    opacity:1;transition:opacity .45s ease;}
+  .site-preloader.loaded{opacity:0;pointer-events:none;}
+  .preloader-spinner{width:42px;height:42px;border-radius:50%;
+    border:2px solid rgba(255,255,255,0.15);border-top-color:#fff;
+    animation:preloaderSpin .8s linear infinite;}
+  @keyframes preloaderSpin{to{transform:rotate(360deg);}}
+  @media (prefers-reduced-motion:reduce){
+    .preloader-spinner{animation-duration:2.4s;}
+  }
+
   :root{
     /* ---- Monochrome brand palette (Apple / Nike / UGREEN inspired) ---- */
     --ink:#181818;            /* primary brand / text */
@@ -1418,6 +1431,9 @@
 </style>
 </head>
 <body>
+<div id="sitePreloader" class="site-preloader" role="status" aria-label="Loading">
+  <div class="preloader-spinner"></div>
+</div>
 <img src="https://i.ibb.co/k65nCHBv/d-icon3d.png" class="site-float-icon" id="siteFloatIcon" alt="Fun mascot — click me" />
 <div class="float-icon-fx-layer" id="floatIconFxLayer"></div>
 
@@ -8278,5 +8294,24 @@ Please confirm my order.`
 </script>
 <!-- ============ END ADMIN LOGIN + ADMIN DASHBOARD ============ -->
 
+<script>
+  // Preloader: purely cosmetic. It runs on window "load", which fires after
+  // every other script has already been parsed and its listeners registered,
+  // so no Firebase listener or render routine is delayed or blocked by it.
+  (function(){
+    var el = document.getElementById("sitePreloader");
+    if (!el) return;
+    function dismiss(){
+      if (!el || el.dataset.done) return;
+      el.dataset.done = "1";
+      el.classList.add("loaded");
+      setTimeout(function(){ if (el.parentNode) el.remove(); }, 450);
+    }
+    if (document.readyState === "complete") dismiss();
+    else window.addEventListener("load", dismiss);
+    // Safety net: never let a slow third-party asset trap the screen.
+    setTimeout(dismiss, 6000);
+  })();
+</script>
 </body>
 </html>
