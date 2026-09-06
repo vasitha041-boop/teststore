@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -915,7 +914,36 @@
   @keyframes cartPerkPulse{0%{transform:scale(1);}30%{transform:scale(1.18);}55%{transform:scale(.94);}100%{transform:scale(1);}}
   .icon-btn.cart-perk-pulse{animation:cartPerkPulse .6s cubic-bezier(.34,1.56,.64,1) 2;}
   .icon-btn.cart-perk-pulse .cart-badge{background:#30D158;}
-  @media (prefers-reduced-motion:reduce){.icon-btn.cart-perk-pulse{animation:none;}}
+  .icon-btn.cart-perk-pulse .cart-badge{background:#30D158;transition:background .3s ease;}
+  /* Floating confirmation anchored under the header cart icon. Fixed-position
+     so it never shifts layout; JS sets top/right from the icon's rect. */
+  .cart-perk-toast{position:fixed;z-index:410;display:flex;align-items:center;gap:6px;
+    max-width:calc(100vw - 24px);padding:8px 12px;border-radius:var(--radius-pill);
+    background:rgba(22,22,24,0.92);color:#fff;
+    backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 12px 30px rgba(0,0,0,0.28),0 0 0 1px rgba(48,209,88,0.35);
+    font-family:'Sora',Arial,sans-serif;font-size:12.5px;font-weight:600;line-height:1.2;
+    white-space:nowrap;pointer-events:none;
+    opacity:0;transform:scale(.86) translateY(-6px);transform-origin:100% 0;
+    transition:opacity .28s ease,transform .45s cubic-bezier(.34,1.56,.64,1);}
+  .cart-perk-toast.show{opacity:1;transform:scale(1) translateY(0);}
+  .cart-perk-toast .cart-perk-check{color:#30D158;font-weight:700;}
+  @media(max-width:768px){.cart-perk-toast{font-size:12px;padding:7px 11px;}}
+  /* Bonus row emphasis when a fresh perk lands while the drawer is open. */
+  @keyframes cartBonusFlash{
+    0%{transform:scale(1);background:rgba(48,209,88,0.08);}
+    35%{transform:scale(1.03);background:rgba(48,209,88,0.22);}
+    100%{transform:scale(1);background:rgba(48,209,88,0.08);}
+  }
+  #cartBonusRow.perk-flash,#checkoutBonusRow.perk-flash{
+    animation:cartBonusFlash .6s cubic-bezier(.34,1.56,.64,1) 2;}
+  @media (prefers-reduced-motion:reduce){
+    .icon-btn.cart-perk-pulse{animation:none;}
+    .cart-perk-toast{transition:opacity .2s ease;transform:none;}
+    .cart-perk-toast.show{transform:none;}
+    #cartBonusRow.perk-flash,#checkoutBonusRow.perk-flash{animation:none;}
+  }
   /* ---- Gamified perk highlight: soft-green pill on the applied discount row ---- */
   #cartBonusRow,#checkoutBonusRow{background:rgba(48,209,88,0.08);padding:6px 10px;border-radius:8px;color:#1F8A43;font-weight:600;}
   .spinner{width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
@@ -1693,20 +1721,89 @@
   }
 
   var spinWonThisSession = false;
+  var spinWonPct = 0;
+  var cartPerkToastTimers = [];
+
+  // Purely visual confirmation that a cart-level discount was applied.
+  // Reads nothing and writes nothing to the cart — the discount was already
+  // saved and rendered by the existing spin/cart logic.
+  function showCartPerkFeedback(pct){
+    cartPerkToastTimers.forEach(clearTimeout);
+    cartPerkToastTimers = [];
+
+    var cartIconBtn = document.getElementById('cartIconBtn');
+    if (cartIconBtn){
+      cartIconBtn.classList.remove('cart-perk-pulse');
+      void cartIconBtn.offsetWidth;
+      cartIconBtn.classList.add('cart-perk-pulse');
+      cartPerkToastTimers.push(setTimeout(function(){
+        cartIconBtn.classList.remove('cart-perk-pulse');
+      }, 1600));
+    }
+
+    // Floating confirmation, anchored under the cart icon.
+    var old = document.getElementById('cartPerkToast');
+    if (old) old.remove();
+    var toast = document.createElement('div');
+    toast.className = 'cart-perk-toast';
+    toast.id = 'cartPerkToast';
+    toast.setAttribute('role', 'status');
+    var label = (pct > 0 ? String(pct).padStart(2, '0') + '% OFF' : 'Discount') + ' applied to cart ';
+    toast.appendChild(document.createTextNode(label));
+    var check = document.createElement('span');
+    check.className = 'cart-perk-check';
+    check.textContent = '\u2713';
+    toast.appendChild(check);
+    document.body.appendChild(toast);
+
+    if (cartIconBtn){
+      var r = cartIconBtn.getBoundingClientRect();
+      toast.style.top = Math.round(r.bottom + 10) + 'px';
+      // Right-anchor to the icon, clamped so it can never leave the viewport.
+      var right = Math.max(12, Math.round(window.innerWidth - r.right));
+      toast.style.right = right + 'px';
+    } else {
+      toast.style.top = '72px';
+      toast.style.right = '12px';
+    }
+
+    requestAnimationFrame(function(){ toast.classList.add('show'); });
+    cartPerkToastTimers.push(setTimeout(function(){
+      toast.classList.remove('show');
+      cartPerkToastTimers.push(setTimeout(function(){
+        if (toast.parentNode) toast.remove();
+      }, 400));
+    }, 2000));
+
+    // If a summary is already on screen, flash its bonus row too.
+    // The drawer is never force-opened.
+    var drawer = document.getElementById('cartDrawer');
+    var rows = [];
+    if (drawer && drawer.classList.contains('open')){
+      rows.push(document.getElementById('cartBonusRow'));
+    }
+    var checkoutRow = document.getElementById('checkoutBonusRow');
+    if (checkoutRow && checkoutRow.offsetParent !== null) rows.push(checkoutRow);
+    rows.forEach(function(row){
+      if (!row || row.style.display === 'none') return;
+      row.classList.remove('perk-flash');
+      void row.offsetWidth;
+      row.classList.add('perk-flash');
+      cartPerkToastTimers.push(setTimeout(function(){
+        row.classList.remove('perk-flash');
+      }, 1400));
+    });
+  }
   function closeSpinModal(){
     spinOverlay.classList.remove('open');
     clearTimeout(spinRollTimer);
     spinRAFCancel();
-    // Post-spin feedback: bounce the header cart so the unlocked perk is noticed.
+    // Post-spin feedback: only for a genuine new win. Runs as the modal
+    // closes, which is the first moment the header/cart is actually
+    // visible — the modal overlay covers them while it is open.
     if (spinWonThisSession){
       spinWonThisSession = false;
-      var cartIconBtn = document.getElementById('cartIconBtn');
-      if (cartIconBtn){
-        cartIconBtn.classList.remove('cart-perk-pulse');
-        void cartIconBtn.offsetWidth;
-        cartIconBtn.classList.add('cart-perk-pulse');
-        setTimeout(function(){ cartIconBtn.classList.remove('cart-perk-pulse'); }, 1400);
-      }
+      showCartPerkFeedback(spinWonPct);
     }
   }
   if (spinModalClose) spinModalClose.addEventListener('click', closeSpinModal);
@@ -1779,6 +1876,7 @@
         spinModalResult.textContent = '🎉 You won ' + pad2(finalPct) + '% OFF! Applied to your cart.';
         spinModalResult.classList.add('win');
         spinWonThisSession = true;
+        spinWonPct = finalPct;
         spinModalSub.textContent = 'Nice one!';
         spinModalBtn.textContent = 'Awesome!';
         spawnParticles();
