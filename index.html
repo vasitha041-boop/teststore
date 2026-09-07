@@ -864,6 +864,8 @@
     .cart-info{flex:1;min-width:0;}
     .cart-info h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .cart-item-card .cart-item-qty{margin-top:8px;}
+    /* Safe zone for the total price so it can never sit under the X button */
+    .cart-item-card .cart-item-right{padding-right:36px;}
     /* Remove button position fix for mobile: circular tap target, clear of the price */
     .remove-btn{position:absolute;top:16px;right:12px;width:28px;height:28px;background:#F5F5F7;border-radius:50%;display:flex;align-items:center;justify-content:center;}
   }
