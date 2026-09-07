@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1126,6 +1129,7 @@
   .checkout-body h2{font-size:20px;font-weight:600;margin-bottom:18px;}
   .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .form-group label .label-optional{font-size:13px;font-weight:400;color:#8E8E93;}
   .form-group input,.form-group textarea,.form-group select{width:100%;background:#F5F5F7;border:1px solid transparent;border-radius:var(--radius-input);padding:12px 14px;min-height:var(--control-h);font-size:13.5px;font-family:'Inter';color:var(--ink);box-shadow:none;transition:all .2s ease;}
   .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;background:#FFFFFF;border-color:#111111;box-shadow:0 0 0 4px rgba(0,0,0,0.05);}
   .warranty-select-row{display:flex;align-items:center;gap:12px;}
@@ -3204,6 +3208,11 @@
               <span class="form-error" id="errContact2">Please enter a valid Sri Lankan phone number.</span>
             </div>
           </div>
+          <div class="form-group" id="fieldEmail">
+            <label for="checkoutEmail">Email Address <span class="label-optional">(Optional &mdash; for digital receipt)</span></label>
+            <input type="email" id="checkoutEmail" placeholder="name@example.com" autocomplete="email" inputmode="email">
+            <span class="form-error" id="errEmail">Please enter a valid email address, or leave it blank.</span>
+          </div>
           <div class="form-group" id="fieldStreetAddress">
             <label for="custStreetAddress">Street Address</label>
             <textarea id="custStreetAddress" placeholder="House / street"></textarea>
@@ -3318,6 +3327,7 @@
           <div id="successAddressLine1"></div>
           <div id="successAddressLine2"></div>
           <div id="successAddressPhone"></div>
+          <div id="successAddressEmail"></div>
         </address>
       </div>
     </div>
@@ -4094,6 +4104,7 @@
         <div class="od-meta-row"><span>Customer</span><strong id="odCustomerName">—</strong></div>
         <div class="od-meta-row"><span>Phone</span><strong id="odPhone">—</strong></div>
         <div class="od-meta-row"><span>Address</span><strong id="odAddress">—</strong></div>
+        <div class="od-meta-row"><span>Email</span><strong id="odEmail">—</strong></div>
         <div class="od-meta-row"><span>Date</span><strong id="odDate">—</strong></div>
         <div class="od-meta-row"><span>Status</span><span class="pill" id="odStatusPill">—</span></div>
       </div>
@@ -6805,6 +6816,10 @@ function showToast(message){
     // A field that's disabled in Admin Settings is never required and never invalid.
     const firstNameValid = !cf.firstName || firstName.length > 0;
     const lastNameValid = !cf.lastName || lastName.length > 0;
+    const emailEl = document.getElementById("checkoutEmail");
+    const emailVal = emailEl ? emailEl.value.trim() : "";
+    const emailValid = isValidEmailOptional(emailVal);
+    setFieldError("fieldEmail", "errEmail", !emailValid);
     const contact1Valid = !cf.contact1 || (contact1.length > 0 && isValidSLPhone(contact1));
     const contact2Valid = !cf.contact2 || (contact2.length > 0 && isValidSLPhone(contact2));
     const streetAddressValid = !cf.streetAddress || streetAddress.length > 0;
@@ -6817,7 +6832,7 @@ function showToast(message){
     setFieldError("fieldStreetAddress", "errStreetAddress", !streetAddressValid);
     setFieldError("fieldCity", "errCity", !cityValid);
 
-    const allValid = firstNameValid && lastNameValid && contact1Valid && contact2Valid && streetAddressValid && cityValid;
+    const allValid = firstNameValid && lastNameValid && contact1Valid && contact2Valid && streetAddressValid && cityValid && emailValid;
     if (!allValid) return null;
 
     // ---- Build safe compatibility fields — never "undefined"/"null" text for a disabled field ----
@@ -6832,7 +6847,16 @@ function showToast(message){
     if (cf.contact2) result.contact2 = contact2;
     if (cf.streetAddress) result.streetAddress = streetAddress;
     if (cf.city) result.city = city;
+    const emailInput = document.getElementById("checkoutEmail");
+    const customerEmail = emailInput ? emailInput.value.trim() : "";
+    if (customerEmail) result.email = customerEmail;
     return result;
+  }
+
+  // Optional field: blank is fine, but a typo should not be saved silently.
+  function isValidEmailOptional(value){
+    if (!value) return true;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   }
 
   function showCheckoutError(message){
@@ -6936,6 +6960,7 @@ function showToast(message){
       if (formData.contact2 !== undefined) orderPayload.contact2 = formData.contact2;
       if (formData.streetAddress !== undefined) orderPayload.streetAddress = formData.streetAddress;
       if (formData.city !== undefined) orderPayload.city = formData.city;
+      if (formData.email) orderPayload.email = formData.email;
 
       const orderRef = await addDoc(collection(db, "orders"), orderPayload);
 
@@ -6969,6 +6994,7 @@ function showToast(message){
         orderId: orderRef.id,
         customerName: formData.customerName,
         contact1: formData.contact1,
+        email: formData.email || "",
         contact2: formData.contact2,
         streetAddress: formData.streetAddress,
         city: formData.city,
@@ -7045,6 +7071,11 @@ function showToast(message){
       set("successAddressLine1", order.streetAddress || "");
       set("successAddressLine2", order.city || "");
       set("successAddressPhone", order.contact1 || "");
+      const emailRow = document.getElementById("successAddressEmail");
+      if (emailRow){
+        emailRow.textContent = order.email || "";
+        emailRow.style.display = order.email ? "" : "none";
+      }
     }
 
     const errEl = document.getElementById("whatsappConfirmError");
@@ -7142,6 +7173,7 @@ function showToast(message){
         orderId: orderId,
         customerName: data.customerName || "",
         contact1: data.contact1 || data.phone || "",
+        email: data.email || "",
         contact2: data.contact2 || "",
         streetAddress: data.streetAddress || data.address || "",
         city: data.city || "",
@@ -7970,6 +8002,7 @@ Please confirm my order.`
     document.getElementById("odCustomerName").textContent = o.customerName || "—";
     document.getElementById("odPhone").textContent = o.phone || "—";
     document.getElementById("odAddress").textContent = o.address || "—";
+    document.getElementById("odEmail").textContent = o.email || "N/A";
     document.getElementById("odDate").textContent = formatOrderDate(o);
 
     const status = o.status || "pending";
