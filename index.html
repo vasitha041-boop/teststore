@@ -859,13 +859,17 @@
     .cart-steps .step{font-size:12px;display:flex;gap:4px;white-space:nowrap;}
     .step-divider{width:20px;}
     /* Fix Cart Item Overflow */
-    .cart-item-card{padding:16px 40px 16px 16px !important;gap:12px;align-items:flex-start;flex-wrap:wrap;position:relative;}
-    .cart-thumb{width:70px;height:70px;}
-    .cart-info{flex:1;min-width:0;}
-    .cart-info h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    /* The card is a wrapping row: thumb + info on line 1, price on its own
+       line. Every child gets min-width:0 so the card can shrink to the
+       column width instead of forcing ~400px of min-content overflow. */
+    .cart-item-card{padding:16px 40px 16px 16px;gap:12px;align-items:flex-start;flex-wrap:wrap;position:relative;max-width:100%;box-sizing:border-box;overflow:hidden;}
+    .cart-thumb{width:70px;height:70px;flex:0 0 70px;}
+    .cart-info{flex:1 1 auto;min-width:0;}
+    .cart-info h3{font-size:14px;white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
     .cart-item-card .cart-item-qty{margin-top:8px;}
-    /* Safe zone for the total price so it can never sit under the X button */
-    .cart-item-card .cart-item-right{padding-right:36px;}
+    /* Price drops to its own full-width line, right-aligned and clear of the X */
+    .cart-item-card .cart-item-right{flex:1 0 100%;min-width:0;display:flex;justify-content:flex-end;align-items:center;padding-right:0;margin-top:4px;text-align:right;}
+    .cart-item-card .cart-item-subtotal{white-space:nowrap;}
     /* Remove button position fix for mobile: circular tap target, clear of the price */
     .remove-btn{position:absolute;top:16px;right:12px;width:28px;height:28px;background:#F5F5F7;border-radius:50%;display:flex;align-items:center;justify-content:center;}
   }
@@ -1305,6 +1309,7 @@
   .success-overview-row .so-col:last-child{border-right:none;}
   .success-overview-row .so-col span{color:#8E8E93;font-weight:500;}
   .success-overview-row .so-col strong{color:#111111;font-weight:700;font-size:14px;word-break:break-word;}
+  #successOrderId{word-break:break-all;font-size:13px;}
   .success-note{font-size:14px;color:#8E8E93;margin-bottom:40px;}
   .success-section-title{font-size:20px;font-weight:700;color:#111111;margin-bottom:16px;}
   .success-table{width:100%;border-collapse:collapse;margin-bottom:40px;font-size:14px;}
@@ -1327,9 +1332,9 @@
   .continue-btn:hover{background:#E5E5EA;}
 
   @media(max-width:600px){
-    .success-page{padding:100px 12px 50px;}
-    .success-page-container{padding:24px 20px;border-radius:20px;}
-    .success-overview-row{grid-template-columns:1fr 1fr;gap:24px 16px;border-right:none;}
+    .success-page{padding:100px 0 50px;}
+    .success-page-container{width:auto;padding:20px 16px;margin:20px 12px;border-radius:20px;}
+    .success-overview-row{grid-template-columns:1fr 1fr;gap:16px;border-right:none;}
     .success-overview-row .so-col{border-right:none;}
     .success-actions{flex-direction:column;}
   }
@@ -1653,7 +1658,9 @@
     .navcart{gap:8px;}
 
     /* UGREEN mobile bar metrics: fixed 56px tall, 20px left / 4px right, icons flush together */
-    .nav{padding:0 4px 0 20px;gap:12px;height:56px;min-height:56px;}
+    .nav{padding:0 4px 0 16px;gap:8px;height:56px;min-height:56px;}
+    .logo{flex-shrink:1;min-width:0;overflow:hidden;}
+    .navcart{flex-shrink:0;}
     .navcart{gap:0;}
     .logo{font-size:17px;gap:7px;line-height:1;}
     .logo-mark{width:22px;height:22px;border-radius:6px;}
