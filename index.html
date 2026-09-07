@@ -4787,7 +4787,15 @@
         renderProducts(newArrivalsGrid, newArrivalsSnap.docs);
       } catch (err) {
         if (err && err.code === "failed-precondition"){
-          console.warn("New Arrivals composite index not found yet — falling back to client-side sort. Create the index via the link in the original Firestore error for better performance.");
+          // Firestore puts a one-click "create index" URL inside the error
+          // message. Surface it, otherwise there is no way to act on this.
+          const idxUrl = (err.message || "").match(/https:\/\/console\.firebase\.google\.com\S+/);
+          console.warn(
+            "New Arrivals composite index not found — using client-side sort (storefront still works).\n" +
+            "Create it once for better performance: collection 'products', fields active (Ascending) + createdAt (Descending).\n" +
+            (idxUrl ? "One-click link: " + idxUrl[0] : "Full Firestore error below:")
+          );
+          if (!idxUrl) console.warn(err.message || err);
         } else {
           console.error("Failed to load new arrivals:", err);
         }
