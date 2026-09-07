@@ -2479,10 +2479,12 @@
     var pdp = document.getElementById("productDetailView");
     var checkoutPage = document.getElementById("checkoutPageView");
     var cartPage = document.getElementById("cartPageView");
+    var successPage = document.getElementById("successPageView");
     var onPdp = pdp && pdp.style.display === "block";
     var onCheckout = checkoutPage && checkoutPage.style.display === "block";
     var onCartPage = cartPage && cartPage.style.display === "block";
-    if(onPdp || onCheckout || onCartPage || window.scrollY > 40){ hdr.classList.add("scrolled"); }
+    var onSuccess = successPage && successPage.style.display === "block";
+    if(onPdp || onCheckout || onCartPage || onSuccess || window.scrollY > 40){ hdr.classList.add("scrolled"); }
     else { hdr.classList.remove("scrolled"); }
   };
   window.addEventListener("scroll", window.updateHeaderSolidState, { passive:true });
