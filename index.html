@@ -1296,8 +1296,8 @@
   @keyframes spin{to{transform:rotate(360deg);}}
 
   /* ============ DETAILED ORDER SUCCESS PAGE ============ */
-  #successModal{background:var(--paper);z-index:9999;flex-direction:column;justify-content:flex-start;padding:40px 20px;overflow-y:auto;}
-  #successModal.open{display:flex;}
+  /* Inline page view (not a modal) so the header + footer stay visible. */
+  .success-page{background:var(--paper);padding:112px 20px 80px;min-height:100vh;}
   .success-page-container{background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.02);max-width:680px;width:100%;margin:0 auto;padding:40px;}
   .success-banner{background:rgba(48,209,88,0.08);border:1px solid rgba(48,209,88,0.15);color:#1F8A43;border-radius:16px;padding:18px;text-align:center;font-weight:600;font-size:15px;margin-bottom:32px;}
   .success-overview-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;border-top:1px solid rgba(0,0,0,0.06);border-bottom:1px solid rgba(0,0,0,0.06);padding:20px 0;margin-bottom:24px;}
@@ -1327,7 +1327,7 @@
   .continue-btn:hover{background:#E5E5EA;}
 
   @media(max-width:600px){
-    #successModal{padding:20px 12px;}
+    .success-page{padding:100px 12px 50px;}
     .success-page-container{padding:24px 20px;border-radius:20px;}
     .success-overview-row{grid-template-columns:1fr 1fr;gap:24px 16px;border-right:none;}
     .success-overview-row .so-col{border-right:none;}
@@ -3258,6 +3258,56 @@
   </div>
 </div>
 
+<!-- ============ ORDER SUCCESS PAGE ============ -->
+<div class="success-page" id="successPageView" style="display:none;">
+  <div class="success-page-container">
+    <div class="success-banner">Thank you. Your order has been received.</div>
+
+    <div class="success-overview-row">
+      <div class="so-col"><span>Order number:</span><strong id="successOrderId">&mdash;</strong></div>
+      <div class="so-col"><span>Date:</span><strong id="successDate">&mdash;</strong></div>
+      <div class="so-col"><span>Total:</span><strong id="successTotal">Rs. 0</strong></div>
+      <div class="so-col"><span>Payment method:</span><strong>Cash on delivery</strong></div>
+    </div>
+
+    <p class="success-note">Pay with cash upon delivery.</p>
+
+    <h3 class="success-section-title">Order details</h3>
+    <table class="success-table">
+      <thead>
+        <tr><th>Product</th><th style="text-align:right;">Total</th></tr>
+      </thead>
+      <tbody id="successItemsTbody"></tbody>
+      <tfoot>
+        <tr><td>Subtotal:</td><td id="successSubtotal" style="text-align:right;">Rs. 0</td></tr>
+        <tr id="successBonusRow" style="display:none;"><td id="successBonusLabel">Bonus discount:</td><td id="successBonus" style="text-align:right;">Rs. 0</td></tr>
+        <tr><td>Shipping:</td><td id="successShipping" style="text-align:right;">Free shipping</td></tr>
+        <tr><td>Payment Method:</td><td style="text-align:right;">Cash on delivery</td></tr>
+        <tr class="grand-total"><td>Total:</td><td id="successGrandTotal" style="text-align:right;">Rs. 0</td></tr>
+      </tfoot>
+    </table>
+
+    <div class="success-addresses">
+      <div class="address-col">
+        <h3 class="success-section-title">Customer Details</h3>
+        <address>
+          <div id="successAddressName"></div>
+          <div id="successAddressLine1"></div>
+          <div id="successAddressLine2"></div>
+          <div id="successAddressPhone"></div>
+        </address>
+      </div>
+    </div>
+
+    <span class="form-error" id="whatsappConfirmError" style="text-align:center;margin-bottom:8px;"></span>
+
+    <div class="success-actions">
+      <button class="btn-primary whatsapp-btn" onclick="confirmViaWhatsapp()">Confirm via WhatsApp</button>
+      <button class="btn-primary continue-btn" onclick="closeSuccessModal()">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div id="footerLightLines" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 1080" preserveAspectRatio="none">
@@ -3389,56 +3439,6 @@
 <!-- ============ CHECKOUT PAGE ============ -->
 
 <!-- ============ END CHECKOUT PAGE ============ -->
-
-<!-- ============ ORDER SUCCESS MODAL ============ -->
-<div class="modal-overlay" id="successModal">
-  <div class="success-page-container">
-    <div class="success-banner">Thank you. Your order has been received.</div>
-
-    <div class="success-overview-row">
-      <div class="so-col"><span>Order number:</span><strong id="successOrderId">&mdash;</strong></div>
-      <div class="so-col"><span>Date:</span><strong id="successDate">&mdash;</strong></div>
-      <div class="so-col"><span>Total:</span><strong id="successTotal">Rs. 0</strong></div>
-      <div class="so-col"><span>Payment method:</span><strong>Cash on delivery</strong></div>
-    </div>
-
-    <p class="success-note">Pay with cash upon delivery.</p>
-
-    <h3 class="success-section-title">Order details</h3>
-    <table class="success-table">
-      <thead>
-        <tr><th>Product</th><th style="text-align:right;">Total</th></tr>
-      </thead>
-      <tbody id="successItemsTbody"></tbody>
-      <tfoot>
-        <tr><td>Subtotal:</td><td id="successSubtotal" style="text-align:right;">Rs. 0</td></tr>
-        <tr id="successBonusRow" style="display:none;"><td id="successBonusLabel">Bonus discount:</td><td id="successBonus" style="text-align:right;">Rs. 0</td></tr>
-        <tr><td>Shipping:</td><td id="successShipping" style="text-align:right;">Free shipping</td></tr>
-        <tr><td>Payment Method:</td><td style="text-align:right;">Cash on delivery</td></tr>
-        <tr class="grand-total"><td>Total:</td><td id="successGrandTotal" style="text-align:right;">Rs. 0</td></tr>
-      </tfoot>
-    </table>
-
-    <div class="success-addresses">
-      <div class="address-col">
-        <h3 class="success-section-title">Customer Details</h3>
-        <address>
-          <div id="successAddressName"></div>
-          <div id="successAddressLine1"></div>
-          <div id="successAddressLine2"></div>
-          <div id="successAddressPhone"></div>
-        </address>
-      </div>
-    </div>
-
-    <span class="form-error" id="whatsappConfirmError" style="text-align:center;margin-bottom:8px;"></span>
-
-    <div class="success-actions">
-      <button class="btn-primary whatsapp-btn" onclick="confirmViaWhatsapp()">Confirm via WhatsApp</button>
-      <button class="btn-primary continue-btn" onclick="closeSuccessModal()">Continue Shopping</button>
-    </div>
-  </div>
-</div>
 
 <!-- ============ ADMIN LOGIN SCREEN ============ -->
 <div class="admin-screen" id="adminLoginScreen">
@@ -5031,9 +5031,11 @@
     const pdp = document.getElementById("productDetailView");
     const checkoutPage = document.getElementById("checkoutPageView");
     const cartPage = document.getElementById("cartPageView");
-    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block") || (cartPage && cartPage.style.display === "block");
+    const successPage = document.getElementById("successPageView");
+    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block") || (cartPage && cartPage.style.display === "block") || (successPage && successPage.style.display === "block");
     if (home) home.style.display = anyOpen ? "none" : "";
   }
+  window.pdpUpdateHomeVisibility = pdpUpdateHomeVisibility;
 
   function openProductDetailInternal(productId){
     const checkoutPage = document.getElementById("checkoutPageView");
@@ -6960,22 +6962,21 @@ function showToast(message){
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
     set("successOrderId", orderId);
-
     const d = new Date();
     set("successDate", d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
     set("successTotal", formatPriceLKR(totalAmount));
     set("successGrandTotal", formatPriceLKR(totalAmount));
 
     const tbody = document.getElementById("successItemsTbody");
-    if (order && Array.isArray(order.items) && tbody){
+    if (tbody && order && Array.isArray(order.items)){
       tbody.innerHTML = order.items.map(i =>
         `<tr><td>${escapeHtmlCheckout(i.name)} \u00D7 ${i.qty}</td><td style="text-align:right;">${formatPriceLKR(i.price * i.qty)}</td></tr>`
       ).join("");
     }
 
-    // Use the real figures captured at checkout. Deriving shipping from
-    // (total - subtotal) would be wrong whenever a bonus discount applies,
-    // since total = subtotal - bonusDiscount + deliveryCharge.
+    // Use the figures captured at checkout. Deriving shipping from
+    // (total - subtotal) is wrong whenever a bonus discount applies, because
+    // total = subtotal - bonusDiscount + deliveryCharge.
     const subtotal = order && typeof order.subtotal === "number"
       ? order.subtotal
       : (order && Array.isArray(order.items) ? order.items.reduce((sum, i) => sum + (i.price * i.qty), 0) : 0);
@@ -7009,8 +7010,22 @@ function showToast(message){
     const errEl = document.getElementById("whatsappConfirmError");
     if (errEl){ errEl.textContent = ""; errEl.style.display = "none"; }
 
-    document.getElementById("successModal").classList.add("open");
-    document.body.style.overflow = "hidden";
+    // ---- switch from the Checkout page to the Success page ----
+    const checkoutPage = document.getElementById("checkoutPageView");
+    if (checkoutPage) checkoutPage.style.display = "none";
+    const cartPage = document.getElementById("cartPageView");
+    if (cartPage) cartPage.style.display = "none";
+    const pdp = document.getElementById("productDetailView");
+    if (pdp) pdp.style.display = "none";
+
+    const successPage = document.getElementById("successPageView");
+    if (successPage) successPage.style.display = "block";
+
+    // It is a page now, not a modal: the body must scroll normally.
+    document.body.style.overflow = "";
+    if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
   }
 
   // ---- Build the WhatsApp confirmation message from real order data ----
@@ -7076,8 +7091,20 @@ Please confirm my order.`
   };
 
   window.closeSuccessModal = function(){
-    document.getElementById("successModal").classList.remove("open");
+    const successPage = document.getElementById("successPageView");
+    if (successPage) successPage.style.display = "none";
     document.body.style.overflow = "";
+
+    // Restore the home sections through the shared helper.
+    if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
+    else {
+      const home = document.getElementById("homeSections");
+      if (home) home.style.display = "";
+    }
+
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+
     const target = document.getElementById("products");
     if (target) target.scrollIntoView({ behavior: "smooth" });
   };
