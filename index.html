@@ -1330,6 +1330,15 @@
   .whatsapp-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,0.4);}
   .continue-btn{background:#F5F5F7;color:#111111;}
   .continue-btn:hover{background:#E5E5EA;}
+  .copy-link-btn{background:#FFFFFF;color:#111111;border:1px solid rgba(0,0,0,0.12) !important;}
+  .copy-link-btn:hover{background:#F5F5F7;}
+  .copy-link-btn.copied{background:#E4F5EC;border-color:#B7E0C8 !important;color:#1F8A43;}
+  /* Shown while a shared receipt link is being fetched, or if it fails. */
+  .success-state-msg{max-width:680px;margin:0 auto;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);
+    border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.02);padding:48px 32px;text-align:center;}
+  .success-state-msg h2{font-size:20px;font-weight:700;color:#111111;margin-bottom:8px;}
+  .success-state-msg p{font-size:14px;color:#8E8E93;margin-bottom:24px;}
+  .success-state-msg .btn-primary{border-radius:99px;min-height:48px;padding:0 28px;background:#111111;color:#fff;border:none;cursor:pointer;}
 
   @media(max-width:600px){
     .success-page{padding:100px 0 50px;}
@@ -3269,7 +3278,12 @@
 
 <!-- ============ ORDER SUCCESS PAGE ============ -->
 <div class="success-page" id="successPageView" style="display:none;">
-  <div class="success-page-container">
+  <div class="success-state-msg" id="successStateMsg" style="display:none;">
+    <h2 id="successStateTitle">Loading your receipt…</h2>
+    <p id="successStateText">Fetching the order details.</p>
+    <button class="btn-primary" id="successStateBtn" type="button" onclick="closeSuccessModal()" style="display:none;">Continue Shopping</button>
+  </div>
+  <div class="success-page-container" id="successReceiptCard">
     <div class="success-banner">Thank you. Your order has been received.</div>
 
     <div class="success-overview-row">
@@ -3312,6 +3326,7 @@
 
     <div class="success-actions">
       <button class="btn-primary whatsapp-btn" onclick="confirmViaWhatsapp()">Confirm via WhatsApp</button>
+      <button class="btn-primary copy-link-btn" id="copyOrderLinkBtn" type="button" onclick="copyOrderLink()">Copy Receipt Link</button>
       <button class="btn-primary continue-btn" onclick="closeSuccessModal()">Continue Shopping</button>
     </div>
   </div>
@@ -5203,6 +5218,7 @@
   function handlePdpHashRouting(){
     const hash = window.location.hash;
     const match = hash.match(/^#product\/(.+)$/);
+    const orderMatch = hash.match(/^#order-received\/(.+)$/);
     if (match){
       openProductDetailInternal(decodeURIComponent(match[1]));
     } else if (hash === "#checkout"){
@@ -5216,17 +5232,24 @@
       openCheckoutPageInternal();
     } else if (hash === "#cart"){
       openCartPageInternal();
+    } else if (orderMatch){
+      // Shareable receipt: #order-received/<orderId>
+      const orderId = decodeURIComponent(orderMatch[1]);
+      if (window.loadAndShowOrderReceived) window.loadAndShowOrderReceived(orderId);
     } else {
       const wasProductOpen = document.getElementById("productDetailView").style.display === "block";
       const wasCheckoutOpen = document.getElementById("checkoutPageView").style.display === "block";
       const wasCartOpen = document.getElementById("cartPageView").style.display === "block";
+      const successPage = document.getElementById("successPageView");
+      const wasSuccessOpen = successPage && successPage.style.display === "block";
       hideProductDetailInternal();
       hideCheckoutPageInternal();
       hideCartPageInternal();
+      if (wasSuccessOpen && window.hideSuccessPageInternal) window.hideSuccessPageInternal();
       // If the new hash points at a section on the home page (e.g. #products
       // from the header nav), make sure we actually scroll to it now that
       // the home content is visible again.
-      if ((wasProductOpen || wasCheckoutOpen || wasCartOpen) && hash && hash.length > 1){
+      if ((wasProductOpen || wasCheckoutOpen || wasCartOpen || wasSuccessOpen) && hash && hash.length > 1){
         const el = document.querySelector(hash);
         if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 0);
       }
@@ -7035,6 +7058,130 @@ function showToast(message){
     if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
     window.scrollTo({ top: 0, behavior: "instant" });
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+
+    // Make the receipt addressable/shareable. Guarded so the resulting
+    // hashchange does not re-fetch the order we are already displaying.
+    const shareHash = "#order-received/" + encodeURIComponent(orderId);
+    window.__currentReceiptId = orderId;
+    if (window.location.hash !== shareHash){
+      window.__suppressReceiptFetch = true;
+      window.location.hash = shareHash;
+      setTimeout(() => { window.__suppressReceiptFetch = false; }, 0);
+    }
+  }
+
+  // ---- Shared/refreshed receipt links: #order-received/<orderId> ----
+  function setReceiptState(mode, title, text){
+    const msg = document.getElementById("successStateMsg");
+    const card = document.getElementById("successReceiptCard");
+    const btn = document.getElementById("successStateBtn");
+    if (msg) msg.style.display = mode === "receipt" ? "none" : "block";
+    if (card) card.style.display = mode === "receipt" ? "" : "none";
+    if (mode !== "receipt"){
+      const t = document.getElementById("successStateTitle");
+      const p = document.getElementById("successStateText");
+      if (t) t.textContent = title;
+      if (p) p.textContent = text;
+      if (btn) btn.style.display = mode === "error" ? "inline-flex" : "none";
+    }
+  }
+
+  function openSuccessPageShell(){
+    ["productDetailView", "checkoutPageView", "cartPageView"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+    const successPage = document.getElementById("successPageView");
+    if (successPage) successPage.style.display = "block";
+    document.body.style.overflow = "";
+    if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+  }
+
+  window.hideSuccessPageInternal = function(){
+    const successPage = document.getElementById("successPageView");
+    if (successPage) successPage.style.display = "none";
+    window.__currentReceiptId = null;
+    if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+  };
+
+  window.loadAndShowOrderReceived = async function(orderId){
+    if (!orderId) return;
+    // Already on screen (we just placed this order) — nothing to fetch.
+    if (window.__suppressReceiptFetch || window.__currentReceiptId === orderId){
+      openSuccessPageShell();
+      setReceiptState("receipt");
+      return;
+    }
+
+    openSuccessPageShell();
+    setReceiptState("loading", "Loading your receipt\u2026", "Fetching the order details.");
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    try {
+      const db = await waitForDb();
+      const snap = await getDoc(doc(db, "orders", orderId));
+      if (!snap.exists()){
+        setReceiptState("error", "Receipt not found", "This order link is invalid or the order no longer exists.");
+        return;
+      }
+      const data = snap.data() || {};
+
+      // Map the stored document onto the shape the receipt renderer expects,
+      // so the WhatsApp button keeps working on a shared link too.
+      lastOrderForWhatsapp = {
+        orderId: orderId,
+        customerName: data.customerName || "",
+        contact1: data.contact1 || data.phone || "",
+        contact2: data.contact2 || "",
+        streetAddress: data.streetAddress || data.address || "",
+        city: data.city || "",
+        items: Array.isArray(data.items) ? data.items : [],
+        totalAmount: Number(data.totalAmount) || 0,
+        subtotal: typeof data.subtotal === "number" ? data.subtotal : undefined,
+        deliveryCharge: typeof data.deliveryCharge === "number" ? data.deliveryCharge : undefined,
+        bonusDiscountPct: Number(data.bonusDiscountPct) || 0,
+        bonusDiscountAmount: Number(data.bonusDiscountAmount) || 0
+      };
+
+      window.__currentReceiptId = orderId;
+      setReceiptState("receipt");
+      showOrderSuccess(orderId, Number(data.totalAmount) || 0);
+    } catch (err){
+      setReceiptState("error", "Couldn\u2019t load this receipt", "Please check your connection and try again.");
+    }
+  };
+
+  window.copyOrderLink = function(){
+    const btn = document.getElementById("copyOrderLinkBtn");
+    const url = window.location.href;
+    const done = () => {
+      if (!btn) return;
+      btn.textContent = "Link Copied!";
+      btn.classList.add("copied");
+      setTimeout(() => { btn.textContent = "Copy Receipt Link"; btn.classList.remove("copied"); }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(() => fallbackCopyLink(url, done));
+    } else {
+      fallbackCopyLink(url, done);
+    }
+  };
+
+  function fallbackCopyLink(text, onDone){
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      onDone();
+    } catch (e){ /* clipboard unavailable — leave the label unchanged */ }
   }
 
   // ---- Build the WhatsApp confirmation message from real order data ----
@@ -7103,6 +7250,11 @@ Please confirm my order.`
     const successPage = document.getElementById("successPageView");
     if (successPage) successPage.style.display = "none";
     document.body.style.overflow = "";
+    window.__currentReceiptId = null;
+    if (window.location.hash.indexOf("#order-received/") === 0){
+      window.__suppressReceiptFetch = false;
+      window.location.hash = "";
+    }
 
     // Restore the home sections through the shared helper.
     if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
