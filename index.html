@@ -859,13 +859,13 @@
     .cart-steps .step{font-size:12px;display:flex;gap:4px;white-space:nowrap;}
     .step-divider{width:20px;}
     /* Fix Cart Item Overflow */
-    .cart-item-card{padding:16px;gap:12px;align-items:flex-start;flex-wrap:wrap;position:relative;}
+    .cart-item-card{padding:16px 40px 16px 16px !important;gap:12px;align-items:flex-start;flex-wrap:wrap;position:relative;}
     .cart-thumb{width:70px;height:70px;}
     .cart-info{flex:1;min-width:0;}
     .cart-info h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .cart-item-card .cart-item-qty{margin-top:8px;}
-    /* Remove button position fix for mobile */
-    .remove-btn{position:absolute;top:12px;right:12px;}
+    /* Remove button position fix for mobile: circular tap target, clear of the price */
+    .remove-btn{position:absolute;top:16px;right:12px;width:28px;height:28px;background:#F5F5F7;border-radius:50%;display:flex;align-items:center;justify-content:center;}
   }
 
   /* ============ PRODUCT DETAILS MODAL ============ */
