@@ -1295,25 +1295,42 @@
   .place-order-btn.loading .spinner{display:inline-block;}
   @keyframes spin{to{transform:rotate(360deg);}}
 
-  /* ============ ORDER SUCCESS MODAL ============ */
-  /* ---- Full-page confirmation overlay (overrides shared .modal-overlay for this modal only) ---- */
-  #successModal{background:#FFFFFF;z-index:9999;flex-direction:column;justify-content:flex-start;padding-top:12vh;overflow-y:auto;}
+  /* ============ DETAILED ORDER SUCCESS PAGE ============ */
+  #successModal{background:#FFFFFF;z-index:9999;flex-direction:column;justify-content:flex-start;padding-top:8vh;overflow-y:auto;}
   #successModal.open{display:flex;}
-  .success-box{max-width:540px;width:100%;padding:20px;text-align:center;background:transparent;border:none;box-shadow:none;max-height:none;overflow:visible;}
-  .success-icon{width:80px;height:80px;border-radius:50%;background:#111111;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:0 8px 24px rgba(0,0,0,0.12);}
-  .success-icon svg{width:32px;height:32px;stroke:#FFFFFF;}
-  .success-box h2{font-size:32px;font-weight:700;letter-spacing:-0.02em;color:#111111;margin-bottom:12px;}
-  .success-box p.success-sub{color:#8E8E93;font-size:16px;margin-bottom:40px;}
-  .success-detail{background:#F5F5F7;border:none;border-radius:16px;padding:24px;text-align:left;display:flex;flex-direction:column;gap:14px;margin-bottom:40px;font-size:15px;}
-  .success-detail-row{display:flex;justify-content:space-between;font-size:15px;}
-  .success-detail-row span:first-child{color:#8E8E93;font-weight:500;}
-  .success-detail-row span:last-child{font-weight:600;color:#111111;}
-  /* Modal Buttons Formatting (scoped via attribute selectors so global .btn-primary is untouched) */
-  .success-box .btn-primary{border-radius:99px;min-height:56px;font-size:15px;font-weight:600;letter-spacing:-0.01em;border:none;transition:all .2s ease;display:flex;align-items:center;justify-content:center;}
-  .success-box .btn-primary[onclick="confirmViaWhatsapp()"]{background:#25D366 !important;color:#FFFFFF !important;box-shadow:0 4px 14px rgba(37,211,102,0.25);margin-bottom:16px !important;}
-  .success-box .btn-primary[onclick="confirmViaWhatsapp()"]:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,0.4);}
-  .success-box .btn-primary[onclick="closeSuccessModal()"]{background:#F5F5F7 !important;color:#111111 !important;}
-  .success-box .btn-primary[onclick="closeSuccessModal()"]:hover{background:#E5E5EA !important;}
+  .success-page-container{max-width:680px;width:100%;margin:0 auto;padding:20px 20px 80px;}
+  .success-banner{background:rgba(48,209,88,0.1);border:1px solid rgba(48,209,88,0.2);color:#1F8A43;border-radius:12px;padding:18px;text-align:center;font-weight:600;font-size:15px;margin-bottom:32px;}
+  .success-overview-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;border-top:1px solid rgba(0,0,0,0.06);border-bottom:1px solid rgba(0,0,0,0.06);padding:20px 0;margin-bottom:24px;}
+  .success-overview-row .so-col{display:flex;flex-direction:column;gap:6px;font-size:13px;border-right:1px solid rgba(0,0,0,0.06);}
+  .success-overview-row .so-col:last-child{border-right:none;}
+  .success-overview-row .so-col span{color:#8E8E93;font-weight:500;}
+  .success-overview-row .so-col strong{color:#111111;font-weight:700;font-size:14px;word-break:break-word;}
+  .success-note{font-size:14px;color:#8E8E93;margin-bottom:40px;}
+  .success-section-title{font-size:20px;font-weight:700;color:#111111;margin-bottom:16px;}
+  .success-table{width:100%;border-collapse:collapse;margin-bottom:40px;font-size:14px;}
+  .success-table th{text-align:left;padding:12px 0;border-bottom:2px solid rgba(0,0,0,0.06);color:#111111;font-weight:700;}
+  .success-table td{padding:14px 0;border-bottom:1px solid rgba(0,0,0,0.04);color:#111111;}
+  .success-table tbody td:first-child{color:#8E8E93;font-weight:500;}
+  .success-table tbody td:last-child{font-weight:600;}
+  .success-table tfoot td:first-child{font-weight:600;color:#111111;}
+  .success-table tfoot td:last-child{color:#8E8E93;font-weight:500;}
+  .success-table tr.grand-total td{font-size:16px;font-weight:700 !important;color:#111111 !important;border-bottom:none;padding-top:18px;}
+  .success-table tr#successBonusRow td:last-child{color:#1F8A43;font-weight:600;}
+  .success-addresses{background:#F5F5F7;border-radius:16px;padding:24px;margin-bottom:40px;}
+  .success-addresses address{font-style:normal;font-size:14px;line-height:1.6;color:#8E8E93;font-weight:500;}
+  .success-addresses address div:first-child{color:#111111;font-weight:600;margin-bottom:4px;}
+  .success-actions{display:flex;gap:16px;}
+  .success-actions .btn-primary{flex:1;border-radius:99px;min-height:56px;font-size:15px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;}
+  .whatsapp-btn{background:#25D366;color:#FFFFFF;box-shadow:0 4px 14px rgba(37,211,102,0.25);}
+  .whatsapp-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,0.4);}
+  .continue-btn{background:#F5F5F7;color:#111111;}
+  .continue-btn:hover{background:#E5E5EA;}
+
+  @media(max-width:600px){
+    .success-overview-row{grid-template-columns:1fr 1fr;gap:24px 16px;border-right:none;}
+    .success-overview-row .so-col{border-right:none;}
+    .success-actions{flex-direction:column;}
+  }
 
   /* ============ ADMIN LOGIN ============ */
   .admin-screen{display:none;position:fixed;inset:0;z-index:500;background:var(--paper);overflow-y:auto;}
@@ -3373,20 +3390,51 @@
 
 <!-- ============ ORDER SUCCESS MODAL ============ -->
 <div class="modal-overlay" id="successModal">
-  <div class="modal-box success-box">
-    <div class="success-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <div class="success-page-container">
+    <div class="success-banner">Thank you. Your order has been received.</div>
+
+    <div class="success-overview-row">
+      <div class="so-col"><span>Order number:</span><strong id="successOrderId">&mdash;</strong></div>
+      <div class="so-col"><span>Date:</span><strong id="successDate">&mdash;</strong></div>
+      <div class="so-col"><span>Total:</span><strong id="successTotal">Rs. 0</strong></div>
+      <div class="so-col"><span>Payment method:</span><strong>Cash on delivery</strong></div>
     </div>
-    <h2>Order Placed Successfully!</h2>
-    <p class="success-sub">We'll contact you shortly to confirm delivery.</p>
-    <div class="success-detail">
-      <div class="success-detail-row"><span>Order ID</span><span id="successOrderId">—</span></div>
-      <div class="success-detail-row"><span>Total</span><span id="successTotal">Rs. 0</span></div>
-      <div class="success-detail-row"><span>Payment</span><span>Cash on Delivery</span></div>
+
+    <p class="success-note">Pay with cash upon delivery.</p>
+
+    <h3 class="success-section-title">Order details</h3>
+    <table class="success-table">
+      <thead>
+        <tr><th>Product</th><th style="text-align:right;">Total</th></tr>
+      </thead>
+      <tbody id="successItemsTbody"></tbody>
+      <tfoot>
+        <tr><td>Subtotal:</td><td id="successSubtotal" style="text-align:right;">Rs. 0</td></tr>
+        <tr id="successBonusRow" style="display:none;"><td id="successBonusLabel">Bonus discount:</td><td id="successBonus" style="text-align:right;">Rs. 0</td></tr>
+        <tr><td>Shipping:</td><td id="successShipping" style="text-align:right;">Free shipping</td></tr>
+        <tr><td>Payment Method:</td><td style="text-align:right;">Cash on delivery</td></tr>
+        <tr class="grand-total"><td>Total:</td><td id="successGrandTotal" style="text-align:right;">Rs. 0</td></tr>
+      </tfoot>
+    </table>
+
+    <div class="success-addresses">
+      <div class="address-col">
+        <h3 class="success-section-title">Customer Details</h3>
+        <address>
+          <div id="successAddressName"></div>
+          <div id="successAddressLine1"></div>
+          <div id="successAddressLine2"></div>
+          <div id="successAddressPhone"></div>
+        </address>
+      </div>
     </div>
+
     <span class="form-error" id="whatsappConfirmError" style="text-align:center;margin-bottom:8px;"></span>
-    <button class="btn-primary" style="width:100%;background:#25D366;border-color:#25D366;margin-bottom:10px;" onclick="confirmViaWhatsapp()">Confirm via WhatsApp</button>
-    <button class="btn-primary" style="width:100%;" onclick="closeSuccessModal()">Continue Shopping</button>
+
+    <div class="success-actions">
+      <button class="btn-primary whatsapp-btn" onclick="confirmViaWhatsapp()">Confirm via WhatsApp</button>
+      <button class="btn-primary continue-btn" onclick="closeSuccessModal()">Continue Shopping</button>
+    </div>
   </div>
 </div>
 
@@ -6881,7 +6929,11 @@ function showToast(message){
         streetAddress: formData.streetAddress,
         city: formData.city,
         items: orderItems,
-        totalAmount
+        totalAmount,
+        subtotal,
+        deliveryCharge,
+        bonusDiscountPct,
+        bonusDiscountAmount
       };
 
       localStorage.removeItem("dplex_cart");
@@ -6902,8 +6954,59 @@ function showToast(message){
   };
 
   function showOrderSuccess(orderId, totalAmount){
-    document.getElementById("successOrderId").textContent = orderId;
-    document.getElementById("successTotal").textContent = formatPriceLKR(totalAmount);
+    const order = lastOrderForWhatsapp;
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+    set("successOrderId", orderId);
+
+    const d = new Date();
+    set("successDate", d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+    set("successTotal", formatPriceLKR(totalAmount));
+    set("successGrandTotal", formatPriceLKR(totalAmount));
+
+    const tbody = document.getElementById("successItemsTbody");
+    if (order && Array.isArray(order.items) && tbody){
+      tbody.innerHTML = order.items.map(i =>
+        `<tr><td>${escapeHtmlCheckout(i.name)} \u00D7 ${i.qty}</td><td style="text-align:right;">${formatPriceLKR(i.price * i.qty)}</td></tr>`
+      ).join("");
+    }
+
+    // Use the real figures captured at checkout. Deriving shipping from
+    // (total - subtotal) would be wrong whenever a bonus discount applies,
+    // since total = subtotal - bonusDiscount + deliveryCharge.
+    const subtotal = order && typeof order.subtotal === "number"
+      ? order.subtotal
+      : (order && Array.isArray(order.items) ? order.items.reduce((sum, i) => sum + (i.price * i.qty), 0) : 0);
+    const bonusAmt = (order && Number(order.bonusDiscountAmount)) || 0;
+    const bonusPct = (order && Number(order.bonusDiscountPct)) || 0;
+    const delivery = order && typeof order.deliveryCharge === "number"
+      ? order.deliveryCharge
+      : Math.max(0, totalAmount - subtotal + bonusAmt);
+
+    set("successSubtotal", formatPriceLKR(subtotal));
+    set("successShipping", delivery > 0 ? formatPriceLKR(delivery) : "Free shipping");
+
+    const bonusRow = document.getElementById("successBonusRow");
+    if (bonusRow){
+      if (bonusAmt > 0){
+        bonusRow.style.display = "";
+        set("successBonusLabel", bonusPct > 0 ? `Bonus discount (${bonusPct}%):` : "Bonus discount:");
+        set("successBonus", "-" + formatPriceLKR(bonusAmt));
+      } else {
+        bonusRow.style.display = "none";
+      }
+    }
+
+    if (order){
+      set("successAddressName", order.customerName || "");
+      set("successAddressLine1", order.streetAddress || "");
+      set("successAddressLine2", order.city || "");
+      set("successAddressPhone", order.contact1 || "");
+    }
+
+    const errEl = document.getElementById("whatsappConfirmError");
+    if (errEl){ errEl.textContent = ""; errEl.style.display = "none"; }
+
     document.getElementById("successModal").classList.add("open");
     document.body.style.overflow = "hidden";
   }
