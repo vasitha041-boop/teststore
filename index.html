@@ -1303,40 +1303,78 @@
   .place-order-btn.loading .spinner{display:inline-block;}
   @keyframes spin{to{transform:rotate(360deg);}}
 
-  /* ============ DETAILED ORDER SUCCESS PAGE ============ */
+  /* ============ DETAILED ORDER SUCCESS PAGE — "Quiet Luxury" ============ */
   /* Inline page view (not a modal) so the header + footer stay visible. */
   .success-page{background:var(--paper);padding:112px 20px 80px;min-height:100vh;}
-  .success-page-container{background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.02);max-width:680px;width:100%;margin:0 auto;padding:40px;}
-  .success-banner{background:rgba(48,209,88,0.08);border:1px solid rgba(48,209,88,0.15);color:#1F8A43;border-radius:16px;padding:18px;text-align:center;font-weight:600;font-size:15px;margin-bottom:32px;}
-  .success-overview-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;border-top:1px solid rgba(0,0,0,0.06);border-bottom:1px solid rgba(0,0,0,0.06);padding:20px 0;margin-bottom:24px;}
-  .success-overview-row .so-col{display:flex;flex-direction:column;gap:6px;font-size:13px;border-right:1px solid rgba(0,0,0,0.06);}
-  .success-overview-row .so-col:last-child{border-right:none;}
-  .success-overview-row .so-col span{color:#8E8E93;font-weight:500;}
-  .success-overview-row .so-col strong{color:#111111;font-weight:700;font-size:14px;word-break:break-word;}
-  #successOrderId{word-break:break-all;font-size:13px;}
-  .success-note{font-size:14px;color:#8E8E93;margin-bottom:40px;}
-  .success-section-title{font-size:20px;font-weight:700;color:#111111;margin-bottom:16px;}
-  .success-table{width:100%;border-collapse:collapse;margin-bottom:40px;font-size:14px;}
-  .success-table th{text-align:left;padding:12px 0;border-bottom:2px solid rgba(0,0,0,0.06);color:#111111;font-weight:700;}
-  .success-table td{padding:14px 0;border-bottom:1px solid rgba(0,0,0,0.04);color:#111111;}
+  .success-page-container{background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.02);max-width:680px;width:100%;margin:0 auto;padding:44px 40px 40px;}
+
+  /* -- Header / confirmation state -- */
+  .success-header{text-align:center;margin-bottom:28px;}
+  .success-check-icon{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;background:#F5F5F7;display:flex;align-items:center;justify-content:center;color:#111111;}
+  .success-check-icon svg{width:26px;height:26px;}
+  .success-heading{font-size:22px;font-weight:600;color:#111111;margin:0 0 6px;letter-spacing:-0.01em;}
+  .success-subheading{font-size:14px;color:#8E8E93;margin:0;line-height:1.5;}
+
+  /* -- Progress stepper -- */
+  .success-stepper{display:flex;align-items:flex-start;padding:22px 4px;margin-bottom:28px;border-top:1px solid #E5E5EA;border-bottom:1px solid #E5E5EA;}
+  .step-col{display:flex;flex-direction:column;align-items:center;gap:8px;flex:0 0 auto;}
+  .step-connector{flex:1 1 auto;height:1px;background:#E5E5EA;margin-top:11px;min-width:16px;}
+  .step-connector.done{background:#111111;}
+  .step-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid #E5E5EA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
+  .step-dot svg{width:11px;height:11px;}
+  .step-col.done .step-dot{background:#111111;border-color:#111111;}
+  .step-label{font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#8E8E93;white-space:nowrap;}
+  .step-col.done .step-label{color:#111111;}
+
+  /* -- Order ID + meta -- */
+  .success-order-meta{margin-bottom:28px;}
+  .meta-id-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #E5E5EA;}
+  .meta-id-label{font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#8E8E93;flex-shrink:0;}
+  .order-id-copy{display:flex;align-items:center;gap:8px;min-width:0;}
+  #successOrderId{font-size:14px;font-weight:700;color:#111111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:inline-block;vertical-align:middle;}
+  .copy-id-btn{width:26px;height:26px;border-radius:50%;border:1px solid #E5E5EA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;padding:0;transition:all .15s ease;color:#111111;}
+  .copy-id-btn:hover{background:#F5F5F7;border-color:#111111;}
+  .copy-id-btn svg{width:12px;height:12px;}
+  .copy-id-btn.copied{border-color:#B7E0C8;background:#E4F5EC;color:#1F8A43;}
+  .meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .meta-col{display:flex;flex-direction:column;gap:4px;min-width:0;}
+  .meta-col span{font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#8E8E93;}
+  .meta-col strong{color:#111111;font-weight:700;font-size:14px;word-break:break-word;}
+
+  .success-note{font-size:14px;color:#8E8E93;margin-bottom:36px;}
+  .success-section-title{font-size:18px;font-weight:700;color:#111111;margin-bottom:16px;letter-spacing:-0.01em;}
+  .success-table{width:100%;border-collapse:collapse;margin-bottom:36px;font-size:14px;}
+  .success-table th{text-align:left;padding:12px 0;border-bottom:2px solid #E5E5EA;color:#111111;font-weight:700;}
+  .success-table td{padding:14px 0;border-bottom:1px solid #F0F0F2;color:#111111;}
   .success-table tbody td:first-child{color:#8E8E93;font-weight:500;}
   .success-table tbody td:last-child{font-weight:600;}
   .success-table tfoot td:first-child{font-weight:600;color:#111111;}
   .success-table tfoot td:last-child{color:#8E8E93;font-weight:500;}
   .success-table tr.grand-total td{font-size:16px;font-weight:700 !important;color:#111111 !important;border-bottom:none;padding-top:18px;}
   .success-table tr#successBonusRow td:last-child{color:#1F8A43;font-weight:600;}
-  .success-addresses{background:#F5F5F7;border-radius:16px;padding:24px;margin-bottom:40px;}
-  .success-addresses address{font-style:normal;font-size:14px;line-height:1.6;color:#8E8E93;font-weight:500;}
-  .success-addresses address div:first-child{color:#111111;font-weight:600;margin-bottom:4px;}
-  .success-actions{display:flex;gap:16px;}
-  .success-actions .btn-primary{flex:1;border-radius:99px;min-height:56px;font-size:15px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;}
+
+  /* -- Customer details -- */
+  .success-addresses{background:#F5F5F7;border-radius:16px;padding:24px;margin-bottom:32px;}
+  .address-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px;}
+  .address-field{min-width:0;}
+  .address-micro-label{display:block;font-size:10.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8E8E93;margin-bottom:8px;}
+  .address-field-body{font-size:14px;line-height:1.6;color:#6E6E73;font-weight:500;}
+  .address-field-body div{word-break:break-word;}
+  #successAddressName{color:#111111;font-weight:600;margin-bottom:2px;}
+
+  /* -- Buttons -- */
+  .success-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+  .success-actions .btn-primary{width:100%;border-radius:99px;min-height:56px;font-size:15px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:9px;}
   .whatsapp-btn{background:#25D366;color:#FFFFFF;box-shadow:0 4px 14px rgba(37,211,102,0.25);}
   .whatsapp-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,0.4);}
-  .continue-btn{background:#F5F5F7;color:#111111;}
-  .continue-btn:hover{background:#E5E5EA;}
-  .copy-link-btn{background:#FFFFFF;color:#111111;border:1px solid rgba(0,0,0,0.12) !important;}
-  .copy-link-btn:hover{background:#F5F5F7;}
+  .whatsapp-btn svg{width:19px;height:19px;flex-shrink:0;}
+  .copy-link-btn{background:#FFFFFF;color:#111111;border:1px solid #E5E5EA !important;}
+  .copy-link-btn svg{width:16px;height:16px;flex-shrink:0;}
+  .copy-link-btn:hover{background:#F5F5F7;border-color:#111111 !important;}
   .copy-link-btn.copied{background:#E4F5EC;border-color:#B7E0C8 !important;color:#1F8A43;}
+  .success-continue-link{display:block;width:100%;text-align:center;background:none;border:none;padding:10px;margin:0;font-size:14px;font-weight:600;color:#8E8E93;cursor:pointer;transition:color .15s ease;font-family:inherit;}
+  .success-continue-link:hover{color:#111111;text-decoration:underline;}
+
   /* Shown while a shared receipt link is being fetched, or if it fails. */
   .success-state-msg{max-width:680px;margin:0 auto;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);
     border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.02);padding:48px 32px;text-align:center;}
@@ -1346,10 +1384,16 @@
 
   @media(max-width:600px){
     .success-page{padding:100px 0 50px;}
-    .success-page-container{width:auto;padding:20px 16px;margin:20px 12px;border-radius:20px;}
-    .success-overview-row{grid-template-columns:1fr 1fr;gap:16px;border-right:none;}
-    .success-overview-row .so-col{border-right:none;}
-    .success-actions{flex-direction:column;}
+    .success-page-container{width:auto;padding:28px 18px 24px;margin:20px 12px;border-radius:20px;}
+    .success-heading{font-size:19px;}
+    .success-stepper{padding:18px 0;}
+    .step-label{font-size:9.5px;}
+    .meta-id-row{flex-wrap:wrap;}
+    #successOrderId{max-width:120px;}
+    .meta-grid{grid-template-columns:repeat(3,1fr);gap:10px;}
+    .meta-col strong{font-size:12.5px;}
+    .address-grid{grid-template-columns:1fr;gap:18px;}
+    .success-actions .btn-primary{min-height:52px;font-size:14px;}
   }
 
   /* ============ ADMIN LOGIN ============ */
@@ -3293,13 +3337,50 @@
     <button class="btn-primary" id="successStateBtn" type="button" onclick="closeSuccessModal()" style="display:none;">Continue Shopping</button>
   </div>
   <div class="success-page-container" id="successReceiptCard">
-    <div class="success-banner">Thank you. Your order has been received.</div>
 
-    <div class="success-overview-row">
-      <div class="so-col"><span>Order number:</span><strong id="successOrderId">&mdash;</strong></div>
-      <div class="so-col"><span>Date:</span><strong id="successDate">&mdash;</strong></div>
-      <div class="so-col"><span>Total:</span><strong id="successTotal">Rs. 0</strong></div>
-      <div class="so-col"><span>Payment method:</span><strong>Cash on delivery</strong></div>
+    <!-- Confirmation header -->
+    <div class="success-header">
+      <div class="success-check-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6.5 9.5 17 4 11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2 class="success-heading">Order Confirmed</h2>
+      <p class="success-subheading">Thank you for shopping with DPLEX. We&rsquo;ve received your order.</p>
+    </div>
+
+    <!-- Progress tracker -->
+    <div class="success-stepper" aria-hidden="true">
+      <div class="step-col done">
+        <span class="step-dot"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6.5 9.5 17 4 11.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="step-label">Order Placed</span>
+      </div>
+      <span class="step-connector"></span>
+      <div class="step-col">
+        <span class="step-dot"></span>
+        <span class="step-label">Processing</span>
+      </div>
+      <span class="step-connector"></span>
+      <div class="step-col">
+        <span class="step-dot"></span>
+        <span class="step-label">Dispatched</span>
+      </div>
+    </div>
+
+    <!-- Order ID + quick meta -->
+    <div class="success-order-meta">
+      <div class="meta-id-row">
+        <span class="meta-id-label">Order ID</span>
+        <div class="order-id-copy">
+          <strong id="successOrderId">&mdash;</strong>
+          <button type="button" class="copy-id-btn" id="copyOrderIdBtn" onclick="copyOrderId()" aria-label="Copy order ID" title="Copy order ID">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="12" height="12" rx="2.2" stroke="currentColor" stroke-width="1.8"/><path d="M5 15H4.6A1.6 1.6 0 0 1 3 13.4V4.6A1.6 1.6 0 0 1 4.6 3h8.8A1.6 1.6 0 0 1 15 4.6V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-col"><span>Date</span><strong id="successDate">&mdash;</strong></div>
+        <div class="meta-col"><span>Total</span><strong id="successTotal">Rs. 0</strong></div>
+        <div class="meta-col"><span>Payment</span><strong>Cash on delivery</strong></div>
+      </div>
     </div>
 
     <p class="success-note">Pay with cash upon delivery.</p>
@@ -3322,23 +3403,45 @@
     <div class="success-addresses">
       <div class="address-col">
         <h3 class="success-section-title">Customer Details</h3>
-        <address>
-          <div id="successAddressName"></div>
-          <div id="successAddressLine1"></div>
-          <div id="successAddressLine2"></div>
-          <div id="successAddressPhone"></div>
-          <div id="successAddressEmail"></div>
-        </address>
+        <div class="address-grid">
+          <div class="address-field">
+            <span class="address-micro-label">Deliver To</span>
+            <div class="address-field-body">
+              <div id="successAddressName"></div>
+              <div id="successAddressLine1"></div>
+              <div id="successAddressLine2"></div>
+            </div>
+          </div>
+          <div class="address-field">
+            <span class="address-micro-label">Contact</span>
+            <div class="address-field-body">
+              <div id="successAddressPhone"></div>
+              <div id="successAddressEmail"></div>
+            </div>
+          </div>
+          <div class="address-field">
+            <span class="address-micro-label">Payment Method</span>
+            <div class="address-field-body">
+              <div>Cash on Delivery</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <span class="form-error" id="whatsappConfirmError" style="text-align:center;margin-bottom:8px;"></span>
 
     <div class="success-actions">
-      <button class="btn-primary whatsapp-btn" onclick="confirmViaWhatsapp()">Confirm via WhatsApp</button>
-      <button class="btn-primary copy-link-btn" id="copyOrderLinkBtn" type="button" onclick="copyOrderLink()">Copy Receipt Link</button>
-      <button class="btn-primary continue-btn" onclick="closeSuccessModal()">Continue Shopping</button>
+      <button class="btn-primary whatsapp-btn" onclick="confirmViaWhatsapp()">
+        <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.001 3C9.383 3 4 8.373 4 14.978c0 2.39.7 4.617 1.912 6.494L4 29l7.73-1.877a12.98 12.98 0 0 0 4.27.722h.001c6.618 0 12-5.373 12-11.978C28 8.373 22.619 3 16.001 3zm0 21.594a9.57 9.57 0 0 1-4.885-1.34l-.35-.207-3.643.885.973-3.55-.228-.365a9.53 9.53 0 0 1-1.472-5.04c0-5.278 4.31-9.575 9.61-9.575 5.298 0 9.608 4.297 9.608 9.575 0 5.279-4.31 9.617-9.613 9.617zm5.273-7.184c-.288-.144-1.706-.84-1.97-.936-.264-.096-.456-.144-.648.144-.192.288-.744.936-.912 1.128-.168.192-.336.216-.624.072-.288-.144-1.215-.448-2.314-1.428-.856-.763-1.434-1.706-1.602-1.994-.168-.288-.018-.444.126-.588.13-.129.288-.336.432-.504.144-.168.192-.288.288-.48.096-.192.048-.36-.024-.504-.072-.144-.648-1.562-.888-2.14-.234-.562-.472-.486-.648-.494l-.552-.01c-.192 0-.504.072-.768.36-.264.288-1.008.984-1.008 2.4 0 1.416 1.032 2.784 1.176 2.976.144.192 2.03 3.097 4.914 4.343.687.297 1.223.474 1.641.606.689.219 1.316.188 1.812.114.553-.083 1.706-.697 1.947-1.371.24-.673.24-1.25.168-1.371-.072-.12-.264-.192-.552-.336z"/></svg>
+        Confirm via WhatsApp
+      </button>
+      <button class="btn-primary copy-link-btn" id="copyOrderLinkBtn" type="button" onclick="copyOrderLink()">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.5 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Copy Receipt Link
+      </button>
     </div>
+    <button class="success-continue-link" type="button" onclick="closeSuccessModal()">Continue Shopping</button>
   </div>
 </div>
 
@@ -7197,15 +7300,38 @@ function showToast(message){
     const btn = document.getElementById("copyOrderLinkBtn");
     const url = window.location.href;
     const done = () => {
+      if (typeof window.showToast === "function") window.showToast("Copied!");
       if (!btn) return;
-      btn.textContent = "Link Copied!";
+      const iconHtml = btn.querySelector("svg") ? btn.querySelector("svg").outerHTML : "";
+      btn.innerHTML = iconHtml + "Link Copied!";
       btn.classList.add("copied");
-      setTimeout(() => { btn.textContent = "Copy Receipt Link"; btn.classList.remove("copied"); }, 1800);
+      setTimeout(() => {
+        btn.innerHTML = iconHtml + "Copy Receipt Link";
+        btn.classList.remove("copied");
+      }, 1800);
     };
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(done).catch(() => fallbackCopyLink(url, done));
     } else {
       fallbackCopyLink(url, done);
+    }
+  };
+
+  window.copyOrderId = function(){
+    const idEl = document.getElementById("successOrderId");
+    const btn = document.getElementById("copyOrderIdBtn");
+    const text = idEl ? idEl.textContent.trim() : "";
+    if (!text || text === "\u2014") return;
+    const done = () => {
+      if (typeof window.showToast === "function") window.showToast("Copied!");
+      if (!btn) return;
+      btn.classList.add("copied");
+      setTimeout(() => btn.classList.remove("copied"), 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopyLink(text, done));
+    } else {
+      fallbackCopyLink(text, done);
     }
   };
 
