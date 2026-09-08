@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +8,40 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* ============ GLOBAL TOUCH / TAP-HIGHLIGHT RESET ============
+     Kills the mobile browser's default blue/grey tap-highlight box and
+     the default focus ring on touch, so only our own :active and
+     :focus-visible states show. Placed first so later component rules
+     (buttons, cards, pills) can still layer their own :active scale /
+     opacity transitions on top without any browser interference. */
+  *, html, body {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button, a, input, select, textarea,
+  .payment-method-card, .payment-method-card *,
+  .buy-now-btn, .cart-btn, .place-order-btn, .admin-btn, .icon-btn,
+  .cat-card, .tab-pill, .copy-btn, .pdp-thumb-btn {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+
+  /* Keyboard users still get a clear, accessible outline — this only
+     ever appears for :focus-visible (keyboard/assistive tech), never
+     on a touch tap or mouse click, so it can't reintroduce the mobile
+     highlight box we just removed above. */
+  button:focus-visible, a:focus-visible, input:focus-visible,
+  select:focus-visible, textarea:focus-visible,
+  .payment-method-card:focus-visible,
+  .buy-now-btn:focus-visible, .cart-btn:focus-visible,
+  .place-order-btn:focus-visible, .admin-btn:focus-visible,
+  .icon-btn:focus-visible, .cat-card:focus-visible,
+  .tab-pill:focus-visible, .copy-btn:focus-visible,
+  .pdp-thumb-btn:focus-visible {
+    outline: 2px solid #111111;
+    outline-offset: 2px;
+  }
+
   /* ============ PRELOADER (APPLE/OBSIDIAN THEME) ============ */
   .site-preloader {
     position: fixed;
@@ -442,49 +473,38 @@
   }
 
   /* ---- spin-the-mascot reveal modal: slot-machine style rolling number ---- */
-  .spin-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(10,10,12,0.78);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .spin-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .spin-modal-overlay.open{opacity:1;pointer-events:auto;}
-  .spin-modal-card{width:100%;max-width:320px;background:rgba(22,22,24,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:28px;padding:36px 28px 28px;text-align:center;color:#fff;box-shadow:0 40px 100px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);position:relative;transform:scale(.82) translateY(24px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);}
+  .spin-modal-card{width:100%;max-width:340px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.06);border-radius:24px;padding:36px 28px 28px;text-align:center;position:relative;transform:scale(.9) translateY(16px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);}
   .spin-modal-overlay.open .spin-modal-card{transform:scale(1) translateY(0);}
-  .spin-modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.10);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.7);font-size:14px;line-height:1;transition:background .2s,color .2s,transform .2s cubic-bezier(.34,1.56,.64,1);}
-  .spin-modal-close:hover{background:rgba(255,255,255,0.16);color:#fff;transform:scale(1.08);}
+  .spin-modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:#F5F5F7;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#111111;transition:background .2s,transform .2s cubic-bezier(.34,1.56,.64,1);}
+  .spin-modal-close svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .spin-modal-close:hover{background:#E5E5EA;transform:scale(1.08);}
   .spin-modal-close:active{transform:scale(.94);}
-  .spin-modal-close:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:2px;}
-  .spin-modal-title{font-family:'Sora';font-size:21px;font-weight:700;color:#fff;letter-spacing:-0.02em;line-height:1.25;margin-bottom:6px;}
-  .spin-modal-sub{font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.4;margin-bottom:24px;}
-  .spin-reel-wrap{background:#0D0D0F;border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:16px 10px;margin-bottom:24px;overflow:hidden;box-shadow:inset 0 2px 18px rgba(0,0,0,0.95),inset 0 0 0 1px rgba(0,0,0,0.6),inset 0 -1px 0 rgba(255,255,255,0.04);}
-  .spin-reel-row{display:flex;align-items:center;justify-content:center;}
-  .spin-reel-window{height:70px;width:40px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
-  .spin-reel-window--units{margin-left:-10px;transform:scaleY(-1);}
+  .spin-modal-close:focus-visible{outline:2px solid #111;outline-offset:2px;}
+  .spin-modal-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:#111111;letter-spacing:-0.02em;line-height:1.25;margin-bottom:6px;}
+  .spin-modal-sub{font-family:'Inter',sans-serif;font-size:13px;color:#8E8E93;line-height:1.4;margin-bottom:24px;}
+  .spin-reel-wrap{background:#F5F5F7;border-radius:16px;padding:20px 16px;margin-bottom:20px;overflow:hidden;}
+  .spin-reel-row{display:flex;align-items:center;justify-content:center;gap:0;}
+  .spin-reel-window{width:32px;height:70px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
   .spin-reel-track{will-change:transform;}
-  .spin-reel-track.spinning{filter:blur(.5px);}
-  .spin-reel-num{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Sora';font-size:48px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.03em;text-shadow:0 0 24px rgba(255,255,255,0.18);}
-  .spin-reel-window--units .spin-reel-num{transform:scaleY(-1);}
+  .spin-reel-num{font-family:'Sora',sans-serif;font-size:44px;font-weight:700;color:#111111;height:70px;display:flex;align-items:center;justify-content:center;line-height:1;text-shadow:none;letter-spacing:-.03em;}
   .spin-reel-num.landed{animation:spinReelLand .4s cubic-bezier(.34,1.56,.64,1);}
-  .spin-reel-window--units .spin-reel-num.landed{animation-name:spinReelLandFlipped;}
-  .spin-reel-percent{font-family:'Sora';font-size:48px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.03em;margin-left:-2px;text-shadow:0 0 24px rgba(255,255,255,0.18);}
+  .spin-reel-percent{font-family:'Sora',sans-serif;font-size:44px;font-weight:700;color:#111111;margin-left:3px;line-height:1;}
   @keyframes spinReelLand{0%{transform:scale(1.2);}60%{transform:scale(.94);}100%{transform:scale(1);}}
-  @keyframes spinReelLandFlipped{0%{transform:scaleY(-1) scale(1.2);}60%{transform:scaleY(-1) scale(.94);}100%{transform:scaleY(-1) scale(1);}}
-  .spin-modal-result{font-size:14px;font-weight:600;min-height:34px;margin-bottom:24px;line-height:1.4;color:rgba(255,255,255,0.9);}
-  .spin-modal-result.win{color:#30D158;}
-  .spin-modal-result.lose{color:rgba(255,255,255,0.5);}
-  .spin-modal-btn{width:100%;min-height:48px;background:transparent;color:#FFFFFF;
-    border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius-pill);padding:12px 24px;
-    font-family:'Sora',Arial,sans-serif;font-weight:600;font-size:15px;letter-spacing:-.01em;
-    cursor:pointer;box-shadow:none;
-    transition:background .25s cubic-bezier(.16,1,.3,1),color .25s cubic-bezier(.16,1,.3,1),border-color .25s,transform .15s;}
-  .spin-modal-btn:hover:not(:disabled){background:#FFFFFF;border-color:#FFFFFF;color:#09090B;}
+  .spin-modal-result{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;min-height:34px;margin-bottom:20px;line-height:1.5;color:#111111;}
+  .spin-modal-result.win{color:#1F8A43;}
+  .spin-modal-result.lose{color:#8E8E93;}
+  .spin-modal-result.hint{color:#8E8E93;font-weight:400;}
+  .spin-modal-btn{width:100%;min-height:48px;background:#111111;color:#FFFFFF;border:none;border-radius:99px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:background .2s ease,transform .2s ease;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
+  .spin-modal-btn:hover:not(:disabled){background:#000000;transform:translateY(-1px);}
   .spin-modal-btn:active:not(:disabled){transform:scale(.98);}
-  .spin-modal-btn:focus-visible{outline:2px solid #fff;outline-offset:3px;}
-  @media (prefers-reduced-motion:reduce){
-    .spin-modal-btn{transition:background .2s,color .2s,border-color .2s;}
-    .spin-modal-btn:active:not(:disabled){transform:none;}
-  }
-  .spin-modal-btn:disabled{background:transparent;border-color:rgba(255,255,255,0.15);
-    color:rgba(255,255,255,0.45);opacity:1;cursor:not-allowed;}
+  .spin-modal-btn:focus-visible{outline:2px solid #111;outline-offset:3px;}
+  .spin-modal-btn:disabled{background:#E5E5EA;color:#8E8E93;cursor:not-allowed;transform:none;}
+  .spin-modal-btn svg{flex-shrink:0;}
   @media (max-width:480px){
-    .spin-modal-card{max-width:290px;padding:28px 20px 20px;border-radius:24px;}
-    .spin-reel-number{font-size:40px;}
+    .spin-modal-card{max-width:100%;padding:28px 20px 20px;border-radius:20px;}
+    .spin-reel-num,.spin-reel-percent{font-size:40px;}
     .spin-modal-title{font-size:18px;}
   }
 
@@ -684,24 +704,17 @@
   .add-btn-icon{display:none;flex-shrink:0;}
   .add-btn:hover{background:var(--accent);}
   /* ---- "Quiet Luxury" action row: soft grey pill + circle, going obsidian/brand on hover ---- */
-  .prod-actions{display:flex;align-items:center;gap:10px;height:44px;margin-top:14px;}
-  .buy-now-btn{flex:1;height:100%;border-radius:99px;background:#F5F5F7;color:#111111;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s ease;padding:0 14px;display:flex;align-items:center;justify-content:center;}
-  .buy-now-btn:hover:not([disabled]){background:#111111;color:#FFFFFF;}
-  .buy-now-btn[disabled]{background:#CFCFCF;color:#fff;cursor:not-allowed;opacity:.5;}
-  .cart-btn{width:44px;height:44px;border-radius:50%;border:none;background:#F5F5F7;color:#111111;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s ease;flex-shrink:0;}
-  .cart-btn:hover:not([disabled]){background:var(--cta);color:#FFFFFF;}
-  .cart-btn .cart-icon-wrap{display:flex;align-items:center;justify-content:center;width:100%;height:100%;line-height:1;}
-  .cart-btn svg{width:17px;height:17px;stroke:currentColor;display:block;transition:transform .2s ease;}
-  .cart-btn:hover:not([disabled]) svg{transform:scale(0.9);}
-  .cart-btn[disabled]{cursor:not-allowed;opacity:.5;}
+  .prod-actions{display:flex;align-items:center;height:44px;margin-top:14px;}
+  .single-add-btn{width:100%;height:100%;border-radius:99px;background:#111111;color:#FFFFFF;border:none;font-size:14px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:background .22s ease,transform .22s ease,box-shadow .22s ease;-webkit-tap-highlight-color:transparent;}
+  .single-add-btn:hover:not([disabled]){background:#000000;transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,0.18);}
+  .single-add-btn[disabled]{background:#E5E5EA;color:#8E8E93;cursor:not-allowed;transform:none;box-shadow:none;}
 
   /* Mobile: same quiet-luxury pill/circle, simply scaled down (desktop untouched) */
   @media(max-width:768px){
     .prod-name{font-size:13px;}
     .prod-price{font-size:13px;}
     .prod-actions{height:40px;}
-    .buy-now-btn{font-size:13.5px;}
-    .cart-btn{width:40px;height:40px;}
+    .single-add-btn{font-size:13.5px;}
   }
   .prod-btns{display:flex;gap:8px;}
 
@@ -763,13 +776,11 @@
   .cart-drawer.open .cart-drawer-overlay{opacity:1;}
   .cart-drawer-panel{position:absolute;top:0;right:0;height:100%;width:min(420px,90vw);background:var(--paper);box-shadow:-8px 0 30px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform .28s ease;display:flex;flex-direction:column;}
   .cart-drawer.open .cart-drawer-panel{transform:translateX(0);}
-  .cart-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--line);}
-  .cart-drawer-head h3{font-size:18px;font-weight:600;}
-  .cart-drawer-head-actions{display:flex;align-items:center;gap:14px;}
-  .cart-drawer-viewfull{font-size:12.5px;font-weight:600;color:#8E8E93;text-decoration:none;cursor:pointer;transition:color .2s ease;}
-  .cart-drawer-viewfull:hover{color:#111111;}
-  .cart-drawer-close{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
-  .cart-drawer-close svg{width:16px;height:16px;stroke:var(--ink);}
+  .cart-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:22px 20px 18px;border-bottom:1px solid var(--line);}
+  .cart-drawer-head h3{font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--ink);}
+  .cart-drawer-close{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:#8E8E93;font-size:13px;font-weight:600;padding:0;transition:color .18s ease;}
+  .cart-drawer-close svg{width:16px;height:16px;stroke:currentColor;flex-shrink:0;}
+  .cart-drawer-close:hover{color:var(--ink);}
   .cart-drawer-items{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px;}
   .cart-item{display:flex;gap:12px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:20px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.02);align-items:center;}
   .cart-item-thumb{width:60px;height:60px;border-radius:10px;background:#F0F0F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:20px;color:#A1A1A6;}
@@ -795,6 +806,12 @@
   .cart-empty p{font-size:15px;font-weight:600;color:var(--ink);margin:0;}
 
   .cart-drawer-foot{background:#FFFFFF;border-top:1px solid rgba(0,0,0,0.04);padding:24px 20px 32px;display:flex;flex-direction:column;gap:10px;}
+  .cart-item-delivery{font-size:11.5px;color:#8E8E93;font-weight:500;margin-top:2px;}
+  .cart-foot-actions{display:flex;gap:10px;margin-top:4px;}
+  .cart-foot-secondary{flex:1;height:46px;border-radius:99px;background:#F5F5F7;color:#111111;border:none;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:background .2s ease;-webkit-tap-highlight-color:transparent;}
+  .cart-foot-secondary:hover{background:#E8E8ED;}
+  .cart-foot-primary{flex:1.4;height:46px;border-radius:99px;background:#111111;color:#FFFFFF;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s ease,transform .2s ease;-webkit-tap-highlight-color:transparent;}
+  .cart-foot-primary:hover{background:#000000;transform:translateY(-1px);}
   .cart-sum-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);}
   .cart-sum-row.total{font-size:16px;font-weight:600;color:var(--ink);font-family:'Sora';}
   .checkout-col-right .cart-sum-row{margin-bottom:10px;}
@@ -1242,7 +1259,7 @@
   .perk-minimal-cta svg{width:16px;height:16px;flex-shrink:0;
     transition:transform .25s cubic-bezier(.16,1,.3,1);}
   .perk-minimal-cta:hover{background:#fff;border-color:#fff;color:#09090B;}
-  .perk-minimal-cta:hover svg{transform:translateX(4px);}
+  .perk-minimal-cta:hover svg{transform:translateY(-2px);}
   .perk-minimal-cta:active{transform:scale(.98);}
   .perk-minimal-cta:focus-visible{outline:2px solid #fff;outline-offset:3px;}
   @media (prefers-reduced-motion:reduce){
@@ -1818,9 +1835,11 @@
 
 <div class="spin-modal-overlay" id="spinModalOverlay">
   <div class="spin-modal-card">
-    <button class="spin-modal-close" id="spinModalClose" type="button" aria-label="Close">✕</button>
-    <div class="spin-modal-title">Daily Mystery Perk</div>
-    <div class="spin-modal-sub" id="spinModalSub">Good luck!</div>
+    <button class="spin-modal-close" id="spinModalClose" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="spin-modal-title">Daily Member Perk</div>
+    <div class="spin-modal-sub" id="spinModalSub">Exclusive privilege for today's session.</div>
     <div class="spin-reel-wrap">
       <div class="spin-reel-row">
         <div class="spin-reel-window spin-reel-window--tens" id="spinReelWindowTens">
@@ -1832,8 +1851,11 @@
         <div class="spin-reel-percent" id="spinReelPercent">%</div>
       </div>
     </div>
-    <div class="spin-modal-result" id="spinModalResult">&nbsp;</div>
-    <button class="spin-modal-btn" id="spinModalBtn" type="button" disabled>Spinning…</button>
+    <div class="spin-modal-result hint" id="spinModalResult">Tap below to reveal your mystery discount.</div>
+    <button class="spin-modal-btn" id="spinModalBtn" type="button" data-state="ready">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+      <span>Spin &amp; Claim</span>
+    </button>
   </div>
 </div>
 
@@ -2103,35 +2125,58 @@
 
   // ---- Reel engine: two independent digit strips (tens/units) that
   // actually slide behind fixed windows, instead of text being swapped
-  // in place. Both run this exact same physics at the same speed — the
-  // units window is simply mirrored in CSS (scaleY(-1), digits
-  // counter-flipped to stay upright), so on screen it visibly spins the
-  // opposite way from the tens window, which reads as more realistic.
+  // in place. Both run the same speed, but with genuinely opposite
+  // physics: the tens strip grows downward and scrolls up past a fixed
+  // window, while the units strip grows upward and scrolls down past
+  // it — real coordinate math in both directions, no visual mirroring.
   var REEL_ITEM_H = 70;
-  var reelSpeed = 1000;    // px/sec while freely spinning — same pace as before
+  var reelSpeed = 400;    // px/sec — calm, premium pace (was 1000)
 
-  function makeDigitReel(trackEl){
-    var items = [];   // digit elements, in strip order
-    var pos = 0;       // current scroll offset in px
+  function makeDigitReel(trackEl, direction){
+    direction = (direction === 'down') ? 'down' : 'up';
+    var items = [];   // digit elements, DOM order top-to-bottom
+    var pos = 0;       // 'up': distance scrolled so far. 'down': world-Y of items[0] (<=0 while still above the window).
     var rafId = null;
     var spinning = false;
     var lastTs = 0;
 
     function render(){
-      trackEl.style.transform = 'translateY(-' + pos + 'px)';
+      // 'up'   — translateY(-pos): strip slides up past a fixed window as pos grows.
+      // 'down' — translateY(+pos): strip slides down past a fixed window as pos grows.
+      trackEl.style.transform = 'translateY(' + (direction === 'down' ? pos : -pos) + 'px)';
     }
-    function pushRandomDigit(){
+    function makeDigitEl(){
       var el = document.createElement('div');
       el.className = 'spin-reel-num';
       el.textContent = String(Math.floor(Math.random() * 10));
+      return el;
+    }
+    function pushRandomDigit(){
+      // Grows the strip below the last item — feeds new content in from the bottom as the 'up' reel scrolls.
+      var el = makeDigitEl();
       trackEl.appendChild(el);
       items.push(el);
+    }
+    function unshiftRandomDigit(){
+      // Grows the strip above the first item — feeds new content in from the top as the 'down' reel scrolls.
+      // Prepending shifts every existing item down one slot in local layout, so pos is pulled back by the
+      // same amount to keep their on-screen position continuous — only the new item ends up higher up.
+      var el = makeDigitEl();
+      trackEl.insertBefore(el, trackEl.firstChild);
+      items.unshift(el);
+      pos -= REEL_ITEM_H;
     }
     function ensureItems(minCount){
       while (items.length < minCount) pushRandomDigit();
     }
     function ensureForPos(p){
-      ensureItems(Math.ceil((p + REEL_ITEM_H * 2) / REEL_ITEM_H) + 1);
+      if (direction === 'down'){
+        // items[0] is always at local-Y 0, so pos IS its current world position.
+        // Keep a few slots of not-yet-visible content stacked above the window at all times.
+        while (pos > -REEL_ITEM_H * 3) unshiftRandomDigit();
+      } else {
+        ensureItems(Math.ceil((p + REEL_ITEM_H * 2) / REEL_ITEM_H) + 1);
+      }
     }
     function cancel(){
       if (rafId) cancelAnimationFrame(rafId);
@@ -2158,24 +2203,41 @@
     function startFreeSpin(){
       clear();
       trackEl.classList.add('spinning');
-      ensureItems(6);
+      if (direction === 'down'){
+        ensureItems(1);           // seed items[0] so ensureForPos has something to measure from
+        while (pos > -REEL_ITEM_H * 3) unshiftRandomDigit();
+      } else {
+        ensureItems(6);
+      }
       spinning = true;
       lastTs = 0;
       rafId = requestAnimationFrame(loop);
     }
-    // Decelerates the moving strip to a stop exactly on digitText, then
-    // fires callback.
+    // Decelerates the moving strip to a stop exactly on digitText, then fires callback.
     function landOn(digitText, callback){
       cancel();
       trackEl.classList.remove('spinning');
-      var targetIndex = Math.ceil(pos / REEL_ITEM_H) + 5;
-      ensureItems(targetIndex + 1);
-      var targetEl = items[targetIndex];
-      targetEl.textContent = digitText;
-      var targetPos = targetIndex * REEL_ITEM_H;
-      var startPos = pos;
+
+      var targetEl, startPos, targetPos;
+      if (direction === 'down'){
+        // Roll a few more slots into view above the window before landing, for a satisfying spin-down —
+        // the last item unshifted becomes items[0], the one that will land centered in the window.
+        for (var i = 0; i < 5; i++) unshiftRandomDigit();
+        targetEl = items[0];
+        targetEl.textContent = digitText;
+        startPos = pos;   // currently negative — target sits above the window, waiting to scroll down into it
+        targetPos = 0;    // items[0]'s local-Y is 0, so pos=0 puts it exactly filling the window
+      } else {
+        var targetIndex = Math.ceil(pos / REEL_ITEM_H) + 5;
+        ensureItems(targetIndex + 1);
+        targetEl = items[targetIndex];
+        targetEl.textContent = digitText;
+        startPos = pos;
+        targetPos = targetIndex * REEL_ITEM_H;
+      }
+
       var distance = targetPos - startPos;
-      var duration = 850;
+      var duration = 1500;
       var startTs = null;
       function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
       function step(ts){
@@ -2195,11 +2257,22 @@
       rafId = requestAnimationFrame(step);
     }
 
-    return { clear: clear, cancel: cancel, startFreeSpin: startFreeSpin, landOn: landOn };
+    // Shows a single fixed digit with no motion — used for the modal's
+    // initial "ready" placeholder, before the visitor has spun anything.
+    function showStatic(digitText){
+      clear();
+      trackEl.classList.remove('spinning');
+      ensureItems(1);
+      items[0].textContent = digitText;
+      pos = 0;
+      render();
+    }
+
+    return { clear: clear, cancel: cancel, startFreeSpin: startFreeSpin, landOn: landOn, showStatic: showStatic };
   }
 
-  var reelTens = makeDigitReel(spinReelTrackTens);
-  var reelUnits = makeDigitReel(spinReelTrackUnits);
+  var reelTens = makeDigitReel(spinReelTrackTens, 'up');
+  var reelUnits = makeDigitReel(spinReelTrackUnits, 'down');
 
   function reelClear(){ reelTens.clear(); reelUnits.clear(); }
   function spinRAFCancel(){ reelTens.cancel(); reelUnits.cancel(); }
@@ -2213,6 +2286,32 @@
     function onDone(){ doneCount++; if (doneCount === 2 && callback) callback(); }
     reelTens.landOn(d0, onDone);
     reelUnits.landOn(d1, onDone);
+  }
+  // Fixed "00%"-style placeholder shown while the modal sits in its
+  // pre-spin "ready" state — no motion, just two static digits.
+  function reelShowStatic(displayText){
+    var d0 = displayText.length > 1 ? displayText[0] : displayText;
+    var d1 = displayText.length > 1 ? displayText[1] : displayText;
+    reelTens.showStatic(d0);
+    reelUnits.showStatic(d1);
+  }
+
+  var GIFT_ICON_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>';
+
+  // Enabled, black pill, gift icon — the button's resting state whenever a
+  // spin hasn't been claimed yet (first open, and again after a 0% "try
+  // again" roll).
+  function setSpinBtnReady(label){
+    spinModalBtn.disabled = false;
+    spinModalBtn.dataset.state = 'ready';
+    spinModalBtn.innerHTML = GIFT_ICON_SVG + '<span>' + (label || 'Spin &amp; Claim') + '</span>';
+  }
+  // Enabled, text-only — shown once a result has landed. Clicking it just
+  // closes the modal (closeSpinModal() fires the cart pulse if it was a win).
+  function setSpinBtnClaimed(label){
+    spinModalBtn.disabled = false;
+    spinModalBtn.dataset.state = 'claimed';
+    spinModalBtn.innerHTML = '<span>' + label + '</span>';
   }
 
   var spinWonThisSession = false;
@@ -2307,33 +2406,48 @@
   });
   if (spinModalBtn) spinModalBtn.addEventListener('click', function(){
     if (spinModalBtn.disabled) return;
-    if (spinModalBtn.dataset.retry === '1'){
-      // 0% roll — the daily claim was never used, so run the whole spin again.
-      spinModalBtn.dataset.retry = '0';
-      runSpin();
+    if (spinModalBtn.dataset.state === 'claimed'){
+      // Result already landed (win, already-claimed, or error) — this tap
+      // just dismisses the modal. closeSpinModal() fires the cart pulse
+      // itself, but only for a genuine new win.
+      closeSpinModal();
       return;
     }
-    closeSpinModal();
+    // data-state === 'ready' — covers both the very first tap and the
+    // "Spin Again" retry after a 0% roll.
+    runSpin();
   });
 
-  // Shared by the mascot click and the "Spin Again" button.
-  function runSpin(){
-    if (typeof window.claimSpinDiscount !== 'function') return;
-    openSpinModal();
-    window.claimSpinDiscount().then(function(result){
-      icon.dataset.claiming = '0';
-      landSpinModal(result);
-    });
+  // Opens the modal in its pre-spin "READY" state: static "00%" placeholder,
+  // hint copy, enabled black pill button with the gift icon. Nothing spins
+  // and nothing is claimed until the visitor taps the button themselves.
+  // Called from the 10s auto-timer and from the homepage banner/mascot.
+  function openPerkModal(){
+    clearTimeout(spinRollTimer);
+    spinRAFCancel();
+    spinWonThisSession = false;
+
+    reelShowStatic('00');
+    spinReelPercent.style.visibility = 'visible';
+    spinModalSub.textContent = 'Exclusive privilege for today\u2019s session.';
+    spinModalResult.textContent = 'Tap below to reveal your mystery discount.';
+    spinModalResult.className = 'spin-modal-result hint';
+    setSpinBtnReady('Spin & Claim');
+
+    spinOverlay.classList.add('open');
   }
 
-  function openSpinModal(){
-    spinReelPercent.style.visibility = 'visible';
+  // Fires on click when data-state === "ready". Locks the button, starts
+  // the opposite-direction reel roll, and kicks off the real claim request.
+  function runSpin(){
+    if (typeof window.claimSpinDiscount !== 'function') return;
+
+    spinModalBtn.disabled = true;
+    spinModalBtn.dataset.state = 'spinning';
+    spinModalBtn.innerHTML = '<span>Spinning\u2026</span>';
     spinModalResult.textContent = '\u00a0';
     spinModalResult.className = 'spin-modal-result';
-    spinModalSub.textContent = 'Good luck!';
-    spinModalBtn.textContent = 'Spinning…';
-    spinModalBtn.disabled = true;
-    spinModalBtn.dataset.retry = '0';
+    spinReelPercent.style.visibility = 'visible';
     spinOverlay.classList.add('open');
     spinStartedAt = Date.now();
 
@@ -2341,6 +2455,12 @@
     // for the full 2.5s; landSpinModal() then decelerates it onto the
     // real result instead of snapping straight to the answer.
     reelStartFreeSpin();
+
+    icon.dataset.claiming = '1';
+    window.claimSpinDiscount().then(function(result){
+      icon.dataset.claiming = '0';
+      landSpinModal(result);
+    });
   }
 
   var SPIN_DURATION_MS = 2500;
@@ -2361,38 +2481,35 @@
     reelLandOn(isError ? '—' : pad2(finalPct), showFinal);
 
     function showFinal(){
-      spinModalBtn.disabled = false;
       icon.classList.remove('poked');
       void icon.offsetWidth;
       icon.classList.add('poked');
       spawnParticles();
 
       if (result.status === 'win'){
-        spinModalResult.textContent = '🎉 You won ' + pad2(finalPct) + '% OFF! Applied to your cart.';
+        spinModalResult.textContent = pad2(finalPct) + '% Privilege Discount applied to your bag.';
         spinModalResult.classList.add('win');
         spinWonThisSession = true;
         spinWonPct = finalPct;
-        spinModalSub.textContent = 'Nice one!';
-        spinModalBtn.textContent = 'Awesome!';
-        spawnParticles();
+        spinModalSub.textContent = 'Your perk is active for this session.';
+        setSpinBtnClaimed('Claim Perk');
         window.renderCartDrawer && window.renderCartDrawer();
         window.renderCheckoutSummary && window.renderCheckoutSummary();
       } else if (result.status === 'already'){
-        spinModalResult.textContent = pick(alreadyMsgs(finalPct));
+        spinModalResult.textContent = "Today's perk is already active on your account.";
         spinModalResult.classList.add('win');
-        spinModalSub.textContent = 'Already claimed today';
-        spinModalBtn.textContent = 'Got it';
+        spinModalSub.textContent = 'Your discount is applied.';
+        setSpinBtnClaimed('Got it');
       } else if (result.status === 'tryagain'){
         spinModalResult.textContent = pick(tryAgainMsgs);
         spinModalResult.classList.add('lose');
-        spinModalSub.textContent = 'You get another go!';
-        spinModalBtn.textContent = '🎰 Spin Again';
-        spinModalBtn.dataset.retry = '1';
+        spinModalSub.textContent = 'You get another go.';
+        setSpinBtnReady('Spin Again');
       } else {
-        spinModalResult.textContent = 'Oops, try again in a bit 🙈';
+        spinModalResult.textContent = 'Something went wrong. Please try again shortly.';
         spinModalResult.classList.add('lose');
-        spinModalSub.textContent = 'Something went wrong';
-        spinModalBtn.textContent = 'Close';
+        spinModalSub.textContent = '';
+        setSpinBtnClaimed('Close');
       }
     }
   }
@@ -2417,12 +2534,15 @@
       return;
     }
 
-    icon.dataset.claiming = '1';
-    runSpin();
+    // Opens in the READY state — the visitor still has to tap "Spin &
+    // Claim" themselves, same as the homepage banner and the 10s auto-timer.
+    openPerkModal();
   }
 
-  // The mascot is hidden, but the perk card button calls this by name.
+  // The mascot is hidden, but the perk card button + the 10s auto-timer
+  // call these by name.
   window.triggerSpin = triggerSpin;
+  window.openPerkModal = openPerkModal;
   icon.addEventListener('click', triggerSpin);
 
   icon.addEventListener('animationend', function(e){
@@ -2907,8 +3027,8 @@
     </div>
     <div class="perk-strip-action">
       <button class="perk-minimal-cta" id="perkSpinBtn" type="button" onclick="triggerSpin()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M12 8v13"/><path d="M3 12h18"/><path d="M8 8C8 5.8 9.5 4 12 4s4 1.8 4 4"/><path d="M12 4c0 0-2-2-2-3.5a2 2 0 0 1 4 0C14 2 12 4 12 4z"/></svg>
         <span>Spin &amp; Claim</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </button>
     </div>
   </div>
@@ -3543,13 +3663,11 @@
   <div class="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
   <div class="cart-drawer-panel">
     <div class="cart-drawer-head">
-      <h3>Your Cart</h3>
-      <div class="cart-drawer-head-actions">
-        <a href="#cart" class="cart-drawer-viewfull" onclick="closeCartDrawer()">View Full Cart</a>
-        <button class="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
+      <h3>Shopping Cart</h3>
+      <button class="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <span>Close</span>
+      </button>
     </div>
     <div class="cart-drawer-items" id="cartItems"></div>
     <div class="cart-drawer-foot" id="cartFoot">
@@ -3557,7 +3675,10 @@
       <div class="cart-sum-row" id="cartBonusRow" style="display:none;"><span>🎁 Bonus Discount</span><span id="cartBonusAmt">-Rs. 0</span></div>
       <div class="cart-sum-row"><span>Delivery</span><span id="cartDelivery">Free Delivery</span></div>
       <div class="cart-sum-row total"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
-      <button class="btn-primary" id="checkoutBtn" onclick="openCheckout()" style="width:100%;">Proceed to Checkout</button>
+      <div class="cart-foot-actions">
+        <a href="#cart" class="cart-foot-secondary" onclick="closeCartDrawer()">View Cart</a>
+        <button class="cart-foot-primary" onclick="closeCartDrawer(); openCheckout();">Checkout</button>
+      </div>
       <button class="cart-clear-btn" id="clearCartBtn" onclick="clearCart()">Clear Cart</button>
     </div>
   </div>
@@ -4695,12 +4816,9 @@
     const outOfStock = newStock <= 0;
     const safeId = CSS && CSS.escape ? CSS.escape(productId) : productId;
 
-    document.querySelectorAll(`.buy-now-btn[data-id="${safeId}"]`).forEach(btn => {
+    document.querySelectorAll(`.single-add-btn[data-id="${safeId}"]`).forEach(btn => {
       btn.disabled = outOfStock;
-      btn.textContent = outOfStock ? "Out of Stock" : "Buy Now";
-    });
-    document.querySelectorAll(`.cart-btn[data-id="${safeId}"]`).forEach(btn => {
-      btn.disabled = outOfStock;
+      btn.textContent = outOfStock ? 'Out of Stock' : 'Add to Cart';
     });
     document.querySelectorAll(`.prod-card[data-id="${safeId}"] .prod-thumb`).forEach(thumb => {
       const oldBadge = thumb.querySelector(".stock-badge");
@@ -4806,10 +4924,7 @@
             <span class="prod-price">${priceRowHtml(p)}</span>
           </div>
           <div class="prod-actions">
-            <button class="buy-now-btn" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Buy Now"}</button>
-            <button class="cart-btn" aria-label="Add to cart" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
-              <span class="cart-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
-            </button>
+            <button class="single-add-btn" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Add to Cart"}</button>
           </div>
         </div>
       </div>`;
@@ -5890,10 +6005,7 @@
             <span class="prod-price">${priceHtml}</span>
           </div>
           <div class="prod-actions">
-            <button class="buy-now-btn" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Buy Now"}</button>
-            <button class="cart-btn" aria-label="Add to cart" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>
-              <span class="cart-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
-            </button>
+            <button class="single-add-btn" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Add to Cart"}</button>
           </div>
         </div>
       </div>`;
@@ -6338,6 +6450,7 @@ function showToast(message){
     renderCartPage();
     syncAddButtons();
     showToast('Product added to cart');
+    openCartDrawer();
   }
 
   function updateCartQty(productId, newQty){
@@ -6437,6 +6550,7 @@ function showToast(message){
           <div class="cart-item-info">
             <span class="cart-item-name">${escapeHtmlCart(item.name)}</span>
             <span class="cart-item-price">${formatPriceLKR(item.price)} each</span>
+            <span class="cart-item-delivery">Estimated Delivery: 1–3 business days</span>
             <div class="cart-item-qty">
               <button class="qty-btn" onclick="updateCartQty('${item.productId}', ${item.qty - 1})" aria-label="Decrease quantity">−</button>
               <span class="qty-val">${item.qty}</span>
@@ -6550,15 +6664,20 @@ function showToast(message){
   // ---- Sync add-to-cart buttons with stock/cart state ----
   function syncAddButtons(){
     const cart = getCart();
-    document.querySelectorAll('.buy-now-btn[data-id], .cart-btn[data-id]').forEach(btn => {
+    document.querySelectorAll('.single-add-btn[data-id]').forEach(btn => {
       const id = btn.getAttribute('data-id');
       const stock = getProductStock(id);
       const inCart = cart.find(i => i.productId === id);
       const currentQty = inCart ? inCart.qty : 0;
       if (stock <= 0){
         btn.disabled = true;
+        btn.textContent = 'Out of Stock';
+      } else if (currentQty >= stock){
+        btn.disabled = true;
+        btn.textContent = 'Out of Stock';
       } else {
-        btn.disabled = currentQty >= stock;
+        btn.disabled = false;
+        btn.textContent = 'Add to Cart';
       }
     });
   }
@@ -6641,20 +6760,12 @@ function showToast(message){
 
   // ---- Event delegation for dynamically-rendered product cards ----
   document.addEventListener('click', (e) => {
-    const cartBtn = e.target.closest('.cart-btn[data-id]');
-    if (cartBtn && !cartBtn.disabled){
-      addToCart(cartBtn.getAttribute('data-id'), 1);
+    const singleAddBtn = e.target.closest('.single-add-btn[data-id]');
+    if (singleAddBtn && !singleAddBtn.disabled){
+      addToCart(singleAddBtn.getAttribute('data-id'), 1);
       return;
     }
-    const buyNowBtn = e.target.closest('.buy-now-btn[data-id]');
-    if (buyNowBtn && !buyNowBtn.disabled){
-      addToCart(buyNowBtn.getAttribute('data-id'), 1);
-      if (typeof window.openCheckout === 'function'){
-        window.openCheckout();
-      }
-      return;
-    }
-    // Clicking anywhere else on a product card (but not the action buttons) opens the full detail view
+    // Clicking anywhere else on a product card (but not the action button) opens the full detail view
     const card = e.target.closest('.prod-card[data-id]');
     if (card && typeof window.showProductDetailView === 'function'){
       window.showProductDetailView(card.getAttribute('data-id'));
@@ -9418,6 +9529,71 @@ Please confirm my order.`
     if (frameId) cancelAnimationFrame(frameId);
     observer.disconnect();
   });
+})();
+</script>
+
+<!-- ============ DAILY MYSTERY PERK: 10-SECOND AUTO-INVITE TRIGGER ============
+     Softly invites an engaged visitor into the spin flow 10 seconds after
+     page load. Opens the modal via window.openPerkModal() in its READY
+     state only — nothing spins and nothing is claimed until the visitor
+     taps "Spin & Claim" themselves. Fires at most once per browser session
+     and never interrupts checkout, cart, or a product page. -->
+<script>
+(function(){
+  var AUTO_SHOWN_KEY = 'dplex_perk_auto_shown';
+  var BONUS_KEY = 'dplex_bonus';
+  var AUTO_DELAY_MS = 10000; // 10 seconds after page load
+
+  function alreadyShownThisSession(){
+    try { return sessionStorage.getItem(AUTO_SHOWN_KEY) === '1'; }
+    catch (e) { return false; }
+  }
+
+  function markShownThisSession(){
+    try { sessionStorage.setItem(AUTO_SHOWN_KEY, '1'); }
+    catch (e) { /* sessionStorage unavailable — fail silent, worst case it can show again */ }
+  }
+
+  function alreadyClaimedToday(){
+    try {
+      var raw = localStorage.getItem(BONUS_KEY);
+      if (!raw) return false;
+      var data = JSON.parse(raw);
+      var todayKey = new Date().toISOString().slice(0, 10);
+      return !!data && data.dateKey === todayKey && Number(data.pct) > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Checkout, Cart, and Product Detail are all shown/hidden on this same
+  // page via display toggles rather than a real navigation, so this has
+  // to check live DOM/hash state rather than just the initial URL.
+  function onRestrictedView(){
+    var hash = window.location.hash || '';
+    if (hash.indexOf('#checkout') === 0 || hash.indexOf('#cart') === 0 || hash.indexOf('#product') === 0) return true;
+    var pdp = document.getElementById('productDetailView');
+    if (pdp && pdp.style.display === 'block') return true;
+    var checkoutPage = document.getElementById('checkoutPageView');
+    if (checkoutPage && checkoutPage.style.display === 'block') return true;
+    var cartPage = document.getElementById('cartPageView');
+    if (cartPage && cartPage.style.display === 'block') return true;
+    return false;
+  }
+
+  function maybeAutoShowDailyPerk(){
+    if (alreadyShownThisSession()) return;
+    if (alreadyClaimedToday()) { markShownThisSession(); return; }
+    if (onRestrictedView()) return; // stay quiet this time — do not reschedule, do not mark as shown
+    if (typeof window.openPerkModal !== 'function') return;
+
+    markShownThisSession();
+    window.openPerkModal();
+  }
+
+  if (!alreadyShownThisSession() && !alreadyClaimedToday()){
+    setTimeout(maybeAutoShowDailyPerk, AUTO_DELAY_MS);
+  }
 })();
 </script>
 </body>
