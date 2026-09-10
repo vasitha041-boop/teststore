@@ -783,7 +783,7 @@
   .discount-badge{background:#111111;color:#FFFFFF;box-shadow:0 4px 12px rgba(0,0,0,0.12);}
 
   /* Product Card DPLEX Brand Badge */
-  .prod-brand-badge{position:absolute;top:12px;left:12px;z-index:8;background:#000000;padding:5px 9px;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.18);pointer-events:none;}
+  .prod-brand-badge{position:absolute;top:12px;left:12px;z-index:10;background:#000000;padding:5px 9px;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.18);pointer-events:none;}
   .prod-brand-badge img{height:11px;width:auto;max-width:54px;object-fit:contain;display:block;}
   .prod-thumb-fallback-text{font-size:13px;font-weight:600;color:#A1A1A6;background:transparent;padding:0 20px;text-align:center;}
   .wishlist-btn{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1);transition:transform .15s;z-index:2;}
@@ -975,7 +975,7 @@
   .pdp-main-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
   .pdp-main-image:hover img{transform:scale(1.03);}
   .pdp-main-image .prod-thumb-fallback{font-size:56px;}
-  .pdp-zoom-hint{position:absolute;bottom:14px;right:14px;background:rgba(255,255,255,0.92);border-radius:var(--radius-pill);padding:6px 12px;font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px;color:var(--ink);}
+  .pdp-zoom-hint{position:absolute;top:14px;right:14px;bottom:auto;background:rgba(255,255,255,0.92);border-radius:var(--radius-pill);padding:6px 12px;font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px;color:var(--ink);z-index:9;}
   .pdp-thumbs{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
   .pdp-thumb-btn{width:72px;height:72px;border-radius:12px;overflow:hidden;border:2px solid transparent;background:#F0F0F2;cursor:pointer;padding:0;flex-shrink:0;transition:border-color .2s;}
   .pdp-thumb-btn.active{border-color:var(--ink);}
@@ -1054,6 +1054,7 @@
   /* Title + compact icon-only share control */
   .pdp-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
   .pdp-title-row .pdp-name{flex:1;min-width:0;}
+  .pdp-title-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
   .pdp-share-btn{flex-shrink:0;margin-top:10px;width:40px;height:40px;padding:0;
     background:#fff;color:var(--ink);border:1.5px solid var(--line);border-radius:var(--radius-pill);
     font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;
@@ -1130,6 +1131,150 @@
     .pdp-freebie-badge{display:none;}
   }
 
+  /* ── DELIVERY BOX ── */
+  .pdp-delivery-trust-box {
+    background: #F5F5F7;
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .pdp-delivery-icon {
+    flex-shrink: 0;
+    color: #111111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pdp-delivery-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .pdp-delivery-info strong {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #111111;
+    line-height: 1.3;
+  }
+  .pdp-delivery-info span {
+    font-size: 12px;
+    color: #8E8E93;
+    line-height: 1.35;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* ── NEED HELP CARD ── */
+  .pdp-help-card {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .pdp-help-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .pdp-help-text strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111111;
+    line-height: 1.3;
+  }
+  .pdp-help-text span {
+    font-size: 12px;
+    color: #8E8E93;
+    line-height: 1.3;
+  }
+  .pdp-help-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .pdp-help-btn {
+    min-height: 44px; /* WCAG AA Touch-Target standard */
+    padding: 0 16px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pdp-help-btn:active {
+    transform: scale(0.97);
+  }
+  .pdp-help-btn.whatsapp {
+    background: #25D366;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
+  }
+  .pdp-help-btn.call {
+    background: #F5F5F7;
+    color: #111111;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  /* ── MOBILE BREAKPOINT (Tablets & Phones <= 560px) ── */
+  @media (max-width: 560px) {
+    .pdp-help-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 16px;
+      gap: 14px;
+    }
+    .pdp-help-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pdp-help-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0 10px;
+    }
+    .pdp-delivery-trust-box {
+      padding: 12px 14px;
+      gap: 12px;
+    }
+  }
+
+  /* ── VERY SMALL PHONES (<= 360px) ── */
+  @media (max-width: 360px) {
+    .pdp-help-actions {
+      grid-template-columns: 1fr;
+    }
+    .pdp-delivery-info strong {
+      font-size: 13px;
+    }
+    .pdp-delivery-info span {
+      font-size: 11.5px;
+    }
+  }
+
   .pdp-benefits{margin-top:24px;}
   .pdp-benefits-title{font-size:20px;font-weight:700;color:#000;margin:0 0 16px;}
   .pdp-benefits-box{background:transparent;border:1px solid rgba(0,0,0,0.06);border-radius:20px;padding:24px;}
@@ -1193,15 +1338,53 @@
     /* Room at the bottom so the floating mascot and sticky bar never
        sit on top of the last block of content. */
     .pdp-view{padding-bottom:112px;}
-    .pdp-title-row{gap:10px;}
-    .pdp-share-btn{width:36px;height:36px;margin-top:6px;}
-    .pdp-share-btn svg{width:15px;height:15px;}
     .pdp-meta-row{gap:8px 10px;margin-top:10px;}
     .pdp-gallery{position:static;}
     .pdp-name{font-size:25px;}
     .pdp-price{font-size:24px;}
     .pdp-overview-features{grid-template-columns:1fr;}
     .pdp-tabs-section,.pdp-related-section,.pdp-recommended-section{margin-top:38px;}
+  }
+
+  /* ---- Mobile PDP title row: stack the name above a dedicated action
+     row instead of squeezing the h1 next to the Share/Download buttons
+     in one flex row (that squashed the title into tiny wrapped lines). ---- */
+  @media(max-width:640px){
+    .pdp-title-row{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .pdp-title-row .pdp-name{
+      width:100%;
+      flex:none;
+      min-width:0;
+      font-size:22px;
+      line-height:1.25;
+      margin:0;
+    }
+    .pdp-title-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      width:100%;
+    }
+    .pdp-share-btn{
+      margin-top:0;
+      height:38px;
+      font-size:13px;
+    }
+    .pdp-share-btn:not(#pdpDownloadCardBtn){width:38px;}
+    .pdp-share-btn svg{width:15px;height:15px;}
+    .pdp-share-btn#pdpDownloadCardBtn{width:auto;padding:0 14px;}
+    /* consistent 8-12px rhythm between breadcrumbs / cat tag / title / actions */
+    .pdp-breadcrumbs{margin-bottom:12px;}
+    .pdp-cat{margin-top:0;}
+    .pdp-brand{margin-top:8px;}
+    .pdp-name{margin-top:10px;}
+    .pdp-short-desc{margin-top:10px;}
+    .pdp-price-row{margin-top:12px;}
   }
 
   /* ============ CHECKOUT MODAL ============ */
@@ -3882,16 +4065,35 @@
 
 <script>
   function openCustomerPortal() {
-    document.getElementById('accountPageView').style.display = 'block';
-    document.getElementById('homeSections').style.display = 'none';
+    if (typeof closeCartDrawer === "function") closeCartDrawer();
+    if (window.location.hash === "#account") {
+      openCustomerPortalInternal();
+    } else {
+      window.location.hash = "account";
+    }
+  }
+  function openCustomerPortalInternal() {
+    if (window.hideAllSubPages) window.hideAllSubPages();
+    const accountPage = document.getElementById("accountPageView");
+    if (accountPage) accountPage.style.display = "block";
+    if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
   }
-  function closeCustomerPortal() {
-    document.getElementById('accountPageView').style.display = 'none';
-    document.getElementById('homeSections').style.display = '';
+  function hideCustomerPortalInternal() {
+    const accountPage = document.getElementById("accountPageView");
+    if (accountPage) accountPage.style.display = 'none';
+    if (window.pdpUpdateHomeVisibility) window.pdpUpdateHomeVisibility();
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
   }
+  function closeCustomerPortal() {
+    hideCustomerPortalInternal();
+    if (window.location.hash === "#account") {
+      window.location.hash = "";
+    }
+  }
+  window.openCustomerPortalInternal = openCustomerPortalInternal;
+  window.hideCustomerPortalInternal = hideCustomerPortalInternal;
   function cpToggleTab(mode) {
     const isSignIn = mode === 'signin';
     document.getElementById('cpSignInForm').style.display = isSignIn ? 'block' : 'none';
@@ -5632,17 +5834,15 @@
     const checkoutPage = document.getElementById("checkoutPageView");
     const cartPage = document.getElementById("cartPageView");
     const successPage = document.getElementById("successPageView");
-    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block") || (cartPage && cartPage.style.display === "block") || (successPage && successPage.style.display === "block");
+    const accountPage = document.getElementById("accountPageView");
+    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block") || (cartPage && cartPage.style.display === "block") || (successPage && successPage.style.display === "block") || (accountPage && accountPage.style.display === "block");
     if (home) home.style.display = anyOpen ? "none" : "";
   }
   window.pdpUpdateHomeVisibility = pdpUpdateHomeVisibility;
 
   function openProductDetailInternal(productId){
-    const checkoutPage = document.getElementById("checkoutPageView");
-    const cartPage = document.getElementById("cartPageView");
+    hideAllSubPages();
     const pdp = document.getElementById("productDetailView");
-    if (checkoutPage) checkoutPage.style.display = "none";
-    if (cartPage) cartPage.style.display = "none";
     if (pdp) pdp.style.display = "block";
     pdpUpdateHomeVisibility();
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -5660,13 +5860,27 @@
     if (window.updateHeaderSolidState) window.updateHeaderSolidState();
   }
 
+  // ---- Universal helper: hide every full-page view so at most one is ever
+  //      visible at a time (Home is handled separately by pdpUpdateHomeVisibility) ----
+  function hideAllSubPages(){
+    const views = [
+      "productDetailView",
+      "cartPageView",
+      "checkoutPageView",
+      "accountPageView",
+      "successPageView"
+    ];
+    views.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+  }
+  window.hideAllSubPages = hideAllSubPages;
+
   // ---- Checkout page show/hide (mirrors the PDP pattern above) ----
   function openCheckoutPageInternal(){
-    const pdp = document.getElementById("productDetailView");
+    hideAllSubPages();
     const checkoutPage = document.getElementById("checkoutPageView");
-    const cartPage = document.getElementById("cartPageView");
-    if (pdp) pdp.style.display = "none";
-    if (cartPage) cartPage.style.display = "none";
     if (checkoutPage) checkoutPage.style.display = "block";
     pdpUpdateHomeVisibility();
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -5686,11 +5900,8 @@
 
   // ---- Full Cart page show/hide (mirrors the PDP/Checkout pattern above) ----
   function openCartPageInternal(){
-    const pdp = document.getElementById("productDetailView");
-    const checkoutPage = document.getElementById("checkoutPageView");
+    hideAllSubPages();
     const cartPage = document.getElementById("cartPageView");
-    if (pdp) pdp.style.display = "none";
-    if (checkoutPage) checkoutPage.style.display = "none";
     if (cartPage) cartPage.style.display = "block";
     pdpUpdateHomeVisibility();
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -5808,6 +6019,8 @@
       openCheckoutPageInternal();
     } else if (hash === "#cart"){
       openCartPageInternal();
+    } else if (hash === "#account"){
+      openCustomerPortalInternal();
     } else if (orderMatch){
       // Shareable receipt: #order-received/<orderId>
       const orderId = decodeURIComponent(orderMatch[1]);
@@ -5816,16 +6029,22 @@
       const wasProductOpen = document.getElementById("productDetailView").style.display === "block";
       const wasCheckoutOpen = document.getElementById("checkoutPageView").style.display === "block";
       const wasCartOpen = document.getElementById("cartPageView").style.display === "block";
+      const accountPage = document.getElementById("accountPageView");
+      const wasAccountOpen = accountPage && accountPage.style.display === "block";
       const successPage = document.getElementById("successPageView");
       const wasSuccessOpen = successPage && successPage.style.display === "block";
-      hideProductDetailInternal();
-      hideCheckoutPageInternal();
-      hideCartPageInternal();
-      if (wasSuccessOpen && window.hideSuccessPageInternal) window.hideSuccessPageInternal();
+      // Clear every subpage so no rogue cart, checkout, or account view lingers.
+      hideAllSubPages();
+      pdpHideStickyBar();
+      closePdpLightbox();
+      pdpCurrentId = null;
+      if (wasSuccessOpen) window.__currentReceiptId = null;
+      pdpUpdateHomeVisibility();
+      if (window.updateHeaderSolidState) window.updateHeaderSolidState();
       // If the new hash points at a section on the home page (e.g. #products
       // from the header nav), make sure we actually scroll to it now that
       // the home content is visible again.
-      if ((wasProductOpen || wasCheckoutOpen || wasCartOpen || wasSuccessOpen) && hash && hash.length > 1){
+      if ((wasProductOpen || wasCheckoutOpen || wasCartOpen || wasAccountOpen || wasSuccessOpen) && hash && hash.length > 1){
         const el = document.querySelector(hash);
         if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 0);
       }
@@ -6250,18 +6469,20 @@
           ${brand ? `<span class="pdp-brand">${brand}</span>` : ""}
           <div class="pdp-title-row">
             <h1 class="pdp-name">${name}</h1>
-            <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button" aria-label="Copy link to this product" title="Copy link">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-              <span class="pdp-share-label" id="pdpShareBtnLabel">Copy Link</span>
-            </button>
-            <button class="pdp-share-btn" id="pdpDownloadCardBtn" onclick="downloadProductCardImage()" type="button" title="Download Product Card Image">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span class="pdp-share-label" style="display:inline; margin-left:4px;">Download Card</span>
-            </button>
+            <div class="pdp-title-actions">
+              <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button" aria-label="Copy link to this product" title="Copy link">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span class="pdp-share-label" id="pdpShareBtnLabel">Copy Link</span>
+              </button>
+              <button class="pdp-share-btn" id="pdpDownloadCardBtn" onclick="downloadProductCardImage()" type="button" title="Download Product Card Image">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span class="pdp-share-label" style="display:inline; margin-left:4px;">Download Card</span>
+              </button>
+            </div>
           </div>
           ${shortDescription ? `<p class="pdp-short-desc">${shortDescription}</p>` : ""}
           <div class="pdp-price-row">
@@ -6296,6 +6517,43 @@
             <button class="pdp-add-btn" id="pdpAddBtn" ${outOfStock ? "disabled" : ""}>
               ${outOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
+          </div>
+          <!-- Delivery Trust Badge -->
+          <div class="pdp-delivery-trust-box">
+            <div class="pdp-delivery-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="2"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </div>
+            <div class="pdp-delivery-info">
+              <strong>Island-wide Delivery</strong>
+              <span>2–3 business days &bull; Cash on Delivery Available</span>
+            </div>
+          </div>
+
+          <!-- "Need Help?" Direct Assistance Card -->
+          <div class="pdp-help-card">
+            <div class="pdp-help-text">
+              <strong>Need Help?</strong>
+              <span>Chat with our team before ordering</span>
+            </div>
+            <div class="pdp-help-actions">
+              <a href="https://wa.me/94719553478" target="_blank" rel="noopener" class="pdp-help-btn whatsapp" aria-label="Contact via WhatsApp">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.004 2c-5.523 0-10 4.477-10 10 0 1.767.459 3.427 1.261 4.872l-1.265 4.628 4.745-1.244c1.401.764 3.003 1.194 4.709 1.194 5.523 0 10-4.477 10-10s-4.477-10-10-10z"/>
+                </svg>
+                <span>WhatsApp</span>
+              </a>
+              <a href="tel:+94719553478" class="pdp-help-btn call" aria-label="Call support">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>Call</span>
+              </a>
+            </div>
           </div>
           <div class="pdp-benefits">
             <p class="pdp-benefits-title">Services and benefits</p>
