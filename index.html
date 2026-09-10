@@ -3776,7 +3776,10 @@
           <div style="text-align: right; margin-bottom: 16px;">
             <button type="button" onclick="cpForgotPassword()" style="background:none; border:none; color:#8E8E93; font-size:13px; cursor:pointer;">Forgot password?</button>
           </div>
-          <button type="button" class="place-order-btn" onclick="cpSignIn()">Sign In</button>
+          <button type="button" class="place-order-btn" id="cpSignInBtn" onclick="cpSignIn()">
+            <span class="spinner"></span>
+            <span id="cpSignInBtnLabel">Sign In</span>
+          </button>
         </form>
 
         <!-- Register Form -->
@@ -3793,7 +3796,10 @@
             <label for="cpRegisterPassword">Password</label>
             <input type="password" id="cpRegisterPassword" placeholder="Minimum 6 characters">
           </div>
-          <button type="button" class="place-order-btn" onclick="cpRegister()">Create Account</button>
+          <button type="button" class="place-order-btn" id="cpRegisterBtn" onclick="cpRegister()">
+            <span class="spinner"></span>
+            <span id="cpRegisterBtnLabel">Create Account</span>
+          </button>
         </form>
       </div>
 
@@ -10005,12 +10011,13 @@ Please confirm my order.`
     el.classList.remove("show", "cp-success");
   }
 
-  function cpSetFormLoading(formId, isLoading, idleLabel, loadingLabel){
-    const form = document.getElementById(formId);
-    const btn = form && form.querySelector('button[type="submit"]');
+  function cpSetBtnLoading(btnId, labelId, isLoading, idleLabel, loadingLabel){
+    const btn = document.getElementById(btnId);
+    const label = document.getElementById(labelId);
     if (!btn) return;
     btn.disabled = isLoading;
-    btn.textContent = isLoading ? loadingLabel : idleLabel;
+    btn.classList.toggle("loading", isLoading);
+    if (label) label.textContent = isLoading ? loadingLabel : idleLabel;
   }
 
   function cpFriendlyAuthError(err){
@@ -10051,7 +10058,7 @@ Please confirm my order.`
       return;
     }
 
-    cpSetFormLoading("cpSignInForm", true, "Sign In", "Signing In…");
+    cpSetBtnLoading("cpSignInBtn", "cpSignInBtnLabel", true, "Sign In", "Signing In…");
     try {
       await waitForFirebase();
       await signInWithEmailAndPassword(window.firebaseAuth, email, password);
@@ -10060,7 +10067,7 @@ Please confirm my order.`
       console.error("Customer sign-in failed:", err);
       cpShowError(cpFriendlyAuthError(err));
     } finally {
-      cpSetFormLoading("cpSignInForm", false, "Sign In", "Signing In…");
+      cpSetBtnLoading("cpSignInBtn", "cpSignInBtnLabel", false, "Sign In", "Signing In…");
     }
   };
 
@@ -10080,7 +10087,7 @@ Please confirm my order.`
       return;
     }
 
-    cpSetFormLoading("cpRegisterForm", true, "Create Account", "Creating Account…");
+    cpSetBtnLoading("cpRegisterBtn", "cpRegisterBtnLabel", true, "Create Account", "Creating Account…");
     try {
       await waitForFirebase();
       const cred = await createUserWithEmailAndPassword(window.firebaseAuth, email, password);
@@ -10090,7 +10097,7 @@ Please confirm my order.`
       console.error("Customer registration failed:", err);
       cpShowError(cpFriendlyAuthError(err));
     } finally {
-      cpSetFormLoading("cpRegisterForm", false, "Create Account", "Creating Account…");
+      cpSetBtnLoading("cpRegisterBtn", "cpRegisterBtnLabel", false, "Create Account", "Creating Account…");
     }
   };
 
