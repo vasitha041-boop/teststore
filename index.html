@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,8 @@
 <title>Northline — Premium Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   /* ============ GLOBAL TOUCH / TAP-HIGHLIGHT RESET ============
      Kills the mobile browser's default blue/grey tap-highlight box and
@@ -781,6 +781,10 @@
   .add-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
   .add-btn[disabled]:hover{background:#CFCFCF;}
   .discount-badge{background:#111111;color:#FFFFFF;box-shadow:0 4px 12px rgba(0,0,0,0.12);}
+
+  /* Product Card DPLEX Brand Badge */
+  .prod-brand-badge{position:absolute;top:12px;left:12px;z-index:8;background:#000000;padding:5px 9px;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.18);pointer-events:none;}
+  .prod-brand-badge img{height:11px;width:auto;max-width:54px;object-fit:contain;display:block;}
   .prod-thumb-fallback-text{font-size:13px;font-weight:600;color:#A1A1A6;background:transparent;padding:0 20px;text-align:center;}
   .wishlist-btn{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1);transition:transform .15s;z-index:2;}
   .wishlist-btn:hover{transform:scale(1.08);}
@@ -1062,6 +1066,34 @@
   .pdp-share-btn.copied{width:auto;padding:0 14px;background:#E4F5EC;border-color:#B7E0C8;color:var(--teal);}
   .pdp-share-btn.copied svg{stroke:var(--teal);}
   .pdp-share-btn.copied .pdp-share-label{display:inline;}
+  /* Download-card button always shows its label, so it needs room the
+     icon-only 40x40 box doesn't give it. */
+  .pdp-share-btn#pdpDownloadCardBtn{width:auto;padding:0 14px;}
+  .pdp-share-btn#pdpDownloadCardBtn[disabled]{opacity:.6;cursor:wait;}
+
+  /* ============ Product Card Image (share/download render source) ============ */
+  .pcr-card{width:1080px;height:1080px;box-sizing:border-box;position:relative;
+    padding:64px;display:flex;flex-direction:column;
+    background:linear-gradient(135deg,#F5F5F7 0%,#FFFFFF 100%);
+    font-family:'Inter',Arial,sans-serif;overflow:hidden;}
+  .pcr-card::before{content:"";position:absolute;inset:28px;border:1px solid rgba(0,0,0,0.07);border-radius:32px;pointer-events:none;}
+  .pcr-topbar{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+  /* html2canvas can't render filter:brightness() on an external SVG <img>,
+     so the logo is a real black badge + text rather than a filtered white asset. */
+  .pcr-logo-badge{background:#000000;padding:8px 16px;border-radius:10px;display:inline-flex;align-items:center;}
+  .pcr-logo-img{height:20px;width:auto;display:block;}
+  .pcr-logo-text{color:#FFFFFF;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;letter-spacing:0.04em;line-height:1;}
+  .pcr-tagline{font-family:'Sora',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#8E8E93;}
+  .pcr-domain{font-size:16px;font-weight:600;color:#111111;letter-spacing:0.02em;}
+  .pcr-imagewrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+  .pcr-image{width:660px;height:660px;object-fit:contain;border-radius:28px;box-shadow:0 30px 70px rgba(0,0,0,0.14);background:#FFFFFF;}
+  .pcr-bottom{text-align:center;position:relative;z-index:1;}
+  .pcr-cat{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8E8E93;margin-bottom:10px;}
+  /* Clip to 2 lines via a fixed max-height (32px * 1.25 line-height * 2 lines)
+     instead of -webkit-line-clamp, which html2canvas also renders unreliably. */
+  .pcr-name{font-family:'Sora',sans-serif;font-size:32px;font-weight:700;color:#111111;letter-spacing:-0.01em;line-height:1.25;max-height:80px;overflow:hidden;}
+  .pcr-price{font-family:'Sora',sans-serif;font-size:38px;font-weight:800;color:#111111;margin-top:8px;margin-bottom:30px;}
+  .pcr-trust{text-align:center;font-size:13px;font-weight:500;color:#767676;padding-top:26px;border-top:1px solid rgba(0,0,0,0.08);position:relative;z-index:1;}
   /* ---- Free-gift banner (per-product, admin toggle) ---- */
   .pdp-freebie-banner{
     display:flex;align-items:center;gap:12px;
@@ -3445,6 +3477,30 @@
       Back to products
     </button>
     <div id="pdpBody"></div>
+
+    <!-- Off-screen 1080x1080 render source for "Download Product Card
+         Image" — html2canvas captures this, never shown to the user. -->
+    <div id="pdpCardRenderTemplate" style="position:fixed; left:-9999px; top:0;">
+      <div class="pcr-card">
+        <div class="pcr-topbar">
+          <div class="pcr-logo-badge">
+            <img class="pcr-logo-img" id="pdpCardLogo" alt="DPLEX" style="display:none;">
+            <span class="pcr-logo-text" id="pdpCardLogoFallback">DPLEX</span>
+          </div>
+          <div class="pcr-tagline">Engineered Performance</div>
+          <div class="pcr-domain">dplex.store</div>
+        </div>
+        <div class="pcr-imagewrap">
+          <img class="pcr-image" id="pdpCardImage" src="" alt="">
+        </div>
+        <div class="pcr-bottom">
+          <div class="pcr-cat" id="pdpCardCategory"></div>
+          <div class="pcr-name" id="pdpCardName"></div>
+          <div class="pcr-price" id="pdpCardPrice"></div>
+        </div>
+        <div class="pcr-trust">Cash on Delivery Available&nbsp;&nbsp;|&nbsp;&nbsp;Islandwide 1-3 Days Delivery</div>
+      </div>
+    </div>
   </div>
 
   <!-- Mobile sticky purchase bar: lives inside the PDP view, so it is
@@ -5192,8 +5248,10 @@
     return `
       <div class="prod-card" data-id="${escapeHtml(id)}">
         <div class="prod-thumb">
+          <div class="prod-brand-badge">
+            <img src="https://res.cloudinary.com/hzwbfomh/image/upload/Dplex_logo.svg" alt="DPLEX">
+          </div>
           ${thumbInner}
-          ${discountBadgeHtml(p)}
           ${wishlistBtnHtml(id)}
           ${stockBadge(stock)}
         </div>
@@ -5564,6 +5622,7 @@
   let pdpActiveImageIndex = 0;
   let pdpQty = 1;
   let pdpLightboxIndex = 0;
+  let pdpCachedLogoDataUrl = null; // fetched once, reused for every card download
 
   // ---- Internal show/hide (no history/hash side-effects — see the public
   //      window.showProductDetailView / closeProductDetailView wrappers below) ----
@@ -5813,6 +5872,163 @@
     if (onDone) onDone();
   }
 
+  // ---- Download a branded 1080x1080 product card image (uses html2canvas) ----
+  const PDP_CARD_LOGO_SRC = "https://res.cloudinary.com/hzwbfomh/image/upload/Dplex_logo.svg";
+
+  function pdpBlobToDataUrl(blob){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("FileReader failed"));
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  // images.weserv.nl is a free, no-signup read-only image proxy: it fetches
+  // the source image server-side and re-serves it with permissive CORS
+  // headers (and can rasterize SVG -> PNG via &output=png). Used only as a
+  // fallback when we can't fetch an image origin-safely ourselves.
+  function pdpProxyImageUrl(url, forcePng){
+    const params = new URLSearchParams({ url });
+    if (forcePng) params.set("output", "png");
+    return "https://images.weserv.nl/?" + params.toString();
+  }
+
+  // Fetches a same-origin-safe data: URL for an image, so it can never
+  // taint the canvas. Tries the image's own origin first (fast path); if
+  // that's blocked by CORS, falls back to the proxy above. Pass
+  // forcePng=true to also rasterize SVGs to PNG, since html2canvas's
+  // support for <img src="data:image/svg+xml..."> is unreliable and can
+  // render as blank even when the data URL itself loaded fine.
+  async function pdpFetchAsDataUrl(url, forcePng){
+    if (!forcePng){
+      try {
+        const res = await fetch(url, { mode: "cors", cache: "force-cache" });
+        if (res.ok) return await pdpBlobToDataUrl(await res.blob());
+      } catch (err) {
+        console.warn("Direct image fetch failed, trying proxy:", url, err);
+      }
+    }
+    try {
+      const res = await fetch(pdpProxyImageUrl(url, forcePng), { mode: "cors", cache: "force-cache" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return await pdpBlobToDataUrl(await res.blob());
+    } catch (err) {
+      console.warn("Proxy image fetch failed too:", url, err);
+      return null;
+    }
+  }
+
+  async function pdpLoadImageForCard(imgEl, url){
+    if (!imgEl) return;
+    if (!url){ imgEl.removeAttribute("src"); return; }
+
+    const dataUrl = await pdpFetchAsDataUrl(url);
+    const finalSrc = dataUrl || url;
+
+    await new Promise((resolve) => {
+      imgEl.onload = () => resolve();
+      imgEl.onerror = () => resolve(); // still generate the card even if the image can't load
+      if (dataUrl) imgEl.removeAttribute("crossorigin");
+      else imgEl.crossOrigin = "anonymous"; // best-effort fallback if both fetches were blocked
+      imgEl.src = finalSrc;
+      if (imgEl.complete && imgEl.naturalWidth > 0) resolve();
+    });
+  }
+
+  // Fetches (and caches) the real DPLEX mark as a rasterized PNG data URL.
+  // If that fails for any reason, the badge quietly keeps its plain-text
+  // "DPLEX" fallback instead of ever rendering blank.
+  async function pdpEnsureCardLogoLoaded(){
+    const logoImg = document.getElementById("pdpCardLogo");
+    const fallbackText = document.getElementById("pdpCardLogoFallback");
+    if (!logoImg) return;
+
+    if (!pdpCachedLogoDataUrl){
+      pdpCachedLogoDataUrl = await pdpFetchAsDataUrl(PDP_CARD_LOGO_SRC, true);
+    }
+
+    if (pdpCachedLogoDataUrl){
+      logoImg.src = pdpCachedLogoDataUrl;
+      logoImg.style.display = "block";
+      if (fallbackText) fallbackText.style.display = "none";
+    } else {
+      logoImg.style.display = "none";
+      if (fallbackText) fallbackText.style.display = "inline";
+    }
+  }
+
+  window.downloadProductCardImage = async function(){
+    const product = pdpCurrentProduct;
+    const btn = document.getElementById("pdpDownloadCardBtn");
+    const label = btn ? btn.querySelector(".pdp-share-label") : null;
+    const idleLabel = "Download Card";
+
+    if (!product){
+      if (typeof showToast === "function") showToast("Open a product first");
+      return;
+    }
+    if (typeof html2canvas !== "function"){
+      if (typeof showToast === "function") showToast("Couldn't generate the card image. Please try again.");
+      return;
+    }
+
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = "Generating…";
+
+    try {
+      const tpl = document.getElementById("pdpCardRenderTemplate");
+      const name = product.name || "DPLEX Product";
+      const category = product.category || "";
+      const price = pdpFormatPrice(product.price);
+      const imgUrl = (pdpImages && (pdpImages[pdpActiveImageIndex] || pdpImages[0])) || "";
+
+      document.getElementById("pdpCardCategory").textContent = category;
+      document.getElementById("pdpCardName").textContent = name;
+      document.getElementById("pdpCardPrice").textContent = price;
+
+      const imgEl = document.getElementById("pdpCardImage");
+      const imgWrap = imgEl ? imgEl.closest(".pcr-imagewrap") : null;
+      if (imgWrap) imgWrap.style.display = imgUrl ? "flex" : "none";
+
+      await Promise.all([
+        pdpLoadImageForCard(imgEl, imgUrl),
+        pdpEnsureCardLogoLoaded()
+      ]);
+
+      // Make sure the Sora 700/800 weights are actually painted before the
+      // raster capture — otherwise a first-ever download can catch the
+      // fallback font mid-swap.
+      if (document.fonts && document.fonts.ready){
+        try { await document.fonts.ready; } catch (e) {}
+      }
+
+      const canvas = await html2canvas(tpl.querySelector(".pcr-card"), {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#FFFFFF"
+      });
+      const dataUrl = canvas.toDataURL("image/png");
+
+      const safeName = name.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "") || "product";
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `DPLEX-${safeName}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      if (typeof showToast === "function") showToast("Product card downloaded!");
+    } catch (err) {
+      console.error("Failed to generate product card image:", err);
+      if (typeof showToast === "function") showToast("Couldn't generate the card image. Please try again.");
+    } finally {
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = idleLabel;
+    }
+  };
+
   // ---- Breadcrumbs ----
   function renderPdpBreadcrumbs(category, name){
     const el = document.getElementById("pdpBreadcrumbs");
@@ -6037,6 +6253,14 @@
             <button class="pdp-share-btn" id="pdpShareBtn" onclick="pdpShareProduct()" type="button" aria-label="Copy link to this product" title="Copy link">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
               <span class="pdp-share-label" id="pdpShareBtnLabel">Copy Link</span>
+            </button>
+            <button class="pdp-share-btn" id="pdpDownloadCardBtn" onclick="downloadProductCardImage()" type="button" title="Download Product Card Image">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span class="pdp-share-label" style="display:inline; margin-left:4px;">Download Card</span>
             </button>
           </div>
           ${shortDescription ? `<p class="pdp-short-desc">${shortDescription}</p>` : ""}
@@ -6266,15 +6490,16 @@
       ? '<span class="badge stock-badge out">Out of stock</span>'
       : (stock <= 5 ? `<span class="badge stock-badge low">Only ${stock} left</span>` : '<span class="badge stock-badge">In stock</span>');
 
-    const discountHtml = typeof window.discountBadgeHtml === "function" ? window.discountBadgeHtml(p) : "";
     const priceHtml = typeof window.priceRowHtml === "function" ? window.priceRowHtml(p) : pdpFormatPrice(p.price);
     const wishlistHtml = typeof window.wishlistBtnHtml === "function" ? window.wishlistBtnHtml(id) : "";
 
     return `
       <div class="prod-card" data-id="${pdpEscapeHtml(id)}">
         <div class="prod-thumb">
+          <div class="prod-brand-badge">
+            <img src="https://res.cloudinary.com/hzwbfomh/image/upload/Dplex_logo.svg" alt="DPLEX">
+          </div>
           ${thumbInner}
-          ${discountHtml}
           ${wishlistHtml}
           ${stockBadgeHtml}
         </div>
