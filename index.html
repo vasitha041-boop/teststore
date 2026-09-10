@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,25 +220,28 @@
     position: relative;
     font-family: 'Inter', sans-serif;
     font-size: 14.5px;
-    font-weight: 400;
+    font-weight: 500;
     color: #FFFFFF;
     letter-spacing: -0.01em;
     line-height: 1;
     padding: 8px 0;
-    opacity: 0.8;
+    opacity: 1;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
     transition: opacity 0.2s ease, transform 0.2s ease;
     display: inline-block;
   }
   .navlinks a:hover {
-    opacity: 1;
+    opacity: 0.75;
   }
   /* Scrolled solid white state */
   header.scrolled .navlinks a {
     color: #111111;
+    text-shadow: none;
   }
   /* Dynamic dark content on light slides */
   header.header-dark-content:not(.scrolled) .navlinks a {
     color: #111111 !important;
+    text-shadow: none;
   }
 
   .nav-search{flex:1;max-width:340px;position:relative;display:flex;align-items:center;}
@@ -327,12 +331,30 @@
   header.scrolled .icon-btn,
   header.scrolled .burger{color:var(--ink);}
 
+  /* Inner-page fix: the DPLEX logo asset is white, so it disappears on the
+     solid white .scrolled header (Cart / Checkout / Account) unless it's
+     inverted to black. !important guards against page-specific overrides. */
+  header.scrolled .logo img,
+  header.scrolled .store-logo-img{filter:brightness(0) !important;}
+  header.scrolled .logo{color:#111111 !important;}
+  header.scrolled .navlinks a{color:#111111 !important;opacity:1 !important;}
+  header.scrolled .icon-btn,
+  header.scrolled .burger{color:#111111 !important;}
+  header.scrolled .icon-btn svg,
+  header.scrolled .burger svg{stroke:#111111 !important;}
+
   /* account icon — mobile only (desktop keeps the Admin pill) */
   .icon-btn.account-toggle{display:flex;}
 
   /* cart bubble: small, and hidden entirely when the cart is empty (like UGREEN) */
   .cart-badge{top:1px;right:1px;min-width:16px;height:16px;font-size:9px;border:none;}
   .icon-btn.nav-cart-empty .cart-badge{display:none;}
+
+  /* ---- WCAG 2.5.5 touch targets: 44x44 minimum ---- */
+  .icon-btn, .burger, .cart-drawer-close{
+    min-width:44px;min-height:44px;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
 
   /* mobile drawer menu */
   .mobile-menu{display:none;position:fixed;inset:0;z-index:200;}
@@ -502,6 +524,16 @@
   .spin-modal-btn:focus-visible{outline:2px solid #111;outline-offset:3px;}
   .spin-modal-btn:disabled{background:#E5E5EA;color:#8E8E93;cursor:not-allowed;transform:none;}
   .spin-modal-btn svg{flex-shrink:0;}
+
+  /* ---- Claimed state: compact discount badge + next-unlock countdown ---- */
+  .spin-claimed-badge{display:inline-flex;align-items:center;background:#111111;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.01em;padding:7px 18px;border-radius:99px;margin-bottom:20px;}
+  .spin-countdown-label{font-size:10.5px;font-weight:700;letter-spacing:0.08em;color:#8E8E93;text-transform:uppercase;margin-bottom:6px;}
+  .spin-countdown-time{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;font-weight:600;color:#111111;margin-bottom:12px;white-space:nowrap;}
+  .spin-countdown-track{width:100%;height:3px;background:#F0F0F2;border-radius:99px;overflow:hidden;margin-bottom:24px;}
+  .spin-countdown-fill{height:100%;width:0%;background:#111111;border-radius:99px;transition:width 1s linear;}
+  @media (max-width:480px){
+    .spin-countdown-time{font-size:13px;}
+  }
   @media (max-width:480px){
     .spin-modal-card{max-width:100%;padding:28px 20px 20px;border-radius:20px;}
     .spin-reel-num,.spin-reel-percent{font-size:40px;}
@@ -793,7 +825,7 @@
   .qty-btn:hover{border-color:var(--ink);}
   .qty-btn:disabled{opacity:0.4;cursor:not-allowed;}
   .qty-val{font-size:13px;font-weight:600;min-width:16px;text-align:center;}
-  .cart-item-qty .qty-btn{width:32px;height:32px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:16px;font-weight:500;color:#111111;transition:transform .2s ease,box-shadow .2s ease;}
+  .cart-item-qty .qty-btn{width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:16px;font-weight:500;color:#111111;transition:transform .2s ease,box-shadow .2s ease;}
   .cart-item-qty .qty-btn:hover:not(:disabled){border-color:rgba(0,0,0,0.04);transform:scale(1.08);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
   .cart-item-qty .qty-val{min-width:36px;text-align:center;font-size:14px;font-weight:600;color:#111111;}
   .cart-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;}
@@ -840,7 +872,7 @@
   .cart-info .price{color:#8E8E93;font-weight:500;font-size:13.5px;}
   /* Quantity pill — identical to the Cart Drawer's */
   .cart-item-card .cart-item-qty{display:inline-flex;align-items:center;gap:0;background:#F5F5F7;border-radius:99px;padding:4px;margin-top:10px;}
-  .cart-item-card .cart-item-qty .qty-btn{width:32px;height:32px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:16px;font-weight:500;color:#111111;transition:transform .2s ease,box-shadow .2s ease;}
+  .cart-item-card .cart-item-qty .qty-btn{width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:16px;font-weight:500;color:#111111;transition:transform .2s ease,box-shadow .2s ease;}
   .cart-item-card .cart-item-qty .qty-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
   .cart-item-card .cart-item-qty .qty-val{min-width:36px;text-align:center;font-size:14px;font-weight:600;color:#111111;}
   /* Right-hand price + remove */
@@ -1252,13 +1284,13 @@
   .perk-strip-action{flex-shrink:0;display:flex;}
   .perk-minimal-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;
     min-height:40px;padding:10px 20px;border-radius:var(--radius-pill);
-    background:transparent;border:1px solid rgba(255,255,255,0.3);color:#fff;
+    background:transparent;border:1.5px solid rgba(255,255,255,0.4);color:#FFFFFF;
     font-family:'Sora',Arial,sans-serif;font-size:14px;font-weight:600;line-height:1;
     cursor:pointer;white-space:nowrap;
     transition:background .25s cubic-bezier(.16,1,.3,1),color .25s cubic-bezier(.16,1,.3,1),border-color .25s;}
   .perk-minimal-cta svg{width:16px;height:16px;flex-shrink:0;
     transition:transform .25s cubic-bezier(.16,1,.3,1);}
-  .perk-minimal-cta:hover{background:#fff;border-color:#fff;color:#09090B;}
+  .perk-minimal-cta:hover{background:#FFFFFF;border-color:#FFFFFF;color:#111111;}
   .perk-minimal-cta:hover svg{transform:translateY(-2px);}
   .perk-minimal-cta:active{transform:scale(.98);}
   .perk-minimal-cta:focus-visible{outline:2px solid #fff;outline-offset:3px;}
@@ -1315,7 +1347,7 @@
     #cartBonusRow.perk-flash,#checkoutBonusRow.perk-flash{animation:none;}
   }
   /* ---- Gamified perk highlight: soft-green pill on the applied discount row ---- */
-  #cartBonusRow,#checkoutBonusRow{background:rgba(48,209,88,0.08);padding:6px 10px;border-radius:8px;color:#1F8A43;font-weight:600;}
+  #cartBonusRow,#checkoutBonusRow,#cartPageBonusRow{background:rgba(48,209,88,0.08);border:1px solid rgba(48,209,88,0.15);padding:8px 12px;border-radius:12px;color:#1F8A43;font-weight:600;}
   .spinner{width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
   .place-order-btn.loading .spinner{display:inline-block;}
   @keyframes spin{to{transform:rotate(360deg);}}
@@ -1775,6 +1807,32 @@
     .promo-learnmore{justify-content:center;}
     .promo-visual{width:100%;margin-top:22px;}
   }
+
+  /* ============ CUSTOMER ACCOUNT PAGE ============ */
+  .account-page{background:var(--paper);min-height:100vh;}
+  .account-card-wrap{background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:24px;padding:40px 32px;box-shadow:0 4px 24px rgba(0,0,0,0.02);}
+
+  .checkout-error.cp-success{background:#E4F5EC;color:#1F8A43;border-color:#CDEBDA;}
+
+  /* -- order cards (rendered by JS in #cpOrdersList) -- */
+  .cp-orders-loading{text-align:center;font-size:13px;color:#767676;padding:24px 0;}
+  .cp-order-card{border:1px solid var(--line);border-radius:16px;padding:16px 18px;}
+  .cp-order-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .cp-order-id{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;color:var(--ink);font-weight:600;}
+  .cp-order-date{font-size:12px;color:#767676;}
+  .cp-order-items{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+  .cp-order-item{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#444;}
+  .cp-order-card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--line);}
+  .cp-order-total{font-size:14px;font-weight:700;color:var(--ink);}
+  .cp-status-pill{font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:99px;text-transform:capitalize;}
+
+  @media(max-width:520px){
+    .account-card-wrap{padding:28px 22px;border-radius:20px;}
+  }
+
+  @media(max-width:520px){
+    .cp-card{padding:26px 20px;border-radius:20px;}
+  }
 </style>
 </head>
 <body>
@@ -1840,7 +1898,7 @@
     </button>
     <div class="spin-modal-title">Daily Member Perk</div>
     <div class="spin-modal-sub" id="spinModalSub">Exclusive privilege for today's session.</div>
-    <div class="spin-reel-wrap">
+    <div class="spin-reel-wrap" id="spinReelWrap">
       <div class="spin-reel-row">
         <div class="spin-reel-window spin-reel-window--tens" id="spinReelWindowTens">
           <div class="spin-reel-track spinning" id="spinReelTrackTens"></div>
@@ -1852,6 +1910,12 @@
       </div>
     </div>
     <div class="spin-modal-result hint" id="spinModalResult">Tap below to reveal your mystery discount.</div>
+    <div class="spin-claimed-panel" id="spinClaimedPanel" style="display:none;">
+      <div class="spin-claimed-badge" id="spinClaimedBadge">00% Active</div>
+      <div class="spin-countdown-label">Next Privilege Unlocks In</div>
+      <div class="spin-countdown-time" id="spinCountdownTime">00h : 00m : 00s</div>
+      <div class="spin-countdown-track"><div class="spin-countdown-fill" id="spinCountdownFill"></div></div>
+    </div>
     <button class="spin-modal-btn" id="spinModalBtn" type="button" data-state="ready">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
       <span>Spin &amp; Claim</span>
@@ -2071,6 +2135,29 @@
 
   function pad2(n){ return String(n).padStart(2, '0'); }
 
+  // Single source of truth for the claimed-state button copy, so the
+  // wording can't drift out of sync between the three places it's shown.
+  function claimedButtonLabel(pct){
+    return 'Continue Shopping with ' + pct + '% Off \u2192';
+  }
+
+  // Swaps the top announcement bar to celebrate an active perk, or
+  // restores the default delivery/COD message when none is active.
+  // Called right after a win, and once on page load so a refresh (or a
+  // perk claimed earlier today) still shows the right banner.
+  var ANNOUNCE_DEFAULT_HTML = 'Islandwide Delivery &nbsp;|&nbsp; Cash on Delivery Available';
+  function syncAnnounceBar(){
+    var bar = document.getElementById('announceBar');
+    if (!bar) return;
+    var pct = (typeof window.getBonusDiscount === 'function') ? window.getBonusDiscount() : 0;
+    if (pct > 0){
+      bar.textContent = '\uD83C\uDF89 ' + pad2(pct) + '% OFF APPLIED TO YOUR SESSION \u2014 DISCOUNT DEDUCTED AT CHECKOUT';
+    } else {
+      bar.innerHTML = ANNOUNCE_DEFAULT_HTML;
+    }
+  }
+  window.syncAnnounceBar = syncAnnounceBar;
+
   var rollingMsgs = ["🎲 Rolling…", "🎰 Spinning…", "🔮 Let's see…"];
   var tryAgainMsgs = [
     "So close! Try again 😅", "Almost! Spin again 👀",
@@ -2113,6 +2200,7 @@
 
   // ---- Slot-machine style reveal modal (replaces instant bubble reveal) ----
   var spinOverlay = document.getElementById('spinModalOverlay');
+  var spinReelWrap = document.getElementById('spinReelWrap');
   var spinReelTrackTens = document.getElementById('spinReelTrackTens');
   var spinReelTrackUnits = document.getElementById('spinReelTrackUnits');
   var spinModalResult = document.getElementById('spinModalResult');
@@ -2120,6 +2208,12 @@
   var spinModalSub = document.getElementById('spinModalSub');
   var spinModalClose = document.getElementById('spinModalClose');
   var spinReelPercent = document.getElementById('spinReelPercent');
+  var spinClaimedPanel = document.getElementById('spinClaimedPanel');
+  var spinClaimedBadge = document.getElementById('spinClaimedBadge');
+  var spinCountdownTime = document.getElementById('spinCountdownTime');
+  var spinCountdownFill = document.getElementById('spinCountdownFill');
+  var spinCountdownInterval = null;
+  var DAY_MS = 24 * 60 * 60 * 1000;
   var spinRollTimer = null;
   var spinStartedAt = 0;
 
@@ -2306,12 +2400,70 @@
     spinModalBtn.dataset.state = 'ready';
     spinModalBtn.innerHTML = GIFT_ICON_SVG + '<span>' + (label || 'Spin &amp; Claim') + '</span>';
   }
-  // Enabled, text-only — shown once a result has landed. Clicking it just
-  // closes the modal (closeSpinModal() fires the cart pulse if it was a win).
+  // Enabled, text-only, data-state="claimed" — shown once a discount is
+  // actually active (a fresh win, or the modal reopened after already
+  // claiming today). Clicking it closes the modal and scrolls to #products.
   function setSpinBtnClaimed(label){
     spinModalBtn.disabled = false;
     spinModalBtn.dataset.state = 'claimed';
     spinModalBtn.innerHTML = '<span>' + label + '</span>';
+  }
+  // Enabled, text-only, data-state="dismiss" — the error-path fallback.
+  // Nothing was claimed, so clicking it should just close, not scroll.
+  function setSpinBtnDismiss(label){
+    spinModalBtn.disabled = false;
+    spinModalBtn.dataset.state = 'dismiss';
+    spinModalBtn.innerHTML = '<span>' + label + '</span>';
+  }
+
+  // ---- "Next privilege" countdown: live ticker to the next local midnight ----
+  function msUntilNextMidnight(){
+    var now = new Date();
+    var next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    return next.getTime() - now.getTime();
+  }
+  function formatCountdown(ms){
+    var totalSec = Math.max(0, Math.round(ms / 1000));
+    var remainingHours = Math.floor(totalSec / 3600);
+    var remainingMinutes = Math.floor((totalSec % 3600) / 60);
+    var remainingSeconds = totalSec % 60;
+    return pad2(remainingHours) + 'h : ' + pad2(remainingMinutes) + 'm : ' + pad2(remainingSeconds) + 's';
+  }
+  function tickCountdown(){
+    var remaining = msUntilNextMidnight();
+    spinCountdownTime.textContent = formatCountdown(remaining);
+    var elapsedRatio = Math.min(1, Math.max(0, (DAY_MS - remaining) / DAY_MS));
+    spinCountdownFill.style.width = (elapsedRatio * 100).toFixed(2) + '%';
+    if (remaining <= 0) stopCountdown();
+  }
+  function startCountdown(){
+    stopCountdown();
+    tickCountdown();
+    spinCountdownInterval = setInterval(tickCountdown, 1000);
+  }
+  function stopCountdown(){
+    if (spinCountdownInterval){ clearInterval(spinCountdownInterval); spinCountdownInterval = null; }
+  }
+
+  // Switches the modal into its fully "claimed" look: hides the reel +
+  // hint copy, shows the "NN% Active" badge with a live countdown to the
+  // next local-midnight reset, and sets the button to close-and-shop.
+  function showClaimedState(pct, buttonLabel){
+    stopCountdown();
+    if (spinReelWrap) spinReelWrap.style.display = 'none';
+    spinModalResult.style.display = 'none';
+    spinClaimedBadge.textContent = pad2(pct) + '% Active';
+    spinClaimedPanel.style.display = 'block';
+    startCountdown();
+    setSpinBtnClaimed(buttonLabel);
+  }
+  // Reverses showClaimedState() — back to the reel + hint-text layout used
+  // by the "ready" and "spinning" states.
+  function hideClaimedState(){
+    stopCountdown();
+    spinClaimedPanel.style.display = 'none';
+    if (spinReelWrap) spinReelWrap.style.display = '';
+    spinModalResult.style.display = '';
   }
 
   var spinWonThisSession = false;
@@ -2392,6 +2544,7 @@
     spinOverlay.classList.remove('open');
     clearTimeout(spinRollTimer);
     spinRAFCancel();
+    stopCountdown();
     // Post-spin feedback: only for a genuine new win. Runs as the modal
     // closes, which is the first moment the header/cart is actually
     // visible — the modal overlay covers them while it is open.
@@ -2400,33 +2553,63 @@
       showCartPerkFeedback(spinWonPct);
     }
   }
+  // Used by the claimed-state button: close, then smoothly scroll the
+  // shopper into the product grid so the applied discount is right there.
+  function closeAndScrollToProducts(){
+    closeSpinModal();
+    var target = document.getElementById('products');
+    if (target){
+      // Give the modal's own fade-out a beat before scrolling, so the two
+      // motions don't fight each other.
+      setTimeout(function(){
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+  }
   if (spinModalClose) spinModalClose.addEventListener('click', closeSpinModal);
   if (spinOverlay) spinOverlay.addEventListener('click', function(e){
     if (e.target === spinOverlay) closeSpinModal();
   });
   if (spinModalBtn) spinModalBtn.addEventListener('click', function(){
     if (spinModalBtn.disabled) return;
-    if (spinModalBtn.dataset.state === 'claimed'){
-      // Result already landed (win, already-claimed, or error) — this tap
-      // just dismisses the modal. closeSpinModal() fires the cart pulse
-      // itself, but only for a genuine new win.
+    var state = spinModalBtn.dataset.state;
+    if (state === 'claimed'){
+      // A discount is active — close and take them straight to the products.
+      closeAndScrollToProducts();
+      return;
+    }
+    if (state === 'dismiss'){
+      // Error path — nothing was claimed, so just close.
       closeSpinModal();
       return;
     }
-    // data-state === 'ready' — covers both the very first tap and the
-    // "Spin Again" retry after a 0% roll.
+    // 'ready' — covers both the very first tap and the "Spin Again" retry
+    // after a 0% roll.
     runSpin();
   });
 
-  // Opens the modal in its pre-spin "READY" state: static "00%" placeholder,
-  // hint copy, enabled black pill button with the gift icon. Nothing spins
-  // and nothing is claimed until the visitor taps the button themselves.
-  // Called from the 10s auto-timer and from the homepage banner/mascot.
+  // Opens the modal. If today's perk is already claimed on this device, it
+  // jumps straight to the claimed badge + countdown — no need to spin
+  // again. Otherwise it opens in the pre-spin "READY" state: static "00%"
+  // placeholder, hint copy, enabled black pill button with the gift icon.
+  // Nothing spins and nothing is claimed until the visitor taps the button
+  // themselves. Called from the 10s auto-timer and from the homepage
+  // banner/mascot.
   function openPerkModal(){
     clearTimeout(spinRollTimer);
     spinRAFCancel();
     spinWonThisSession = false;
 
+    var existingPct = (typeof window.getBonusDiscount === 'function') ? window.getBonusDiscount() : 0;
+    if (existingPct > 0){
+      spinModalSub.textContent = 'Your perk is active for this session.';
+      showClaimedState(existingPct, claimedButtonLabel(existingPct));
+      if (typeof syncAnnounceBar === 'function') syncAnnounceBar();
+      spinOverlay.classList.add('open');
+      return;
+    }
+
+    hideClaimedState();
     reelShowStatic('00');
     spinReelPercent.style.visibility = 'visible';
     spinModalSub.textContent = 'Exclusive privilege for today\u2019s session.';
@@ -2487,19 +2670,17 @@
       spawnParticles();
 
       if (result.status === 'win'){
-        spinModalResult.textContent = pad2(finalPct) + '% Privilege Discount applied to your bag.';
-        spinModalResult.classList.add('win');
         spinWonThisSession = true;
         spinWonPct = finalPct;
         spinModalSub.textContent = 'Your perk is active for this session.';
-        setSpinBtnClaimed('Claim Perk');
+        showClaimedState(finalPct, claimedButtonLabel(finalPct));
+        if (typeof syncAnnounceBar === 'function') syncAnnounceBar();
         window.renderCartDrawer && window.renderCartDrawer();
         window.renderCheckoutSummary && window.renderCheckoutSummary();
       } else if (result.status === 'already'){
-        spinModalResult.textContent = "Today's perk is already active on your account.";
-        spinModalResult.classList.add('win');
-        spinModalSub.textContent = 'Your discount is applied.';
-        setSpinBtnClaimed('Got it');
+        spinModalSub.textContent = 'Your perk is active for this session.';
+        showClaimedState(finalPct, claimedButtonLabel(finalPct));
+        if (typeof syncAnnounceBar === 'function') syncAnnounceBar();
       } else if (result.status === 'tryagain'){
         spinModalResult.textContent = pick(tryAgainMsgs);
         spinModalResult.classList.add('lose');
@@ -2509,7 +2690,7 @@
         spinModalResult.textContent = 'Something went wrong. Please try again shortly.';
         spinModalResult.classList.add('lose');
         spinModalSub.textContent = '';
-        setSpinBtnClaimed('Close');
+        setSpinBtnDismiss('Close');
       }
     }
   }
@@ -2551,7 +2732,7 @@
 })();
 </script>
 
-<div class="announce-bar">Islandwide Delivery &nbsp;|&nbsp; Cash on Delivery Available</div>
+<div class="announce-bar" id="announceBar">Islandwide Delivery &nbsp;|&nbsp; Cash on Delivery Available</div>
 
 <div class="search-overlay" id="searchOverlay">
   <div class="search-overlay-backdrop" onclick="closeSearchOverlay()"></div>
@@ -2607,16 +2788,12 @@
       <button class="icon-btn search-toggle" onclick="toggleMobileSearch()" aria-label="Search">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
-      <button class="icon-btn account-toggle" onclick="openAdminLogin()" aria-label="Account">
+      <button class="icon-btn account-toggle" onclick="openCustomerPortal()" aria-label="Account">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.75 20.2A9.25 9.25 0 0 1 12 13.6a9.25 9.25 0 0 1 9.25 6.6c0 .58-.42 1.05-.94 1.05H3.69c-.52 0-.94-.47-.94-1.05Z"/><circle cx="12" cy="6.22" r="3.47"/></svg>
       </button>
       <button class="icon-btn" id="cartIconBtn" aria-label="Cart" onclick="openCartDrawer()">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         <span class="cart-badge" id="cartcount">0</span>
-      </button>
-      <button class="admin-btn" onclick="openAdminLogin()">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>
-        <span class="admin-label">Admin</span>
       </button>
       <button class="burger" onclick="toggleMobileMenu(true)" aria-label="Menu">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -2640,10 +2817,6 @@
       <a href="#categories" onclick="toggleMobileMenu(false)">Categories</a>
       <a href="#" onclick="toggleMobileMenu(false)">About</a>
     </nav>
-    <button class="admin-btn" onclick="toggleMobileMenu(false); openAdminLogin();">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>
-      <span class="admin-label">Admin</span>
-    </button>
   </div>
 </div>
 
@@ -2657,11 +2830,13 @@
     var checkoutPage = document.getElementById("checkoutPageView");
     var cartPage = document.getElementById("cartPageView");
     var successPage = document.getElementById("successPageView");
+    var accountPage = document.getElementById("accountPageView");
     var onPdp = pdp && pdp.style.display === "block";
     var onCheckout = checkoutPage && checkoutPage.style.display === "block";
     var onCartPage = cartPage && cartPage.style.display === "block";
     var onSuccess = successPage && successPage.style.display === "block";
-    if(onPdp || onCheckout || onCartPage || onSuccess || window.scrollY > 40){ hdr.classList.add("scrolled"); }
+    var onAccount = accountPage && accountPage.style.display === "block";
+    if(onPdp || onCheckout || onCartPage || onSuccess || onAccount || window.scrollY > 40){ hdr.classList.add("scrolled"); }
     else { hdr.classList.remove("scrolled"); }
   };
   window.addEventListener("scroll", window.updateHeaderSolidState, { passive:true });
@@ -3313,7 +3488,7 @@
         </div>
         <hr>
         <div class="totals-row"><span>Subtotal</span><strong id="cartPageSubtotal">Rs. 0</strong></div>
-        <div class="totals-row" id="cartPageBonusRow" style="display:none;"><span>🎁 Bonus Discount</span><strong id="cartPageBonusAmt">-Rs. 0</strong></div>
+        <div class="totals-row" id="cartPageBonusRow" style="display:none;"><span id="cartPageBonusLabel">🎁 Bonus Discount</span><strong id="cartPageBonusAmt">-Rs. 0</strong></div>
         <div class="totals-row"><span>Delivery</span><strong id="cartPageDelivery">Free Delivery</strong></div>
         <hr>
         <div class="totals-row grand-total"><span>Total</span><span id="cartPageTotal">Rs. 0</span></div>
@@ -3400,7 +3575,7 @@
 
         <div class="order-summary" id="checkoutSummary"></div>
         <div class="cart-sum-row"><span>Subtotal</span><span id="checkoutSubtotal">Rs. 0</span></div>
-        <div class="cart-sum-row" id="checkoutBonusRow" style="display:none;"><span>🎁 Bonus Discount</span><span id="checkoutBonusAmt">-Rs. 0</span></div>
+        <div class="cart-sum-row" id="checkoutBonusRow" style="display:none;"><span id="checkoutBonusLabel">🎁 Bonus Discount</span><span id="checkoutBonusAmt">-Rs. 0</span></div>
         <div class="cart-sum-row"><span>Delivery</span><span id="checkoutDelivery">Free Delivery</span></div>
         <div class="order-total-row"><span>Total</span><span id="checkoutTotal">Rs. 0</span></div>
 
@@ -3565,6 +3740,105 @@
   </div>
 </div>
 
+<div class="account-page" id="accountPageView" style="display:none;">
+  <div class="wrap" style="max-width: 680px; margin: 0 auto; padding: 120px 20px 80px;">
+    <!-- Back button -->
+    <button class="pdp-back" onclick="closeCustomerPortal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to store
+    </button>
+
+    <!-- Centered Card Container -->
+    <div class="account-card-wrap">
+      <!-- Guest View (Sign In / Register) -->
+      <div id="cpGuestView">
+        <h2 style="font-size: 24px; font-weight: 700; color: #111111; margin-bottom: 8px; text-align: center;">Customer Account</h2>
+        <p style="font-size: 14px; color: #8E8E93; margin-bottom: 24px; text-align: center;">Sign in or create an account to view your orders.</p>
+
+        <!-- Tab Selector -->
+        <div class="tab-row" style="justify-content: center; margin-bottom: 24px;">
+          <button type="button" class="tab-pill active" id="cpTabSignIn" onclick="cpToggleTab('signin')">Sign In</button>
+          <button type="button" class="tab-pill" id="cpTabRegister" onclick="cpToggleTab('register')">Create Account</button>
+        </div>
+
+        <div class="checkout-error" id="cpAuthError" style="display:none; margin-bottom: 16px;"></div>
+
+        <!-- Sign In Form -->
+        <form id="cpSignInForm" onsubmit="return false;">
+          <div class="form-group">
+            <label for="cpSignInEmail">Email Address</label>
+            <input type="email" id="cpSignInEmail" placeholder="name@example.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="cpSignInPassword">Password</label>
+            <input type="password" id="cpSignInPassword" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <div style="text-align: right; margin-bottom: 16px;">
+            <button type="button" onclick="cpForgotPassword()" style="background:none; border:none; color:#8E8E93; font-size:13px; cursor:pointer;">Forgot password?</button>
+          </div>
+          <button type="button" class="place-order-btn" onclick="cpSignIn()">Sign In</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="cpRegisterForm" onsubmit="return false;" style="display:none;">
+          <div class="form-group">
+            <label for="cpRegisterName">Full Name</label>
+            <input type="text" id="cpRegisterName" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="cpRegisterEmail">Email Address</label>
+            <input type="email" id="cpRegisterEmail" placeholder="name@example.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="cpRegisterPassword">Password</label>
+            <input type="password" id="cpRegisterPassword" placeholder="Minimum 6 characters">
+          </div>
+          <button type="button" class="place-order-btn" onclick="cpRegister()">Create Account</button>
+        </form>
+      </div>
+
+      <!-- Logged-in Customer Dashboard View -->
+      <div id="cpAccountView" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #E5E5EA;">
+          <div>
+            <h2 id="cpCustomerName" style="font-size: 20px; font-weight: 700; color: #111111; margin: 0 0 4px;">Welcome</h2>
+            <span id="cpCustomerEmail" style="font-size: 13px; color: #8E8E93;"></span>
+          </div>
+<button type="button" onclick="cpLogout()" class="btn-ghost" style="padding: 8px 16px; min-height: 36px; font-size: 13px;">Log Out</button>
+        </div>
+
+        <h3 style="font-size: 18px; font-weight: 700; color: #111111; margin-bottom: 16px;">My Orders</h3>
+        <div id="cpOrdersList" style="display:flex; flex-direction:column; gap:12px;"></div>
+        <div id="cpOrdersEmpty" style="display:none; text-align:center; padding: 40px 10px; color: #8E8E93;">
+          <p style="margin-bottom: 16px; font-size: 14px;">No orders placed yet.</p>
+          <button type="button" class="btn-primary" onclick="closeCustomerPortal()">Start Shopping</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openCustomerPortal() {
+    document.getElementById('accountPageView').style.display = 'block';
+    document.getElementById('homeSections').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+  }
+  function closeCustomerPortal() {
+    document.getElementById('accountPageView').style.display = 'none';
+    document.getElementById('homeSections').style.display = '';
+    if (window.updateHeaderSolidState) window.updateHeaderSolidState();
+  }
+  function cpToggleTab(mode) {
+    const isSignIn = mode === 'signin';
+    document.getElementById('cpSignInForm').style.display = isSignIn ? 'block' : 'none';
+    document.getElementById('cpRegisterForm').style.display = isSignIn ? 'none' : 'block';
+    document.getElementById('cpTabSignIn').classList.toggle('active', isSignIn);
+    document.getElementById('cpTabRegister').classList.toggle('active', !isSignIn);
+  }
+</script>
+
 <footer>
   <div id="footerLightLines" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 1080" preserveAspectRatio="none">
@@ -3672,7 +3946,7 @@
     <div class="cart-drawer-items" id="cartItems"></div>
     <div class="cart-drawer-foot" id="cartFoot">
       <div class="cart-sum-row"><span>Subtotal</span><span id="cartSubtotal">Rs. 0</span></div>
-      <div class="cart-sum-row" id="cartBonusRow" style="display:none;"><span>🎁 Bonus Discount</span><span id="cartBonusAmt">-Rs. 0</span></div>
+      <div class="cart-sum-row" id="cartBonusRow" style="display:none;"><span id="cartBonusLabel">🎁 Bonus Discount</span><span id="cartBonusAmt">-Rs. 0</span></div>
       <div class="cart-sum-row"><span>Delivery</span><span id="cartDelivery">Free Delivery</span></div>
       <div class="cart-sum-row total"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
       <div class="cart-foot-actions">
@@ -6572,11 +6846,13 @@ function showToast(message){
     const subtotalEl = document.getElementById('cartSubtotal');
     const deliveryEl = document.getElementById('cartDelivery');
     const bonusRowEl = document.getElementById('cartBonusRow');
+    const bonusLabelEl = document.getElementById('cartBonusLabel');
     const bonusAmtEl = document.getElementById('cartBonusAmt');
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : 'Free Delivery';
     if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? 'flex' : 'none';
-    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt) + ` (${String(bonusPct).padStart(2,'0')}%)`;
+    if (bonusLabelEl && bonusAmt > 0) bonusLabelEl.textContent = `🎁 ${String(bonusPct).padStart(2,'0')}% Daily Privilege Applied`;
+    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt);
     if (totalEl) totalEl.textContent = formatPriceLKR(subtotal - bonusAmt + deliveryCharge);
   }
 
@@ -6640,11 +6916,13 @@ function showToast(message){
     const subtotalEl = document.getElementById('cartPageSubtotal');
     const deliveryEl = document.getElementById('cartPageDelivery');
     const bonusRowEl = document.getElementById('cartPageBonusRow');
+    const bonusLabelEl = document.getElementById('cartPageBonusLabel');
     const bonusAmtEl = document.getElementById('cartPageBonusAmt');
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : 'Free Delivery';
     if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? 'flex' : 'none';
-    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt) + ` (${String(bonusPct).padStart(2,'0')}%)`;
+    if (bonusLabelEl && bonusAmt > 0) bonusLabelEl.textContent = `🎁 ${String(bonusPct).padStart(2,'0')}% Daily Privilege Applied`;
+    if (bonusAmtEl) bonusAmtEl.textContent = '-' + formatPriceLKR(bonusAmt);
     if (totalEl) totalEl.textContent = formatPriceLKR(subtotal - bonusAmt + deliveryCharge);
   }
   window.renderCartPage = renderCartPage;
@@ -6780,6 +7058,7 @@ function showToast(message){
     updateCartBadge();
     renderCartDrawer();
     syncAddButtons();
+    if (typeof window.syncAnnounceBar === 'function') window.syncAnnounceBar();
   });
 </script>
 <!-- ============ END SHOPPING CART ============ -->
@@ -6998,9 +7277,11 @@ function showToast(message){
     const total = subtotal - bonusAmt + deliveryCharge;
 
     const bonusRowEl = document.getElementById("checkoutBonusRow");
+    const bonusLabelEl = document.getElementById("checkoutBonusLabel");
     const bonusAmtEl = document.getElementById("checkoutBonusAmt");
     if (bonusRowEl) bonusRowEl.style.display = bonusAmt > 0 ? "flex" : "none";
-    if (bonusAmtEl) bonusAmtEl.textContent = "-" + formatPriceLKR(bonusAmt) + ` (${String(bonusPct).padStart(2,'0')}%)`;
+    if (bonusLabelEl && bonusAmt > 0) bonusLabelEl.textContent = `🎁 ${String(bonusPct).padStart(2,'0')}% Daily Privilege Applied`;
+    if (bonusAmtEl) bonusAmtEl.textContent = "-" + formatPriceLKR(bonusAmt);
 
     if (subtotalEl) subtotalEl.textContent = formatPriceLKR(subtotal);
     if (deliveryEl) deliveryEl.textContent = deliveryCharge > 0 ? formatPriceLKR(deliveryCharge) : "Free Delivery";
@@ -7175,6 +7456,16 @@ function showToast(message){
       if (formData.streetAddress !== undefined) orderPayload.streetAddress = formData.streetAddress;
       if (formData.city !== undefined) orderPayload.city = formData.city;
       if (formData.email) orderPayload.email = formData.email;
+
+      // ---- Link the order to the signed-in customer account, if any ----
+      // A logged-in customer's account email is the source of truth for
+      // matching this order back to them in "My Orders" — it overrides
+      // whatever was typed into the checkout email field.
+      const currentUser = window.firebaseAuth && window.firebaseAuth.currentUser;
+      if (currentUser){
+        orderPayload.customerUid = currentUser.uid;
+        if (currentUser.email) orderPayload.email = currentUser.email;
+      }
 
       const orderRef = await addDoc(collection(db, "orders"), orderPayload);
 
@@ -7553,6 +7844,87 @@ Please confirm my order.`
 <!-- Firebase Email/Password auth restricted to a single authorized UID.
      Dashboard shows read-only stats/products/orders overview.
      No product create/edit/delete or order status editing here yet. -->
+
+<!-- Route isolation + the pure-DOM parts of the login screen. Deliberately
+     a classic (non-module) script, not folded into the Firebase module
+     below: a `type="module"` script defers until the document has fully
+     parsed and aborts entirely if any of its imports fail (slow CDN,
+     offline, ad-blocker) — /admin route detection and hiding the storefront
+     must not depend on that. Everything that actually needs Firebase
+     (adminLogin, adminLogout, the dashboard, the auth-state listener)
+     stays in the module immediately below, untouched. -->
+<script>
+  // ---- Admin screen open/close (pure DOM, no Firebase) ----
+  window.openAdminLogin = function(){
+    document.getElementById("adminLoginScreen").classList.add("open");
+    document.body.style.overflow = "hidden";
+  };
+  window.closeAdminLogin = function(){
+    // "← Back to store": if we're isolated on /admin or #admin, a real
+    // navigation to "/" is the correct exit (it also naturally restores
+    // every storefront element without having to reverse the hide-storefront
+    // step by hand). Anywhere else, just close the modal in place.
+    if (isAdminRoute()){
+      window.location.href = "/";
+      return;
+    }
+    document.getElementById("adminLoginScreen").classList.remove("open");
+    document.body.style.overflow = "";
+    window.hideAdminLoginError();
+  };
+  window.hideAdminLoginError = function(){
+    var el = document.getElementById("adminLoginError");
+    if (!el) return;
+    el.textContent = "";
+    el.classList.remove("show");
+  };
+
+  // ---- /admin and #admin routing ----
+  // Isolates the whole admin system behind a dedicated URL: the storefront
+  // never links to it (Step 1 removes every in-page trigger except the
+  // account icon, which Step 2 will repoint at the customer portal), and
+  // this is the only code path that can now open it.
+  var STOREFRONT_CHROME_SELECTORS = ["#homeSections", "#siteHeader", "footer", "#announceBar"];
+
+  function isAdminRoute(){
+    var path = window.location.pathname.toLowerCase();
+    var hash = window.location.hash.toLowerCase();
+    return path === "/admin" || hash === "#admin";
+  }
+
+  function setStorefrontChromeVisible(visible){
+    STOREFRONT_CHROME_SELECTORS.forEach(function(sel){
+      var el = document.querySelector(sel);
+      if (el) el.style.display = visible ? "" : "none";
+    });
+  }
+
+  function checkAdminRoute(){
+    if (isAdminRoute()){
+      setStorefrontChromeVisible(false);
+      // If the visitor is already signed in as the authorized admin, the
+      // Firebase module's onAuthStateChanged listener (once it loads) will
+      // swap this login screen for the dashboard on its own — no need to
+      // duplicate that authentication check here.
+      window.openAdminLogin();
+    } else {
+      // Returning to "/" (e.g. browser back/forward) — restore the
+      // storefront and make sure no admin screen is left open over it.
+      setStorefrontChromeVisible(true);
+      var loginEl = document.getElementById("adminLoginScreen");
+      var dashEl = document.getElementById("adminDashboardScreen");
+      if (loginEl) loginEl.classList.remove("open");
+      if (dashEl) dashEl.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+  }
+  window.checkAdminRoute = checkAdminRoute;
+
+  document.addEventListener("DOMContentLoaded", checkAdminRoute);
+  window.addEventListener("popstate", checkAdminRoute);
+  window.addEventListener("hashchange", checkAdminRoute);
+</script>
+
 <script type="module">
   import {
     signInWithEmailAndPassword,
@@ -7637,17 +8009,6 @@ Please confirm my order.`
     }[c]));
   }
 
-  // ---- Admin screen open/close ----
-  window.openAdminLogin = function(){
-    document.getElementById("adminLoginScreen").classList.add("open");
-    document.body.style.overflow = "hidden";
-  };
-  window.closeAdminLogin = function(){
-    document.getElementById("adminLoginScreen").classList.remove("open");
-    document.body.style.overflow = "";
-    hideAdminLoginError();
-  };
-
   function showAdminDashboard(){
     document.getElementById("adminLoginScreen").classList.remove("open");
     document.getElementById("adminDashboardScreen").classList.add("open");
@@ -7663,12 +8024,6 @@ Please confirm my order.`
     el.textContent = message;
     el.classList.add("show");
   }
-  function hideAdminLoginError(){
-    const el = document.getElementById("adminLoginError");
-    el.textContent = "";
-    el.classList.remove("show");
-  }
-
   function setAdminLoginLoading(isLoading){
     const btn = document.getElementById("adminLoginBtn");
     const label = document.getElementById("adminLoginBtnLabel");
@@ -7718,6 +8073,9 @@ Please confirm my order.`
     }
     hideAdminDashboard();
     document.getElementById("adminLoginForm").reset();
+    // Always leave the isolated /admin URL behind on logout, so a refresh
+    // doesn't immediately re-trigger the login screen over a blank page.
+    window.location.href = "/";
   };
 
   // ---- React to auth state changes ----
@@ -9595,6 +9953,332 @@ Please confirm my order.`
     setTimeout(maybeAutoShowDailyPerk, AUTO_DELAY_MS);
   }
 })();
+</script>
+
+
+
+<script type="module">
+  import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    sendPasswordResetEmail,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import {
+    collection,
+    query,
+    where,
+    orderBy,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  function waitForFirebase(){
+    return new Promise((resolve) => {
+      if (window.firebaseAuth && window.firebaseDb) return resolve();
+      const iv = setInterval(() => {
+        if (window.firebaseAuth && window.firebaseDb) { clearInterval(iv); resolve(); }
+      }, 30);
+    });
+  }
+
+  // ---- Error / success banner (#cpAuthError) ----
+  function cpShowError(message){
+    const el = document.getElementById("cpAuthError");
+    if (!el) return;
+    el.textContent = message;
+    el.classList.remove("cp-success");
+    el.classList.add("show");
+  }
+  function cpShowSuccess(message){
+    const el = document.getElementById("cpAuthError");
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add("cp-success");
+    el.classList.add("show");
+  }
+  function cpHideError(){
+    const el = document.getElementById("cpAuthError");
+    if (!el) return;
+    el.textContent = "";
+    el.classList.remove("show", "cp-success");
+  }
+
+  function cpSetFormLoading(formId, isLoading, idleLabel, loadingLabel){
+    const form = document.getElementById(formId);
+    const btn = form && form.querySelector('button[type="submit"]');
+    if (!btn) return;
+    btn.disabled = isLoading;
+    btn.textContent = isLoading ? loadingLabel : idleLabel;
+  }
+
+  function cpFriendlyAuthError(err){
+    switch (err && err.code){
+      case "auth/invalid-email": return "Please enter a valid email address.";
+      case "auth/user-not-found":
+      case "auth/wrong-password":
+      case "auth/invalid-credential": return "Incorrect email or password.";
+      case "auth/email-already-in-use": return "An account with this email already exists.";
+      case "auth/weak-password": return "Password should be at least 6 characters.";
+      case "auth/missing-password": return "Please enter a password.";
+      case "auth/too-many-requests": return "Too many attempts. Please try again in a moment.";
+      case "auth/network-request-failed": return "Network error. Please check your connection.";
+      default: return "Something went wrong. Please try again.";
+    }
+  }
+
+  // ============ 1. Customer authentication ============
+
+  // ---- Switch between Sign In / Create Account ----
+  window.cpToggleTab = function(mode){
+    const isSignIn = mode === "signin";
+    document.getElementById("cpTabSignIn").classList.toggle("active", isSignIn);
+    document.getElementById("cpTabRegister").classList.toggle("active", !isSignIn);
+    document.getElementById("cpSignInForm").classList.toggle("active", isSignIn);
+    document.getElementById("cpRegisterForm").classList.toggle("active", !isSignIn);
+    cpHideError();
+  };
+
+  // ---- Sign in with email/password ----
+  window.cpSignIn = async function(){
+    cpHideError();
+    const email = (document.getElementById("cpSignInEmail").value || "").trim();
+    const password = document.getElementById("cpSignInPassword").value || "";
+
+    if (!email || !password){
+      cpShowError("Please enter both email and password.");
+      return;
+    }
+
+    cpSetFormLoading("cpSignInForm", true, "Sign In", "Signing In…");
+    try {
+      await waitForFirebase();
+      await signInWithEmailAndPassword(window.firebaseAuth, email, password);
+      // onAuthStateChanged (below) swaps in #cpAccountView on success.
+    } catch (err) {
+      console.error("Customer sign-in failed:", err);
+      cpShowError(cpFriendlyAuthError(err));
+    } finally {
+      cpSetFormLoading("cpSignInForm", false, "Sign In", "Signing In…");
+    }
+  };
+
+  // ---- Create a new customer account ----
+  window.cpRegister = async function(){
+    cpHideError();
+    const name = (document.getElementById("cpRegisterName").value || "").trim();
+    const email = (document.getElementById("cpRegisterEmail").value || "").trim();
+    const password = document.getElementById("cpRegisterPassword").value || "";
+
+    if (!name || !email || !password){
+      cpShowError("Please fill in your name, email, and password.");
+      return;
+    }
+    if (password.length < 6){
+      cpShowError("Password should be at least 6 characters.");
+      return;
+    }
+
+    cpSetFormLoading("cpRegisterForm", true, "Create Account", "Creating Account…");
+    try {
+      await waitForFirebase();
+      const cred = await createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+      await updateProfile(cred.user, { displayName: name });
+      // onAuthStateChanged (below) swaps in #cpAccountView on success.
+    } catch (err) {
+      console.error("Customer registration failed:", err);
+      cpShowError(cpFriendlyAuthError(err));
+    } finally {
+      cpSetFormLoading("cpRegisterForm", false, "Create Account", "Creating Account…");
+    }
+  };
+
+  // ---- Send a password reset email ----
+  window.cpForgotPassword = async function(){
+    cpHideError();
+    const email = (document.getElementById("cpSignInEmail").value || "").trim();
+    if (!email){
+      cpShowError('Enter your email above, then tap "Forgot password?" again.');
+      return;
+    }
+
+    try {
+      await waitForFirebase();
+      await sendPasswordResetEmail(window.firebaseAuth, email);
+      cpShowSuccess("Password reset email sent — please check your inbox.");
+    } catch (err) {
+      console.error("Password reset failed:", err);
+      cpShowError(cpFriendlyAuthError(err));
+    }
+  };
+
+  // ---- Sign out ----
+  window.cpLogout = async function(){
+    try {
+      await waitForFirebase();
+      await signOut(window.firebaseAuth);
+      // onAuthStateChanged (below) swaps back to #cpGuestView.
+    } catch (err) {
+      console.error("Customer logout failed:", err);
+    }
+  };
+
+  // ============ 2. Auth state listener & UI switcher ============
+
+  function cpResetGuestForms(){
+    const signInForm = document.getElementById("cpSignInForm");
+    const registerForm = document.getElementById("cpRegisterForm");
+    if (signInForm) signInForm.reset();
+    if (registerForm) registerForm.reset();
+    cpHideError();
+    window.cpToggleTab("signin");
+  }
+
+  function cpRenderAccountHeader(user){
+    const nameEl = document.getElementById("cpCustomerName");
+    const emailEl = document.getElementById("cpCustomerEmail");
+    if (nameEl) nameEl.textContent = user.displayName ? ("Welcome, " + user.displayName) : "Welcome back";
+    if (emailEl) emailEl.textContent = user.email || "";
+  }
+
+  waitForFirebase().then(() => {
+    onAuthStateChanged(window.firebaseAuth, (user) => {
+      const guestView = document.getElementById("cpGuestView");
+      const accountView = document.getElementById("cpAccountView");
+      if (!guestView || !accountView) return;
+
+      // The admin panel shares the same firebaseAuth instance — the customer
+      // account view should never take over while an admin session is on
+      // the isolated /admin (or #admin) route.
+      const onAdminRoute = typeof window.isAdminRoute === "function" && window.isAdminRoute();
+
+      if (user && !onAdminRoute){
+        guestView.style.display = "none";
+        accountView.style.display = "block";
+        cpRenderAccountHeader(user);
+        window.cpLoadCustomerOrders(user.email);
+      } else {
+        accountView.style.display = "none";
+        guestView.style.display = "";
+        cpResetGuestForms();
+      }
+    });
+  });
+
+  // ============ 3. Fetch & render customer orders ============
+
+  const CP_STATUS_STYLES = {
+    pending:   { label: "Pending",   bg: "#FFF3D6", color: "#9A6B00" },
+    confirmed: { label: "Confirmed", bg: "#E3EEFF", color: "#2255C4" },
+    delivered: { label: "Delivered", bg: "#E4F5EC", color: "#1F8A43" },
+    cancelled: { label: "Cancelled", bg: "#FDECEC", color: "#B3261E" }
+  };
+
+  function cpFormatDate(value){
+    let d = null;
+    if (value && typeof value.toDate === "function") d = value.toDate();
+    else if (value) d = new Date(value);
+    if (!d || isNaN(d.getTime())) return "";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  function cpFormatPrice(amount){
+    return window.formatStorePrice
+      ? window.formatStorePrice(amount)
+      : ("Rs. " + (Number(amount) || 0).toLocaleString("en-US"));
+  }
+
+  function cpEscapeHtml(str){
+    return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function cpRenderOrderCard(order){
+    const status = String(order.status || "pending").toLowerCase();
+    const statusStyle = CP_STATUS_STYLES[status] || CP_STATUS_STYLES.pending;
+    const items = Array.isArray(order.items) ? order.items : [];
+
+    const itemsHtml = items.map((i) =>
+      `<div class="cp-order-item"><span>${cpEscapeHtml(i.name)} &times; ${Number(i.qty) || 0}</span><span>${cpFormatPrice((Number(i.price) || 0) * (Number(i.qty) || 0))}</span></div>`
+    ).join("");
+
+    return `
+      <div class="cp-order-card">
+        <div class="cp-order-card-head">
+          <span class="cp-order-id">#${cpEscapeHtml(order.id)}</span>
+          <span class="cp-order-date">${cpFormatDate(order.createdAt)}</span>
+        </div>
+        <div class="cp-order-items">${itemsHtml}</div>
+        <div class="cp-order-card-foot">
+          <span class="cp-order-total">${cpFormatPrice(order.totalAmount)}</span>
+          <span class="cp-status-pill" style="background:${statusStyle.bg};color:${statusStyle.color};">${statusStyle.label}</span>
+        </div>
+      </div>`;
+  }
+
+  function cpSortOrdersDesc(orders){
+    return orders.slice().sort((a, b) => {
+      const at = a.createdAt && typeof a.createdAt.toDate === "function" ? a.createdAt.toDate().getTime() : 0;
+      const bt = b.createdAt && typeof b.createdAt.toDate === "function" ? b.createdAt.toDate().getTime() : 0;
+      return bt - at;
+    });
+  }
+
+  window.cpLoadCustomerOrders = async function(customerEmail){
+    const listEl = document.getElementById("cpOrdersList");
+    const emptyEl = document.getElementById("cpOrdersEmpty");
+    if (!listEl || !emptyEl || !customerEmail) return;
+
+    // ---- Loading state ----
+    listEl.style.display = "flex";
+    emptyEl.style.display = "none";
+    listEl.innerHTML = '<div class="cp-orders-loading">Loading your orders…</div>';
+
+    try {
+      await waitForFirebase();
+      const db = window.firebaseDb;
+      const ordersRef = collection(db, "orders");
+      let orders = [];
+
+      try {
+        // Preferred shape: orders keyed by 'email', newest first.
+        // (where + orderBy on different fields needs a composite index —
+        // fall back to an unsorted query below if it isn't there yet.)
+        const q1 = query(ordersRef, where("email", "==", customerEmail), orderBy("createdAt", "desc"));
+        const snap1 = await getDocs(q1);
+        orders = snap1.docs.map((d) => ({ id: d.id, ...d.data() }));
+      } catch (indexErr) {
+        console.warn("Sorted orders query failed, falling back to unsorted:", indexErr);
+        const q2 = query(ordersRef, where("email", "==", customerEmail));
+        const snap2 = await getDocs(q2);
+        orders = cpSortOrdersDesc(snap2.docs.map((d) => ({ id: d.id, ...d.data() })));
+      }
+
+      // Legacy fallback: some older orders may have been saved under a
+      // 'customerEmail' field instead of 'email'.
+      if (!orders.length){
+        const q3 = query(ordersRef, where("customerEmail", "==", customerEmail));
+        const snap3 = await getDocs(q3);
+        orders = cpSortOrdersDesc(snap3.docs.map((d) => ({ id: d.id, ...d.data() })));
+      }
+
+      if (!orders.length){
+        listEl.innerHTML = "";
+        listEl.style.display = "none";
+        emptyEl.style.display = "flex";
+        return;
+      }
+
+      listEl.style.display = "flex";
+      emptyEl.style.display = "none";
+      listEl.innerHTML = orders.map(cpRenderOrderCard).join("");
+    } catch (err) {
+      console.error("Failed to load customer orders:", err);
+      listEl.innerHTML = '<div class="cp-orders-loading">Unable to load your orders right now.</div>';
+    }
+  };
 </script>
 </body>
 </html>
