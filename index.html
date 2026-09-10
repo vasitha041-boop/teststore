@@ -10035,8 +10035,8 @@ Please confirm my order.`
     const isSignIn = mode === "signin";
     document.getElementById("cpTabSignIn").classList.toggle("active", isSignIn);
     document.getElementById("cpTabRegister").classList.toggle("active", !isSignIn);
-    document.getElementById("cpSignInForm").classList.toggle("active", isSignIn);
-    document.getElementById("cpRegisterForm").classList.toggle("active", !isSignIn);
+    document.getElementById("cpSignInForm").style.display = isSignIn ? "block" : "none";
+    document.getElementById("cpRegisterForm").style.display = isSignIn ? "none" : "block";
     cpHideError();
   };
 
