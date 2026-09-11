@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4302,19 +4301,19 @@
       </button>
     </div>
     <div class="acc-drawer-menu">
-      <a href="#account" class="acc-menu-link" onclick="closeAccountDrawer(); openCustomerPortal(); setTimeout(() => cpToggleTab('signin'), 0);">
+      <a href="javascript:void(0)" class="acc-menu-link" onclick="closeAccountDrawer(); openCustomerPortal(); setTimeout(() => cpToggleTab('signin'), 0);">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Sign In</span>
       </a>
-      <a href="#account" class="acc-menu-link" onclick="closeAccountDrawer(); openCustomerPortal(); setTimeout(() => cpToggleTab('register'), 0);">
+      <a href="javascript:void(0)" class="acc-menu-link" onclick="closeAccountDrawer(); openCustomerPortal(); setTimeout(() => cpToggleTab('register'), 0);">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
         <span>Create Account</span>
       </a>
-      <a href="#wishlist" class="acc-menu-link" onclick="closeAccountDrawer()">
+      <a href="javascript:void(0)" class="acc-menu-link" onclick="closeAccountDrawer(); window.location.hash='wishlist';">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
         <span>Wishlist</span>
       </a>
-      <a href="#account" class="acc-menu-link" onclick="closeAccountDrawer(); openCustomerPortal();">
+      <a href="javascript:void(0)" class="acc-menu-link" onclick="closeAccountDrawer(); openCustomerPortal();">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         <span>Track Order</span>
       </a>
@@ -6153,6 +6152,14 @@
 
   window.addEventListener("hashchange", handlePdpHashRouting);
   document.addEventListener("DOMContentLoaded", handlePdpHashRouting);
+
+  // Guarantee initial route is processed even if this module loads late
+  // (type="module" scripts can finish their async imports after
+  // DOMContentLoaded has already fired, in which case the listener
+  // above was registered too late to ever be called).
+  if (document.readyState === "interactive" || document.readyState === "complete") {
+    handlePdpHashRouting();
+  }
 
   // ---- Share / copy product link ----
   function pdpShareProduct(){
