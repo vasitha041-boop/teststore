@@ -3061,12 +3061,14 @@
     var cartPage = document.getElementById("cartPageView");
     var successPage = document.getElementById("successPageView");
     var accountPage = document.getElementById("accountPageView");
+    var legalPage = document.getElementById("legalPageView");
     var onPdp = pdp && pdp.style.display === "block";
     var onCheckout = checkoutPage && checkoutPage.style.display === "block";
     var onCartPage = cartPage && cartPage.style.display === "block";
     var onSuccess = successPage && successPage.style.display === "block";
     var onAccount = accountPage && accountPage.style.display === "block";
-    if(onPdp || onCheckout || onCartPage || onSuccess || onAccount || window.scrollY > 40){ hdr.classList.add("scrolled"); }
+    var onLegal = legalPage && legalPage.style.display === "block";
+    if(onPdp || onCheckout || onCartPage || onSuccess || onAccount || onLegal || window.scrollY > 40){ hdr.classList.add("scrolled"); }
     else { hdr.classList.remove("scrolled"); }
   };
   window.addEventListener("scroll", window.updateHeaderSolidState, { passive:true });
@@ -4024,6 +4026,29 @@
   </div>
 </div>
 
+<!-- ============ LEGAL / TEXT PAGE (Privacy Policy, Terms, etc.) ============ -->
+<div class="legal-page" id="legalPageView" style="display:none; background:var(--paper); padding:112px 0 80px; min-height:100vh;">
+  <div class="wrap" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+    <button class="pdp-back" onclick="goHomeFromPdp()" style="margin-bottom: 24px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Home
+    </button>
+    <div style="background:#FFFFFF; border:1px solid rgba(0,0,0,0.04); border-radius:24px; padding:48px 40px; box-shadow:0 4px 24px rgba(0,0,0,0.02);">
+      <h1 id="legalTitle" style="font-size:32px; font-weight:700; color:#111111; margin-bottom:24px; letter-spacing:-0.02em;">Privacy Policy</h1>
+      <div id="legalContent" style="font-size:15px; line-height:1.8; color:#444444; display:flex; flex-direction:column; gap:16px;">
+        <p>At DPLEX, we are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner.</p>
+        <h3 style="color:#111; margin-top:16px; font-size:18px;">1. Information We Collect</h3>
+        <p>We collect information you provide directly to us when you create an account, place an order, or contact us for support. This may include your name, email address, phone number, and delivery address.</p>
+        <h3 style="color:#111; margin-top:16px; font-size:18px;">2. How We Use Your Information</h3>
+        <p>We use the information we collect to process your orders, communicate with you about your purchases, and provide customer support. We do not sell your personal data to third parties.</p>
+        <h3 style="color:#111; margin-top:16px; font-size:18px;">3. Security</h3>
+        <p>We implement industry-standard security measures to protect your personal data. All payment information is processed securely through encrypted connections.</p>
+        <p style="margin-top:24px; font-size:13.5px; color:#8E8E93;">Last updated: September 2026</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="account-page" id="accountPageView" style="display:none;">
   <div class="wrap" style="max-width: 680px; margin: 0 auto; padding: 120px 20px 80px;">
     <!-- Back button -->
@@ -4229,10 +4254,10 @@
       </div>
       <div class="foot-col" id="footSupportCol">
         <h4>Support</h4>
-        <a href="#">Delivery info</a>
-        <a href="#">Returns policy</a>
-        <a href="#">Track order</a>
-        <a href="#">Contact us</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Service</a>
+        <a href="#returns">Returns Policy</a>
+        <a href="mailto:support@dplex.store">Contact us</a>
       </div>
       <div class="foot-news">
         <h4 style="color:#fff;font-size:13px;font-weight:600;margin-bottom:10px;">Stay updated</h4>
@@ -5934,7 +5959,8 @@
     const cartPage = document.getElementById("cartPageView");
     const successPage = document.getElementById("successPageView");
     const accountPage = document.getElementById("accountPageView");
-    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block") || (cartPage && cartPage.style.display === "block") || (successPage && successPage.style.display === "block") || (accountPage && accountPage.style.display === "block");
+    const legalPage = document.getElementById("legalPageView");
+    const anyOpen = (pdp && pdp.style.display === "block") || (checkoutPage && checkoutPage.style.display === "block") || (cartPage && cartPage.style.display === "block") || (successPage && successPage.style.display === "block") || (accountPage && accountPage.style.display === "block") || (legalPage && legalPage.style.display === "block");
     if (home) home.style.display = anyOpen ? "none" : "";
   }
   window.pdpUpdateHomeVisibility = pdpUpdateHomeVisibility;
@@ -5967,7 +5993,8 @@
       "cartPageView",
       "checkoutPageView",
       "accountPageView",
-      "successPageView"
+      "successPageView",
+      "legalPageView"
     ];
     views.forEach(id => {
       const el = document.getElementById(id);
@@ -6120,6 +6147,19 @@
       openCartPageInternal();
     } else if (hash === "#account"){
       openCustomerPortalInternal();
+    } else if (hash === "#privacy" || hash === "#terms" || hash === "#returns"){
+      hideAllSubPages();
+      const legalPage = document.getElementById("legalPageView");
+      const title = document.getElementById("legalTitle");
+      if (legalPage && title) {
+        legalPage.style.display = "block";
+        if(hash === "#privacy") title.textContent = "Privacy Policy";
+        if(hash === "#terms") title.textContent = "Terms of Service";
+        if(hash === "#returns") title.textContent = "Returns & Refunds";
+      }
+      pdpUpdateHomeVisibility();
+      window.scrollTo({ top: 0, behavior: "instant" });
+      if (window.updateHeaderSolidState) window.updateHeaderSolidState();
     } else if (orderMatch){
       // Shareable receipt: #order-received/<orderId>
       const orderId = decodeURIComponent(orderMatch[1]);
@@ -6132,7 +6172,9 @@
       const wasAccountOpen = accountPage && accountPage.style.display === "block";
       const successPage = document.getElementById("successPageView");
       const wasSuccessOpen = successPage && successPage.style.display === "block";
-      // Clear every subpage so no rogue cart, checkout, or account view lingers.
+      const legalPage = document.getElementById("legalPageView");
+      const wasLegalOpen = legalPage && legalPage.style.display === "block";
+      // Clear every subpage so no rogue cart, checkout, account, or legal view lingers.
       hideAllSubPages();
       pdpHideStickyBar();
       closePdpLightbox();
@@ -6143,7 +6185,7 @@
       // If the new hash points at a section on the home page (e.g. #products
       // from the header nav), make sure we actually scroll to it now that
       // the home content is visible again.
-      if ((wasProductOpen || wasCheckoutOpen || wasCartOpen || wasAccountOpen || wasSuccessOpen) && hash && hash.length > 1){
+      if ((wasProductOpen || wasCheckoutOpen || wasCartOpen || wasAccountOpen || wasSuccessOpen || wasLegalOpen) && hash && hash.length > 1){
         const el = document.querySelector(hash);
         if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 0);
       }
@@ -7221,10 +7263,22 @@ function showToast(message){
 </script>
 <!-- ============ END LEGACY UI SCRIPT ============ -->
 
+<!-- ============ SHOPPING CART: FIRESTORE ACCESSORS ============ -->
+<!-- The main cart script below is a plain (non-module) script, so it can't
+     use ES module `import` directly. This small module imports the Firestore
+     doc/getDoc/setDoc helpers and exposes them on window so the cart logic
+     can read/write a signed-in user's cart at carts/{uid}. -->
+<script type="module">
+  import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  window.__cartFirestore = { doc, getDoc, setDoc };
+</script>
+<!-- ============ END SHOPPING CART: FIRESTORE ACCESSORS ============ -->
+
 <!-- ============ SHOPPING CART ============ -->
-<!-- Vanilla JS cart: add/update/remove items, localStorage persistence,
-     cart drawer rendering, badge sync, and product-details modal.
-     No checkout/order/admin logic here. -->
+<!-- Vanilla JS cart: add/update/remove items, hybrid persistence
+     (Firestore for signed-in users so carts follow them across devices,
+     localStorage for guests), cart drawer rendering, badge sync, and
+     product-details modal. No checkout/order/admin logic here. -->
 <script>
   const CART_KEY = 'dplex_cart';
   const BONUS_KEY = 'dplex_bonus';
@@ -7246,6 +7300,13 @@ function showToast(message){
   window.getBonusDiscount = getBonusDiscount;
 
   // ---- Cart storage helpers ----
+  // getCart()/saveCart() remain synchronous, localStorage-only helpers.
+  // They're kept (and still used internally) because several places in the
+  // app — the badge, the checkout module, product cards — read the cart
+  // synchronously. loadCartData()/saveCartData() below always keep this
+  // localStorage copy in sync (even for signed-in users) so those readers
+  // stay correct, while ALSO persisting to Firestore for signed-in users so
+  // the cart follows them across devices.
   function getCart(){
     try {
       const raw = localStorage.getItem(CART_KEY);
@@ -7269,6 +7330,95 @@ function showToast(message){
   window.getCart = getCart;
   window.saveCart = saveCart;
 
+  // ---- Hybrid cart persistence: Firestore for signed-in users, localStorage for guests ----
+  function cartDocRef(uid){
+    const fs = window.__cartFirestore;
+    if (!fs || !window.firebaseDb) return null;
+    return fs.doc(window.firebaseDb, 'carts', uid);
+  }
+
+  async function loadCartData(){
+    const user = window.firebaseAuth && window.firebaseAuth.currentUser;
+    if (!user){
+      return getCart();
+    }
+    try {
+      const fs = window.__cartFirestore;
+      const ref = cartDocRef(user.uid);
+      if (!fs || !ref){
+        // Firestore helpers not ready yet — fall back to whatever's cached locally.
+        return getCart();
+      }
+      const snap = await fs.getDoc(ref);
+      const cart = (snap.exists() && Array.isArray(snap.data().items)) ? snap.data().items : [];
+      // Keep the local cache in sync so synchronous readers elsewhere (badge,
+      // checkout, product cards) see the same data.
+      saveCart(cart);
+      return cart;
+    } catch (e) {
+      console.error('Failed to load cart from Firestore, falling back to local cache:', e);
+      return getCart();
+    }
+  }
+
+  async function saveCartData(cartArray){
+    // Always mirror to localStorage so every synchronous reader in the app
+    // stays consistent, guest or signed-in.
+    saveCart(cartArray);
+
+    const user = window.firebaseAuth && window.firebaseAuth.currentUser;
+    if (!user) return;
+
+    try {
+      const fs = window.__cartFirestore;
+      const ref = cartDocRef(user.uid);
+      if (!fs || !ref) return;
+      await fs.setDoc(ref, { items: cartArray, updatedAt: Date.now() });
+    } catch (e) {
+      console.error('Failed to save cart to Firestore:', e);
+    }
+  }
+
+  window.loadCartData = loadCartData;
+  window.saveCartData = saveCartData;
+
+  // When a user signs in, pull their Firestore cart down (merging in any
+  // items they'd added locally as a guest) so nothing is lost and the synced
+  // cart is reflected immediately.
+  async function syncCartOnLogin(){
+    const user = window.firebaseAuth && window.firebaseAuth.currentUser;
+    if (!user) return;
+    try {
+      const localCart = getCart();
+      const fs = window.__cartFirestore;
+      const ref = cartDocRef(user.uid);
+      if (!fs || !ref) return;
+      const snap = await fs.getDoc(ref);
+      const remoteCart = (snap.exists() && Array.isArray(snap.data().items)) ? snap.data().items : [];
+
+      // Merge: remote items win on conflict, but any local-only guest items
+      // (added before sign-in) are carried over too.
+      const merged = remoteCart.slice();
+      localCart.forEach(localItem => {
+        const match = merged.find(i => i.productId === localItem.productId);
+        if (match){
+          match.qty += localItem.qty;
+        } else {
+          merged.push(localItem);
+        }
+      });
+
+      await saveCartData(merged);
+      updateCartBadge();
+      renderCartDrawer();
+      if (window.renderCartPage) window.renderCartPage();
+      syncAddButtons();
+    } catch (e) {
+      console.error('Failed to sync cart on login:', e);
+    }
+  }
+  window.syncCartOnLogin = syncCartOnLogin;
+
   function formatPriceLKR(value){
     if (window.formatStorePrice) return window.formatStorePrice(value);
     const n = Number(value);
@@ -7282,7 +7432,11 @@ function showToast(message){
   }
 
   // ---- Core cart operations ----
-  function addToCart(productId, qty){
+  // These are async so they can await the hybrid load/save (Firestore for
+  // signed-in users, localStorage for guests). They're attached to `window`
+  // and invoked from plain onclick="" handlers, which is fine — the handler
+  // fires the promise and the UI updates once it resolves.
+  window.addToCart = async function(productId, qty){
     qty = qty || 1;
     const stock = getProductStock(productId);
     if (stock <= 0){
@@ -7295,7 +7449,7 @@ function showToast(message){
       return;
     }
 
-    const cart = getCart();
+    let cart = await loadCartData();
     const existing = cart.find(i => i.productId === productId);
     const currentQty = existing ? existing.qty : 0;
 
@@ -7316,17 +7470,17 @@ function showToast(message){
       });
     }
 
-    saveCart(cart);
+    await saveCartData(cart);
     updateCartBadge();
     renderCartDrawer();
-    renderCartPage();
+    if (window.renderCartPage) window.renderCartPage();
     syncAddButtons();
     showToast('Product added to cart');
     openCartDrawer();
   }
 
-  function updateCartQty(productId, newQty){
-    const cart = getCart();
+  window.updateCartQty = async function(productId, newQty){
+    let cart = await loadCartData();
     const item = cart.find(i => i.productId === productId);
     if (!item) return;
 
@@ -7337,43 +7491,51 @@ function showToast(message){
     }
 
     if (newQty <= 0){
-      removeFromCart(productId);
+      await removeFromCart(productId);
       return;
     }
 
     item.qty = newQty;
-    saveCart(cart);
+    await saveCartData(cart);
     updateCartBadge();
     renderCartDrawer();
-    renderCartPage();
+    if (window.renderCartPage) window.renderCartPage();
     syncAddButtons();
   }
 
-  function removeFromCart(productId){
-    let cart = getCart();
+  window.removeFromCart = async function(productId){
+    let cart = await loadCartData();
     cart = cart.filter(i => i.productId !== productId);
-    saveCart(cart);
+    await saveCartData(cart);
     updateCartBadge();
     renderCartDrawer();
-    renderCartPage();
+    if (window.renderCartPage) window.renderCartPage();
     syncAddButtons();
     showToast('Product removed from cart');
   }
 
-  function clearCart(){
-    const cart = getCart();
+  window.clearCart = async function(){
+    const cart = await loadCartData();
     if (!cart.length){
       return;
     }
     const confirmed = window.confirm('Are you sure you want to clear your entire cart?');
     if (!confirmed) return;
-    saveCart([]);
+    await saveCartData([]);
     updateCartBadge();
     renderCartDrawer();
-    renderCartPage();
+    if (window.renderCartPage) window.renderCartPage();
     syncAddButtons();
     showToast('Cart cleared');
   }
+
+  // Local references so the rest of this script (and any code in this same
+  // <script> block) can keep calling addToCart(...)/removeFromCart(...)
+  // unqualified, exactly as before.
+  const addToCart = window.addToCart;
+  const updateCartQty = window.updateCartQty;
+  const removeFromCart = window.removeFromCart;
+  const clearCart = window.clearCart;
 
   function cartCount(cart){
     return (cart || getCart()).reduce((sum, i) => sum + i.qty, 0);
@@ -10757,6 +10919,10 @@ Please confirm my order.`
         accountView.style.display = "block";
         cpRenderAccountHeader(user);
         window.cpLoadCustomerOrders(user.email);
+        // Pull the signed-in user's Firestore cart down, merging in any
+        // items added locally as a guest, so the cart follows them
+        // across devices instead of staying bound to this browser.
+        if (typeof window.syncCartOnLogin === "function") window.syncCartOnLogin();
       } else {
         accountView.style.display = "none";
         guestView.style.display = "";
