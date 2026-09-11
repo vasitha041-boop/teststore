@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
   button, a, input, select, textarea,
   .payment-method-card, .payment-method-card *,
   .buy-now-btn, .cart-btn, .place-order-btn, .admin-btn, .icon-btn,
-  .cat-card, .tab-pill, .copy-btn, .pdp-thumb-btn {
+  .cat-card, .tab-pill, .copy-btn, .copy-icon-btn, .pdp-thumb-btn {
     -webkit-tap-highlight-color: transparent;
     outline: none;
   }
@@ -37,7 +38,7 @@
   .buy-now-btn:focus-visible, .cart-btn:focus-visible,
   .place-order-btn:focus-visible, .admin-btn:focus-visible,
   .icon-btn:focus-visible, .cat-card:focus-visible,
-  .tab-pill:focus-visible, .copy-btn:focus-visible,
+  .tab-pill:focus-visible, .copy-btn:focus-visible, .copy-icon-btn:focus-visible,
   .pdp-thumb-btn:focus-visible {
     outline: 2px solid #111111;
     outline-offset: 2px;
@@ -283,14 +284,14 @@
   .search-overlay-panel{position:relative;background:#fff;border-radius:0 0 24px 24px;box-shadow:0 24px 48px rgba(0,0,0,0.16);max-height:min(560px,80vh);overflow-y:auto;overscroll-behavior:contain;transform:translateY(-24px);opacity:0;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .28s ease;}
   .search-overlay.open .search-overlay-panel{transform:translateY(0);opacity:1;}
   .search-overlay-bar.wrap{padding:16px 20px;}
-  .search-overlay-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #E5E7EB;background:#fff;}
-  .search-overlay-icon{display:none;}
-  .search-overlay-input{flex:1 1 auto;min-width:0;border:none;outline:none;font-size:14px;font-weight:700;font-family:'Inter';line-height:1.4;color:#000;background:transparent;}
-  .search-overlay-input::placeholder{color:#4A4C56;font-weight:700;}
-  .search-overlay-bar-actions{display:flex;align-items:center;gap:12px;flex-shrink:0;}
-  .search-overlay-action-btn{background:none;border:none;padding:0;margin:0;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#000;flex-shrink:0;}
-  .search-overlay-action-btn svg{width:20px;height:20px;display:block;}
-  .search-overlay-divider{width:1px;height:20px;background:#E4E5E6;flex-shrink:0;}
+  .search-overlay-bar{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);background:#fff;}
+  .search-input-pill{flex:1;display:flex;align-items:center;gap:10px;background:#F5F5F7;border-radius:99px;padding:0 16px;height:48px;border:1.5px solid transparent;transition:0.2s;}
+  .search-input-pill:focus-within{background:#fff;border-color:#111;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+  .search-input-pill .search-icon{width:18px;height:18px;stroke:#8E8E93;flex-shrink:0;}
+  .search-overlay-input{flex:1;border:none;outline:none;background:transparent;font-size:15px;color:#111;height:100%;padding:0;}
+  .search-overlay-input::placeholder{color:#8E8E93;}
+  .search-overlay-input:focus-visible{outline:none !important;}
+  .search-overlay-close-btn{background:none;border:none;font-size:15px;font-weight:600;color:#111;cursor:pointer;padding:0;flex-shrink:0;}
   .search-overlay-body.wrap{padding:20px;}
   .search-overlay-body{display:flex;flex-direction:column;gap:22px;}
   .search-overlay-label{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 10px;}
@@ -960,13 +961,18 @@
 
   /* ============ PRODUCT DETAIL VIEW (PDP) ============ */
   .pdp-view{padding:112px 0 60px;}
-  .pdp-breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:18px;}
+  .pdp-breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
   .pdp-breadcrumbs a{font-weight:600;color:var(--muted);cursor:pointer;transition:color .2s;}
   .pdp-breadcrumbs a:hover{color:var(--ink);}
   .pdp-breadcrumbs span.sep{color:#C7C2B7;}
   .pdp-breadcrumbs span.current{color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px;}
   .pdp-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink);padding:0 0 22px;font-family:inherit;}
   .pdp-back:hover{color:var(--accent);}
+  /* ---- PDP: single-line compact back-to-category bar (replaces the
+       old stacked breadcrumbs + separate "Back to products" button) ---- */
+  .pdp-top-nav{margin-bottom:16px;display:flex;align-items:center;}
+  .pdp-back-compact{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:#8E8E93;cursor:pointer;transition:color .15s ease;font-family:inherit;}
+  .pdp-back-compact:hover{color:#111111;}
 
   .pdp-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:48px;align-items:flex-start;}
 
@@ -1379,7 +1385,7 @@
     .pdp-share-btn svg{width:15px;height:15px;}
     .pdp-share-btn#pdpDownloadCardBtn{width:auto;padding:0 14px;}
     /* consistent 8-12px rhythm between breadcrumbs / cat tag / title / actions */
-    .pdp-breadcrumbs{margin-bottom:12px;}
+    .pdp-top-nav{margin-bottom:12px;}
     .pdp-cat{margin-top:0;}
     .pdp-brand{margin-top:8px;}
     .pdp-name{margin-top:10px;}
@@ -1444,14 +1450,17 @@
 
   /* Bank Details Panel */
   .bank-details-panel{background:#F5F5F7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;border:1px solid rgba(0,0,0,0.03);}
-  .bd-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,0.04);}
-  .bd-row:last-of-type{border-bottom:none;padding-bottom:0;}
-  .bd-label{color:#8E8E93;font-weight:500;}
-  .bd-val{color:#111111;font-weight:600;}
+  .bd-header-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:#111;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.06);}
+  .bd-bank-icon{width:32px;height:32px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,0.03);}
+  .bd-info-list{display:flex;flex-direction:column;gap:10px;}
+  .bd-item{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .bd-lbl{font-size:13px;font-weight:500;color:#8E8E93;}
+  .bd-copy-wrap{display:flex;align-items:center;gap:6px;}
+  .bd-val{background:#FFFFFF;border:1px solid rgba(0,0,0,0.06);padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600;color:#111111;min-width:140px;text-align:left;}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:0.05em;}
-  .copy-btn{background:#FFFFFF;border:1px solid rgba(0,0,0,0.08);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#111111;transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
-  .copy-btn:hover{background:#111111;color:#FFFFFF;}
-  .copy-btn svg{width:13px;height:13px;}
+  .copy-icon-btn{background:transparent;border:1px solid rgba(0,0,0,0.1);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#8E8E93;transition:all 0.2s;flex-shrink:0;}
+  .copy-icon-btn:hover{background:#111111;color:#FFFFFF;border-color:#111111;}
+  .copy-icon-btn svg{width:14px;height:14px;}
 
   /* Custom File Upload */
   .custom-file-upload{margin-top:8px;background:#FFFFFF;border:1px dashed rgba(0,0,0,0.15);border-radius:12px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:13px;font-weight:600;color:#111111;transition:all .2s;}
@@ -2953,16 +2962,11 @@
   <div class="search-overlay-backdrop" onclick="closeSearchOverlay()"></div>
   <div class="search-overlay-panel">
     <div class="wrap search-overlay-bar">
-      <input type="text" id="searchOverlayInput" class="search-overlay-input" placeholder="Search products…" autocomplete="off" value="">
-      <div class="search-overlay-bar-actions">
-        <button type="button" class="search-overlay-action-btn" id="searchOverlayGoBtn" onclick="searchOverlayPickTerm(document.getElementById('searchOverlayInput').value.trim())" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 1C15.7467 1 20 5.25329 20 10.5C20 12.7631 19.2068 14.8398 17.8857 16.4717L21.833 20.4189C22.2231 20.8095 22.2234 21.4426 21.833 21.833C21.4426 22.2234 20.8095 22.2231 20.4189 21.833L16.4717 17.8857C14.8398 19.2068 12.7631 20 10.5 20C5.25329 20 1 15.7467 1 10.5C1 5.25329 5.25329 1 10.5 1ZM10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C14.6421 18 18 14.6421 18 10.5C18 6.35786 14.6421 3 10.5 3Z" fill="currentColor"/></svg>
-        </button>
-        <div class="search-overlay-divider"></div>
-        <button type="button" class="search-overlay-action-btn" onclick="closeSearchOverlay()" aria-label="Close search">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M5.63593 5.63604C6.0264 5.24546 6.65962 5.24551 7.05015 5.63604L11.9999 10.5858L16.9496 5.63604L17.0256 5.56699C17.4184 5.24681 17.9979 5.26993 18.3639 5.63604C18.7298 6.00211 18.753 6.58152 18.4329 6.97429L18.3639 7.05025L13.4141 12L18.3639 16.9497L18.4329 17.0257C18.753 17.4185 18.7298 17.9979 18.3639 18.364C17.9979 18.7301 17.4184 18.7532 17.0256 18.433L16.9496 18.364L11.9999 13.4142L7.05015 18.364C6.65962 18.7545 6.0264 18.7545 5.63593 18.364C5.2455 17.9734 5.24551 17.3403 5.63593 16.9497L10.5857 12L5.63593 7.05025C5.24551 6.65972 5.2455 6.02658 5.63593 5.63604Z" fill="currentColor"/></svg>
-        </button>
+      <div class="search-input-pill">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchOverlayInput" class="search-overlay-input" placeholder="Search products..." autocomplete="off">
       </div>
+      <button class="search-overlay-close-btn" onclick="closeSearchOverlay()">Cancel</button>
     </div>
     <div class="wrap search-overlay-body">
       <div id="searchOverlayDefault">
@@ -3655,10 +3659,6 @@
 <div class="pdp-view" id="productDetailView" style="display:none;">
   <div class="wrap">
     <div class="pdp-breadcrumbs" id="pdpBreadcrumbs"></div>
-    <button class="pdp-back" onclick="closeProductDetailView()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      Back to products
-    </button>
     <div id="pdpBody"></div>
 
     <!-- Off-screen 1080x1080 render source for "Download Product Card
@@ -3830,27 +3830,61 @@
           </div>
         </div>
         <div class="bank-details-panel" id="bankDetailsPanel" style="display: none;">
-          <div class="bd-row">
-            <span class="bd-label">Bank Name</span>
-            <span class="bd-val">Commercial Bank</span>
+          <div class="bd-header-title">
+            <div class="bd-bank-icon">🏦</div>
+            <strong>Bank Transfer Details</strong>
           </div>
-          <div class="bd-row">
-            <span class="bd-label">Account Name</span>
-            <span class="bd-val">Northline Tech</span>
-          </div>
-          <div class="bd-row">
-            <span class="bd-label">Account Number</span>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="bd-val mono" id="bd-acc">100023456789</span>
-              <button type="button" class="copy-btn" onclick="copyToClipboard('100023456789', this)" title="Copy">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              </button>
+
+          <div class="bd-info-list">
+            <div class="bd-item">
+              <span class="bd-lbl">Bank Name</span>
+              <div class="bd-copy-wrap">
+                <span class="bd-val mono">Commercial Bank</span>
+                <button type="button" class="copy-icon-btn" onclick="copyToClipboard('Commercial Bank', this)" aria-label="Copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="bd-item">
+              <span class="bd-lbl">Branch</span>
+              <div class="bd-copy-wrap">
+                <span class="bd-val mono">City Office</span>
+                <button type="button" class="copy-icon-btn" onclick="copyToClipboard('City Office', this)" aria-label="Copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="bd-item">
+              <span class="bd-lbl">Name</span>
+              <div class="bd-copy-wrap">
+                <span class="bd-val mono">DPLEX Official</span>
+                <button type="button" class="copy-icon-btn" onclick="copyToClipboard('DPLEX Official', this)" aria-label="Copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="bd-item">
+              <span class="bd-lbl">Account Number</span>
+              <div class="bd-copy-wrap">
+                <span class="bd-val mono">100023456789</span>
+                <button type="button" class="copy-icon-btn" onclick="copyToClipboard('100023456789', this)" aria-label="Copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="bd-item">
+              <span class="bd-lbl">Reference / Remarks</span>
+              <div class="bd-copy-wrap">
+                <span class="bd-val mono">Your Mobile Number</span>
+              </div>
             </div>
           </div>
-          <label class="custom-file-upload">
+
+          <label class="custom-file-upload" style="margin-top: 6px;">
             <input type="file" accept="image/*,.pdf" onchange="document.getElementById('fileName').textContent = this.files[0]?.name || 'No file chosen'">
-            Upload Receipt
-            <span id="fileName" style="font-weight:400; color:var(--muted); font-size:12px;">No file chosen</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Transfer Receipt
+            <span id="fileName" style="font-weight:400; color:#8E8E93; font-size:11.5px;">JPG, PNG or PDF</span>
           </label>
         </div>
 
@@ -6254,10 +6288,12 @@
     if (!el) return;
     const catLabel = category ? pdpEscapeHtml(category) : "Products";
     el.innerHTML = `
-      <a onclick="goHomeFromPdp()">Home</a>
-      <span class="sep">/</span>
-      <a onclick="closeProductDetailView()">${catLabel}</a>
-      ${name ? `<span class="sep">/</span><span class="current">${pdpEscapeHtml(name)}</span>` : ""}
+      <div class="pdp-top-nav">
+        <button class="pdp-back-compact" onclick="closeProductDetailView()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Back to ${catLabel}</span>
+        </button>
+      </div>
     `;
   }
 
@@ -6542,8 +6578,8 @@
             </div>
             <div class="pdp-help-actions">
               <a href="https://wa.me/94719553478" target="_blank" rel="noopener" class="pdp-help-btn whatsapp" aria-label="Contact via WhatsApp">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12.004 2c-5.523 0-10 4.477-10 10 0 1.767.459 3.427 1.261 4.872l-1.265 4.628 4.745-1.244c1.401.764 3.003 1.194 4.709 1.194 5.523 0 10-4.477 10-10s-4.477-10-10-10z"/>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.07-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.15c-.22.62-1.09 1.14-1.78 1.29-.47.1-1.08.18-3.14-.67-2.64-1.09-4.34-3.77-4.47-3.95-.13-.18-1.07-1.42-1.07-2.71 0-1.29.68-1.92.92-2.18.24-.26.53-.33.71-.33.18 0 .35 0 .5.01.16.01.38-.06.6.46.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.13.29-.26.45-.13.15-.27.34-.38.46-.13.13-.26.27-.11.53.15.26.66 1.09 1.42 1.77.98.87 1.8 1.14 2.06 1.27.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.18-.26.35-.22.59-.13.24.09 1.53.72 1.79.85.26.13.44.2.5.31.06.11.06.62-.16 1.24z"/>
                 </svg>
                 <span>WhatsApp</span>
               </a>
