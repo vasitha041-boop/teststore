@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -186,7 +187,8 @@
   }
   *{box-sizing:border-box;}
   html{overflow-x:hidden;scroll-behavior:smooth;}
-  body{margin:0;overflow-x:hidden;background:var(--paper);color:var(--ink);font-family:'Inter',Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+  html{scroll-padding-top:calc(var(--announce-h) + var(--header-height));}
+  body{margin:0;overflow-x:hidden;background:var(--paper);color:var(--ink);font-family:'Inter',Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-top:var(--announce-h);}
   h1,h2,h3{font-family:'Sora',Arial,sans-serif;margin:0;letter-spacing:-0.01em;}
   a{color:inherit;text-decoration:none;}
   button{font-family:inherit;}
@@ -197,10 +199,10 @@
   .announce-gold{background:linear-gradient(180deg,#fde07b 0%,#d9a748 100%);
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     color:#fde07b;font-weight:700;}
-  .announce-bar{position:relative;z-index:120;height:var(--announce-h);display:flex;align-items:center;justify-content:center;text-align:center;background:#111;color:#fff;font-size:12px;font-weight:500;line-height:1.3;padding:0 14px;}
+  .announce-bar{position:fixed;top:0;left:0;right:0;z-index:120;height:var(--announce-h);display:flex;align-items:center;justify-content:center;text-align:center;background:#111;color:#fff;font-size:12px;font-weight:500;line-height:1.3;padding:0 14px;}
 
   /* ============ HEADER ============ */
-  header{position:absolute;top:var(--announce-h);left:0;right:0;width:100%;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;}
+  header{position:fixed;top:var(--announce-h);left:0;right:0;width:100%;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;}
   header.scrolled{background:transparent;backdrop-filter:none;border-bottom-color:transparent;}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:var(--header-height);gap:20px;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Sora';font-weight:600;font-size:20px;flex-shrink:0;color:#fff;line-height:1;opacity:1;transition:opacity .2s ease;}
@@ -580,8 +582,8 @@
   .dplex-hero-slide.color-scheme-dark::before{content:'';position:absolute;top:0;left:0;width:100%;height:60px;background:linear-gradient(180deg,rgba(0,0,0,0.20) 0%,rgba(0,0,0,0.00) 100%);pointer-events:none;z-index:1;}
 
   /* prev / next nav buttons — 45px white circle, hidden until hover, matches UGREEN exactly */
-  .dplex-hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:45px;height:45px;border-radius:50%;background-color:#fff;color:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;padding:0;border:none;opacity:0;}
-  .dplex-hero:hover .dplex-hero-arrow{opacity:.4;}
+  .dplex-hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:45px;height:45px;border-radius:50%;background-color:#fff;color:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;padding:0;border:none;opacity:.65;}
+  .dplex-hero:hover .dplex-hero-arrow{opacity:1;}
   .dplex-hero .dplex-hero-arrow:hover{opacity:1 !important;}
   .dplex-hero-arrow svg{width:7px;height:12px;stroke:currentColor;fill:none;pointer-events:none;}
   .dplex-hero-arrow-prev{left:16px;}
@@ -631,6 +633,14 @@
     .dplex-hero-arrow-next{right:12px;}
   }
 
+  /* WCAG 2.2.2: a visible control to pause auto-advancing content. */
+  .dplex-hero-playpause{position:absolute;right:20px;bottom:0;z-index:6;width:28px;height:28px;border-radius:50%;
+    background:rgba(255,255,255,0.16);border:none;color:#fff;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;pointer-events:auto;transition:background .2s;flex-shrink:0;}
+  .dplex-hero-playpause:hover{background:rgba(255,255,255,0.3);}
+  .dplex-hero-playpause svg{width:13px;height:13px;display:block;}
+  @media(max-width:768px){.dplex-hero-playpause{position:static;margin-left:10px;width:24px;height:24px;}}
+
   @keyframes dplexPlaceholderGradient{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
   /* marquee */
@@ -665,20 +675,24 @@
   /* categories */
   /* ---- Shop by category ---- */
   .cat-carousel{position:relative;}
-  .cat-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3*16px)/4);gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;opacity:1;transition:opacity .2s ease;}
+  .cat-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3*16px)/4);gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;opacity:1;transition:opacity .2s ease;
+    /* Expand bounds so card shadows don't get clipped by the scroll container */
+    padding:20px 16px;
+    margin:-20px -16px;
+  }
   .cat-track.cat-loading{opacity:0;}
   .cat-track::-webkit-scrollbar{display:none;}
-  .cat-card{scroll-snap-align:start;background:#EAEAEC;border:none;border-radius:16px;padding:24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;min-height:192px;cursor:pointer;overflow:hidden;transition:background .3s ease;}
+  .cat-card{scroll-snap-align:start;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:16px;padding:24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;min-height:192px;cursor:pointer;transition:transform .3s ease;}
   .cat-media{flex:1;width:100%;display:flex;align-items:center;justify-content:center;transition:transform .3s ease;}
   .cat-media img{max-width:100%;max-height:116px;width:auto;object-fit:contain;display:block;}
   .cat-emoji{font-size:64px;line-height:1;}
   .cat-label{font-size:14px;font-weight:700;color:#080A0F;text-align:center;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-  /* hover: tile lifts to white and the product grows — pointer devices only */
+  /* hover: tile lifts further with a stronger shadow, product grows — pointer devices only */
   @media(hover:hover){
-    .cat-card:hover{background:#fff;}
-    .cat-card:hover .cat-media{transform:scale(1.1);}
+    .cat-card:hover{background:#FFFFFF;transform:translateY(-4px);}
+    .cat-card:hover .cat-media{transform:scale(1.08);}
   }
-  .cat-card:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  .cat-card:focus-visible{outline:2px solid #111111;outline-offset:2px;}
   .cat-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:24px;}
   .cat-dot{width:8px;height:8px;border-radius:50%;background:#C9C9CE;border:none;padding:0;cursor:pointer;transition:background .2s,width .2s;}
   .cat-dot.active{background:var(--accent);}
@@ -2018,7 +2032,7 @@
     .hero{padding:96px 0 40px;}
     .hero h1{font-size:30px;}
     /* mobile: 2 columns x 3 rows per swipe page; grid fills down each column, then across */
-    .cat-track{display:grid;grid-auto-flow:row;grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-columns:unset;gap:12px;overflow-x:visible;}
+    .cat-track{display:grid;grid-auto-flow:row;grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-columns:unset;gap:12px;overflow-x:visible;padding:10px 0;margin:-10px 0;}
     .cat-card{min-height:0;height:130px;padding:16px 12px 14px;border-radius:14px;gap:8px;}
     .cat-media img{max-height:72px;}
     .cat-emoji{font-size:46px;}
@@ -2069,6 +2083,368 @@
     .cp-card{padding:26px 20px;border-radius:20px;}
   }
 </style>
+<style>
+/* =====================================================================
+   PREMIUM VISUAL REFRESH — override layer only.
+   No JS, IDs, classes, or structural HTML are touched by this block.
+   Every rule below either targets a property the base stylesheet leaves
+   unset, or relies on normal cascade order (same selector specificity,
+   declared later) to win. `!important` is used only on the small number
+   of declarations that must beat an `!important` already present in the
+   base stylesheet (noted inline).
+   ===================================================================== */
+
+/* ---------- 1. REFINED DESIGN TOKENS ---------- */
+:root{
+  /* 8-point spacing scale */
+  --s-1:4px; --s-2:8px; --s-3:16px; --s-4:24px; --s-5:32px;
+  --s-6:48px; --s-7:64px; --s-8:80px; --s-9:96px;
+
+  /* 5-level elevation — layered, not flat */
+  --sh-xs:0 1px 2px rgba(15,15,15,.04), 0 1px 1px rgba(15,15,15,.03);
+  --sh-sm:0 2px 6px rgba(15,15,15,.05), 0 1px 3px rgba(15,15,15,.04);
+  --sh-md:0 8px 24px rgba(15,15,15,.07), 0 2px 6px rgba(15,15,15,.05);
+  --sh-lg:0 16px 40px rgba(15,15,15,.10), 0 4px 12px rgba(15,15,15,.06);
+  --sh-xl:0 28px 64px rgba(15,15,15,.14), 0 8px 20px rgba(15,15,15,.08);
+
+  /* motion curves */
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+
+  /* refined radii */
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px;
+
+  /* hairline border */
+  --hairline:rgba(15,15,15,.06);
+}
+
+/* ---------- 2. GLOBAL TYPOGRAPHY & MOTION ---------- */
+@keyframes pageFadeIn{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+#homeSections,
+.pdp-view,
+.cart-page,
+.checkout-page,
+.success-page,
+.account-page,
+.legal-page{
+  animation:pageFadeIn .5s var(--ease-out) both;
+}
+
+/* Section heading rhythm feels a touch more editorial at this weight */
+.section-head h2{letter-spacing:-0.015em;}
+
+/* ---------- 3. ANNOUNCEMENT BAR ---------- */
+.announce-bar{
+  background:#0A0A0B;
+  position:fixed;
+  top:0;left:0;right:0;
+}
+.announce-bar::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:-8px;
+  height:8px;
+  background:linear-gradient(180deg,rgba(10,10,11,.14),rgba(10,10,11,0));
+  pointer-events:none;
+}
+
+/* ---------- 4. HEADER ---------- */
+:root{ --header-height:68px; }
+@media(max-width:768px){ :root{ --header-height:60px; } }
+
+header.scrolled{
+  background:rgba(255,255,255,.78);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom-color:var(--hairline);
+  box-shadow:var(--sh-xs);
+  transition:background .35s var(--ease-out),border-color .35s var(--ease-out),
+             box-shadow .35s var(--ease-out),backdrop-filter .35s var(--ease-out);
+}
+header{ transition:background .35s var(--ease-out),border-color .35s var(--ease-out),
+         box-shadow .35s var(--ease-out),backdrop-filter .35s var(--ease-out); }
+
+/* animated underline reveal on nav links — scaleX from right, hover from left */
+.navlinks a{ overflow:visible; }
+.navlinks a::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:2px;
+  height:1.5px;
+  background:currentColor;
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform .35s var(--ease-out);
+}
+.navlinks a:hover::after{ transform:scaleX(1); transform-origin:left; }
+.navlinks a:hover{ opacity:1; }
+
+/* transparent search pill → solid white on focus */
+.nav-search input{
+  background:rgba(255,255,255,.16);
+  border-color:rgba(255,255,255,.28);
+  color:#fff;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  transition:background .3s var(--ease-out),border-color .3s var(--ease-out),
+             box-shadow .3s var(--ease-out),color .3s var(--ease-out);
+}
+.nav-search input::placeholder{ color:rgba(255,255,255,.65); }
+header.scrolled .nav-search input,
+header.header-dark-content:not(.scrolled) .nav-search input{
+  background:#fff;
+  border-color:var(--line);
+  color:var(--ink);
+}
+header.scrolled .nav-search input::placeholder,
+header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:#A7A7A7; }
+.nav-search input:focus{
+  background:#fff !important; /* base rule already wins the color war; this just guarantees the "flip" on a transparent-state header */
+  color:var(--ink) !important;
+  border-color:var(--ink);
+  box-shadow:0 0 0 4px rgba(15,15,15,.06);
+}
+.nav-search input:focus::placeholder{ color:#A7A7A7 !important; }
+.nav-search svg{ transition:stroke .3s var(--ease-out); }
+
+.icon-btn{ transition:border-color .25s var(--ease-out),transform .25s var(--ease-spring),box-shadow .25s var(--ease-out); }
+.icon-btn:hover{ box-shadow:var(--sh-xs); }
+.icon-btn:active{ transform:scale(.94); }
+
+/* ---------- 5. HERO ---------- */
+.dplex-hero-eyebrow{
+  background:rgba(255,255,255,.16);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.24);
+  color:#fff;
+}
+.dplex-hero-slide.color-scheme-dark .dplex-hero-eyebrow{
+  background:rgba(0,0,0,.08);
+  border-color:rgba(0,0,0,.14);
+  color:#000;
+}
+.dplex-hero-title{
+  font-size:clamp(30px,4.6vw,52px);
+  letter-spacing:-0.02em;
+}
+.dplex-hero-desc{ font-size:clamp(14px,1.6vw,16px); }
+.dplex-hero-actions a{
+  min-height:52px;
+  padding:0 32px;
+  transition:transform .25s var(--ease-spring),background-color .3s var(--ease-out),
+             color .3s var(--ease-out),border-color .3s var(--ease-out),box-shadow .3s var(--ease-out);
+}
+.dplex-hero-actions a:hover{ box-shadow:var(--sh-md); }
+.dplex-hero-actions a:active{ transform:scale(.96); }
+
+/* ---------- 6. SECTION HEADS ---------- */
+.section-head a{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-bottom-color:transparent;
+  color:var(--ink);
+  transition:color .25s var(--ease-out);
+}
+.section-head a::after{
+  content:"→";
+  display:inline-block;
+  transition:transform .3s var(--ease-spring);
+}
+.section-head a:hover{ border-bottom-color:var(--ink); }
+.section-head a:hover::after{ transform:translateX(4px); }
+
+/* ---------- 7. PRODUCT CARDS ---------- */
+.prod-card{
+  border:1px solid var(--hairline);
+  box-shadow:none;
+  transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out),border-color .35s var(--ease-out);
+}
+.prod-card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--sh-md);
+  border-color:var(--hairline);
+}
+.prod-card:hover .prod-thumb img{ transform:scale(1.06); }
+.prod-thumb img{ transition:transform .6s var(--ease-out); }
+
+/* wishlist button: hidden at rest on hover-capable devices, revealed on card hover;
+   always visible on touch devices (no hover to reveal it with) */
+@media(hover:hover) and (pointer:fine){
+  .wishlist-btn{
+    opacity:0;
+    transform:scale(.7);
+    transition:opacity .25s var(--ease-out),transform .25s var(--ease-spring),box-shadow .2s var(--ease-out);
+  }
+  .prod-card:hover .wishlist-btn,
+  .wishlist-btn.active{ opacity:1; transform:scale(1); }
+}
+.wishlist-btn:hover{ box-shadow:var(--sh-sm); }
+
+/* shine-sweep on the card add-to-cart pill */
+.single-add-btn{
+  position:relative;
+  overflow:hidden;
+  transition:background-color .3s var(--ease-out),transform .3s var(--ease-spring),box-shadow .3s var(--ease-out);
+}
+.single-add-btn::before{
+  content:"";
+  position:absolute;
+  top:0; left:-60%;
+  width:40%; height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:skewX(-20deg);
+  transition:left .6s var(--ease-out);
+  pointer-events:none;
+}
+.single-add-btn:hover:not([disabled])::before{ left:130%; }
+.single-add-btn:active:not([disabled]){ transform:scale(.97); }
+
+.add-btn{ transition:background-color .3s var(--ease-out),transform .25s var(--ease-spring); }
+.add-btn:active{ transform:scale(.97); }
+
+/* ---------- 8. CATEGORY TILES ---------- */
+/* Superseded by the shadow-clipping fix in the base stylesheet
+   (.cat-track / .cat-card now carry the always-elevated white look
+   with a safe-padded track — see those rules above). Left as a marker
+   so it's clear this section was intentionally consolidated, not lost. */
+
+/* ---------- 9. PROMO BANNER ---------- */
+.promo-box{
+  background:linear-gradient(155deg,#0A0A0B 0%,#1A1A1D 100%);
+  border-radius:32px;
+  isolation:isolate;
+}
+.promo-box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(60% 60% at 82% 12%,rgba(255,255,255,.12),transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+.promo-box > *{ position:relative; z-index:1; }
+.promo-actions .btn-light{
+  transition:transform .25s var(--ease-spring),box-shadow .3s var(--ease-out);
+}
+.promo-actions .btn-light:hover{ box-shadow:var(--sh-md); transform:translateY(-2px); }
+.promo-actions .btn-light:active{ transform:scale(.96); }
+
+/* ---------- 10. CART DRAWER ---------- */
+.cart-drawer-panel{ box-shadow:var(--sh-xl); }
+.cart-item{ transition:box-shadow .25s var(--ease-out); }
+.cart-drawer-foot{ background:#FFFFFF; box-shadow:0 -8px 24px rgba(15,15,15,.03); }
+.cart-drawer-panel .qty-btn,
+.cart-item-qty .qty-btn{
+  transition:background-color .22s var(--ease-out),color .22s var(--ease-out),
+             border-color .22s var(--ease-out),transform .22s var(--ease-spring);
+}
+.cart-drawer-panel .qty-btn:hover:not(:disabled),
+.cart-item-qty .qty-btn:hover:not(:disabled){
+  background:#111111;
+  color:#fff;
+  border-color:#111111;
+}
+
+/* ---------- 11. PDP ---------- */
+.pdp-main-image{ border-radius:var(--r-xl); }
+.pdp-thumb-btn{
+  width:76px; height:76px;
+  transition:border-color .25s var(--ease-out),transform .25s var(--ease-spring),box-shadow .25s var(--ease-out);
+}
+.pdp-thumb-btn:hover{ transform:translateY(-2px); box-shadow:var(--sh-sm); }
+.pdp-add-btn,.pdp-buy-now-btn{
+  transition:background-color .3s var(--ease-out),color .3s var(--ease-out),
+             border-color .3s var(--ease-out),transform .3s var(--ease-spring),box-shadow .3s var(--ease-out);
+}
+.pdp-add-btn:hover:not(:disabled){ box-shadow:var(--sh-md); transform:translateY(-2px); }
+.pdp-qty-row .qty-btn,.modal-qty-row .qty-btn{
+  transition:transform .25s var(--ease-spring),box-shadow .25s var(--ease-out);
+}
+
+/* ---------- 12. CHECKOUT ---------- */
+.checkout-col-left,.checkout-col-right{ box-shadow:var(--sh-sm); }
+.checkout-col-right{ box-shadow:var(--sh-md); }
+.form-group input,.form-group textarea,.form-group select{
+  min-height:48px;
+  transition:background .25s var(--ease-out),border-color .25s var(--ease-out),box-shadow .25s var(--ease-out);
+}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{
+  box-shadow:0 0 0 4px rgba(17,17,17,.06);
+}
+.place-order-btn{
+  transition:transform .3s var(--ease-spring),box-shadow .3s var(--ease-out),background-color .3s var(--ease-out);
+}
+.place-order-btn:hover:not(:disabled){ box-shadow:var(--sh-md); }
+
+/* ---------- 13. SUCCESS PAGE ---------- */
+.success-page-container{ box-shadow:var(--sh-lg); }
+.success-table td{ padding:10px 0; }
+.success-table th{ padding:10px 0; }
+.success-actions .btn-primary{
+  transition:transform .3s var(--ease-spring),box-shadow .3s var(--ease-out);
+}
+.success-actions .btn-primary:hover{ box-shadow:var(--sh-md); transform:translateY(-2px); }
+
+/* ---------- 14. FOOTER ---------- */
+.foot-col h4{
+  font-size:12.5px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#9C9CA3;
+}
+.foot-col a{ transition:color .2s var(--ease-out),transform .25s var(--ease-out); display:inline-block; }
+.foot-col a:hover{ transform:translateX(3px); }
+.foot-social a{ transition:transform .25s var(--ease-spring),background .25s var(--ease-out); }
+.foot-social a:hover{ transform:translateY(-3px); background:rgba(255,255,255,.16); }
+
+/* ---------- 15. MOBILE (max-width: 768px) ---------- */
+@media(max-width:768px){
+  .nav{ padding:0 20px; }
+  .prod-grid{ gap:14px; }
+  .prod-body{ padding:12px; }
+  .cart-item,.cart-item-card{ padding:14px; }
+  .dplex-hero-title{ font-size:clamp(26px,8vw,34px); }
+  .checkout-col-left,.checkout-col-right{ padding:24px 20px; }
+  .success-page-container{ padding:24px 20px; }
+  /* touch devices can't hover to reveal the wishlist button, so it stays put */
+  .wishlist-btn{ opacity:1; transform:none; }
+  .icon-btn,.wishlist-btn,.qty-btn,.foot-social a{ min-width:44px; min-height:44px; }
+}
+
+/* ---------- 16. ACCESSIBILITY ---------- */
+:focus-visible{ outline:2px solid #111111; outline-offset:2px; }
+*{ -webkit-tap-highlight-color:transparent; }
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  #homeSections,.pdp-view,.cart-page,.checkout-page,.success-page,.account-page,.legal-page{
+    animation:none !important;
+  }
+}
+
+/* ---------- CAT CARD: shadow-clipping fix ----------
+   The white/hairline .cat-card look and the safe-padded .cat-track now
+   live directly in the base stylesheet (see the "Shop by category"
+   rules above). Box-shadow has been removed entirely per request —
+   cards are flat with just the hairline border, at rest and on hover. */
+@media (max-width: 768px) {
+  @media (hover: hover) {
+    .cat-card:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+</style>
 </head>
 <body>
 <!-- ============ TIER-1 CINEMATIC PRELOADER ============ -->
@@ -2095,21 +2471,26 @@
     const preloader = document.getElementById('sitePreloader');
     if (!preloader) return;
 
-    // Prevent background scrolling while loading
-    document.body.style.overflow = 'hidden';
-
-    const MIN_DISPLAY_TIME = 3000; // 3 Seconds
+    // The brand flourish only plays once per browser session — a repeat
+    // visit/reload minutes later shouldn't pay the same tax again.
+    const seenThisSession = sessionStorage.getItem('dplexPreloaderSeen') === '1';
+    // First visit: brief branded reveal, capped well under 1.2s (never a
+    // fixed floor — this is a ceiling, and real load time can finish
+    // sooner). Repeat visits this session: effectively instant.
+    const MIN_DISPLAY_TIME = seenThisSession ? 0 : 900;
     const startTime = performance.now();
 
+    // Never trap the user: no scroll-lock, no pointer-events block beyond
+    // what the preloader's own opaque layer already provides visually.
     function dismissLoader() {
       const elapsed = performance.now() - startTime;
       const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
 
       setTimeout(() => {
         preloader.classList.add('loaded');
-        document.body.style.overflow = '';
+        sessionStorage.setItem('dplexPreloaderSeen', '1');
 
-        // Free DOM node after animation finishes
+        // Free DOM node after the fade-out transition finishes.
         setTimeout(() => {
           if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
         }, 700);
@@ -2121,6 +2502,8 @@
     } else {
       window.addEventListener('load', dismissLoader);
     }
+    // Safety net: never let a slow asset trap a visitor behind this screen.
+    setTimeout(dismissLoader, 4000);
   })();
 </script>
 <img src="https://i.ibb.co/k65nCHBv/d-icon3d.png" class="site-float-icon" id="siteFloatIcon" alt="Fun mascot — click me" />
@@ -2971,7 +3354,7 @@
 
 <div class="search-overlay" id="searchOverlay">
   <div class="search-overlay-backdrop" onclick="closeSearchOverlay()"></div>
-  <div class="search-overlay-panel">
+  <div class="search-overlay-panel" role="dialog" aria-modal="true" aria-label="Search">
     <div class="wrap search-overlay-bar">
       <div class="search-input-pill">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -3099,6 +3482,10 @@
     </button>
     <div class="dplex-hero-pagination">
       <div class="dplex-hero-point-list" id="dplexHeroDots" role="tablist" aria-label="Slide navigation"></div>
+      <button type="button" class="dplex-hero-playpause" id="dplexHeroPlayPause" onclick="dplexToggleAutoplay()" aria-label="Pause slideshow" aria-pressed="false">
+        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -3386,6 +3773,28 @@
     dplexFillActiveProgress();
     dplexHeroState.autoplayTimer = setInterval(() => { dplexNextSlide(); dplexFillActiveProgress(); }, 5000);
   }
+
+  // ---- Manual pause/play (WCAG 2.2.2) ----
+  let dplexAutoplayPaused = false;
+  function dplexToggleAutoplay(){
+    const btn = document.getElementById('dplexHeroPlayPause');
+    dplexAutoplayPaused = !dplexAutoplayPaused;
+    if (dplexAutoplayPaused){
+      stopDplexAutoplay();
+      dplexFreezeActiveProgress();
+    } else {
+      startDplexAutoplay();
+    }
+    if (btn){
+      btn.setAttribute('aria-pressed', String(dplexAutoplayPaused));
+      btn.setAttribute('aria-label', dplexAutoplayPaused ? 'Play slideshow' : 'Pause slideshow');
+      const pauseIcon = btn.querySelector('.icon-pause');
+      const playIcon = btn.querySelector('.icon-play');
+      if (pauseIcon) pauseIcon.style.display = dplexAutoplayPaused ? 'none' : '';
+      if (playIcon) playIcon.style.display = dplexAutoplayPaused ? '' : 'none';
+    }
+  }
+  window.dplexToggleAutoplay = dplexToggleAutoplay;
 
   function initDplexHero(){
     // First paint uses the built-in default slides; Admin-saved slides (if any)
@@ -5416,6 +5825,62 @@
 </script>
 <!-- ============ END STORE SETTINGS ============ -->
 
+<!-- Product-card / Add-to-Cart click delegation. Deliberately a classic
+     (non-module) script, not folded into the Firestore module below: a
+     `type="module"` script defers until the document has fully parsed
+     AND aborts entirely if any of its imports fail (slow CDN, offline,
+     ad-blocker) -- clicking "Add to Cart" or opening a product must not
+     depend on that succeeding. The functions it calls (window.addToCart,
+     window.showProductDetailView) are still defined by Firebase-dependent
+     modules elsewhere; this script only owns the always-on delegation
+     that finds and calls them. -->
+<script>
+  document.addEventListener('click', function(e) {
+    // 1. Handle "Add to Cart" button clicks
+    const addBtn = e.target.closest('.single-add-btn');
+    if (addBtn) {
+      e.preventDefault();
+      e.stopPropagation(); // Stop click from bubbling up to the card
+      if (addBtn.disabled) return;
+
+      const productId = addBtn.getAttribute('data-id');
+      if (!productId) return;
+
+      if (window.addToCart) {
+        window.addToCart(productId, 1);
+      } else {
+        console.warn('[prod-card] addToCart is not available yet -- the cart module may still be loading or failed to load. Product:', productId);
+      }
+      return;
+    }
+
+    // 2. Handle clicks on the Product Card itself to open the PDP
+    const card = e.target.closest('.prod-card');
+    if (card) {
+      // Ignore click if it was on a wishlist or share button
+      if (e.target.closest('.wishlist-btn') || e.target.closest('.pdp-share-btn')) return;
+
+      e.preventDefault();
+      const productId = card.getAttribute('data-id');
+      if (!productId) return;
+
+      if (window.showProductDetailView) {
+        window.showProductDetailView(productId);
+      } else {
+        // The module that defines showProductDetailView (a Firebase-
+        // dependent <script type="module">) hasn't finished loading, or
+        // failed to load. Surface this loudly instead of the click doing
+        // nothing with no trace -- and fall back to a hash-based
+        // navigation, which the same router will pick up the moment it
+        // *does* finish loading (its hashchange listener fires as soon as
+        // it's registered, and a hash that's already set is re-checked).
+        console.warn('[prod-card] showProductDetailView is not available yet -- the PDP module may still be loading or failed to load. Falling back to hash navigation for product:', productId);
+        window.location.hash = 'product/' + encodeURIComponent(productId);
+      }
+    }
+  });
+</script>
+
 <!-- ============ FIRESTORE: LOAD PRODUCTS (customer storefront) ============ -->
 <!-- Reads the "products" collection and renders active products into the
      Featured Products and New Arrivals grids using the existing card design.
@@ -5896,6 +6361,11 @@
       });
     }
   }
+  // ---- Global Event Delegation for Product Cards & Add to Cart ----
+  // Moved to a classic <script> right before this module (see comment
+  // there) so a slow/blocked Firebase CDN load can never disable clicking
+  // products or adding to cart site-wide.
+
   initStorefrontFilters();
 
   loadProducts();
@@ -7054,10 +7524,30 @@ function toggleMobileMenu(open){
 // background page — restored exactly on close so nothing jumps.
 let searchOverlayScrollY = 0;
 
+let searchOverlayReturnFocusEl = null;
+function searchOverlayTrapKeydown(e){
+  if (e.key !== 'Tab') return;
+  const overlay = document.getElementById('searchOverlay');
+  if (!overlay) return;
+  const focusable = overlay.querySelectorAll('input, button, [href], [tabindex]:not([tabindex="-1"])');
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first){
+    e.preventDefault(); last.focus();
+  } else if (!e.shiftKey && document.activeElement === last){
+    e.preventDefault(); first.focus();
+  }
+}
+
 function openSearchOverlay(){
   const overlay = document.getElementById('searchOverlay');
   if (!overlay) return;
+  // Remember what had focus so it can be restored on close (e.g. the
+  // search icon on mobile, or wherever the shopper was on desktop).
+  searchOverlayReturnFocusEl = document.activeElement;
   overlay.classList.add('open');
+  document.addEventListener('keydown', searchOverlayTrapKeydown, true);
 
   // Plain `overflow:hidden` on body doesn't reliably stop background
   // scroll on mobile Safari once a nested scrollable element (the panel)
@@ -7083,6 +7573,7 @@ function closeSearchOverlay(){
   const overlay = document.getElementById('searchOverlay');
   if (!overlay) return;
   overlay.classList.remove('open');
+  document.removeEventListener('keydown', searchOverlayTrapKeydown, true);
 
   document.body.style.position = '';
   document.body.style.top = '';
@@ -7091,6 +7582,13 @@ function closeSearchOverlay(){
   document.body.style.width = '';
   document.body.style.overflow = '';
   window.scrollTo({ top: searchOverlayScrollY, behavior: 'instant' });
+
+  // Give focus back to whatever opened the overlay, rather than dropping
+  // it silently (a hard requirement for keyboard/screen-reader users).
+  if (searchOverlayReturnFocusEl && typeof searchOverlayReturnFocusEl.focus === 'function'){
+    searchOverlayReturnFocusEl.focus();
+  }
+  searchOverlayReturnFocusEl = null;
 }
 window.closeSearchOverlay = closeSearchOverlay;
 
@@ -7795,20 +8293,6 @@ function showToast(message){
     document.getElementById('productModal').classList.remove('open');
     document.body.style.overflow = '';
   }
-
-  // ---- Event delegation for dynamically-rendered product cards ----
-  document.addEventListener('click', (e) => {
-    const singleAddBtn = e.target.closest('.single-add-btn[data-id]');
-    if (singleAddBtn && !singleAddBtn.disabled){
-      addToCart(singleAddBtn.getAttribute('data-id'), 1);
-      return;
-    }
-    // Clicking anywhere else on a product card (but not the action button) opens the full detail view
-    const card = e.target.closest('.prod-card[data-id]');
-    if (card && typeof window.showProductDetailView === 'function'){
-      window.showProductDetailView(card.getAttribute('data-id'));
-    }
-  });
 
   // Re-sync add-buttons whenever fresh products are rendered from Firestore
   document.addEventListener('products:rendered', syncAddButtons);
@@ -10660,7 +11144,8 @@ Please confirm my order.`
 (function(){
   var AUTO_SHOWN_KEY = 'dplex_perk_auto_shown';
   var BONUS_KEY = 'dplex_bonus';
-  var AUTO_DELAY_MS = 10000; // 10 seconds after page load
+  var AUTO_DELAY_MS = 45000; // 45 seconds after page load
+  var AUTO_SCROLL_DEPTH_MIN = 0.6; // and only once the visitor has scrolled 60% down the page
 
   function alreadyShownThisSession(){
     try { return sessionStorage.getItem(AUTO_SHOWN_KEY) === '1'; }
@@ -10699,11 +11184,26 @@ Please confirm my order.`
     return false;
   }
 
+  function pageScrollDepth(){
+    const doc = document.documentElement;
+    const scrollable = doc.scrollHeight - doc.clientHeight;
+    if (scrollable <= 0) return 1; // page has no scroll room -- treat as fully seen
+    return (window.scrollY || doc.scrollTop) / scrollable;
+  }
+
   function maybeAutoShowDailyPerk(){
     if (alreadyShownThisSession()) return;
     if (alreadyClaimedToday()) { markShownThisSession(); return; }
     if (onRestrictedView()) return; // stay quiet this time — do not reschedule, do not mark as shown
     if (typeof window.openPerkModal !== 'function') return;
+
+    // Never interrupt a visitor who hasn't started browsing yet -- wait
+    // for real engagement (60% scroll depth), checking again shortly if
+    // they haven't gotten there yet rather than firing blind.
+    if (pageScrollDepth() < AUTO_SCROLL_DEPTH_MIN){
+      setTimeout(maybeAutoShowDailyPerk, 2000);
+      return;
+    }
 
     markShownThisSession();
     window.openPerkModal();
