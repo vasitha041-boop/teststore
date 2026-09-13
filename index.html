@@ -889,6 +889,22 @@
   .prod-price{font-family:'Sora';font-weight:600;font-size:16px;}
   .prod-price del{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px;}
   .prod-save{font-size:11.5px;font-weight:600;color:#1F8A43;margin-top:-6px;}
+
+  /* ---- Product Colors: clickable swatches (card + PDP) ---- */
+  .prod-swatches{display:flex;align-items:center;gap:8px;margin-top:2px;flex-wrap:wrap;}
+  .swatch{
+    width:20px;height:20px;border-radius:50%;padding:0;flex-shrink:0;
+    background:var(--sw,#ccc);
+    border:2px solid #FFFFFF;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.12);
+    cursor:pointer;-webkit-tap-highlight-color:transparent;
+    transition:box-shadow .18s ease,transform .18s ease;
+  }
+  .swatch:hover{transform:scale(1.12);}
+  .swatch.is-active{box-shadow:0 0 0 1px rgba(0,0,0,0.12),0 0 0 2px #111111;}
+  /* Larger, more prominent swatches on the full Product Detail Page */
+  .pdp-swatches{margin:14px 0 4px;gap:10px;}
+  .pdp-swatches .swatch{width:28px;height:28px;border-width:2.5px;}
   .stock-line{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:#1F8A43;margin-top:-6px;}
   .stock-line .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
   .stock-line.low{color:#B45309;}
@@ -2026,6 +2042,10 @@
   .spec-remove-btn:hover{border-color:#B3261E;color:#B3261E;}
   .spec-add-btn{width:100%;border:1.5px dashed var(--line);border-radius:12px;padding:10px;background:none;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .2s;}
   .spec-add-btn:hover{border-color:var(--accent);}
+  .color-row input[type="text"]{flex:1;}
+  .color-row input[type="number"]{width:88px;flex:none;}
+  .color-row input[type="color"]{width:38px;height:38px;flex:none;padding:2px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;}
+  .color-row-hint{font-size:11.5px;color:var(--muted);margin:-4px 0 10px;}
   .spec-empty-note{font-size:12px;color:var(--muted);margin:0 0 8px;}
 
   /* ---- Delete confirm modal ---- */
@@ -5784,6 +5804,7 @@ body:has(header.scrolled) .search-overlay {
             <label for="productStock">Stock</label>
             <input type="number" id="productStock" placeholder="0" min="0" step="1">
             <span class="form-error" id="errProductStock">Enter a valid stock quantity.</span>
+            <span class="color-row-hint" id="stockAutoSumHint" style="display:none;"></span>
           </div>
         </div>
 
@@ -5797,6 +5818,15 @@ body:has(header.scrolled) .search-overlay {
           <label for="productCategory">Category</label>
           <input type="text" id="productCategory" placeholder="e.g. Accessories">
           <span class="form-error" id="errProductCategory">Category is required.</span>
+        </div>
+
+        <div class="form-group" id="fieldProductColors">
+          <label>Colors <span style="font-weight:400;color:var(--muted);">(optional — each color can have its own stock count)</span></label>
+          <div class="color-row-hint">Type a color name (e.g. "Black", "Rose Gold") and the swatch fills in automatically — or just click the swatch to pick any exact shade.</div>
+          <div class="spec-builder" id="colorRowsContainer"></div>
+          <button type="button" class="spec-add-btn" onclick="addColorRow()">+ Add Color</button>
+          <button type="button" class="spec-add-btn" onclick="autoSumColorStock()">Σ Auto-Sum Stock from Colors</button>
+          <datalist id="colorNameSuggestions"></datalist>
         </div>
 
         <div class="form-group">
@@ -6442,22 +6472,37 @@ body:has(header.scrolled) .search-overlay {
   // so every already-rendered card/button for this product (Featured grid,
   // New Arrivals, promo carousel, PDP) reflects the new stock immediately —
   // no reload, no re-fetch.
-  window.applyProductStockUpdate = function(productId, newStock){
-    if (window.__productCache && window.__productCache[productId]){
-      window.__productCache[productId].stock = newStock;
+  window.applyProductStockUpdate = function(productId, newStock, colorName){
+    const cached = window.__productCache && window.__productCache[productId];
+
+    if (colorName && cached && Array.isArray(cached.colors)){
+      const idx = cached.colors.findIndex(c => c && typeof c === "object" && c.name &&
+        String(c.name).toLowerCase() === String(colorName).toLowerCase());
+      if (idx !== -1){
+        // Color-specific stock is its own track (mirrors the PDP's
+        // colorHasOwnStock logic) — only that color's figure changes here,
+        // the product's overall `stock` field is untouched.
+        cached.colors[idx] = Object.assign({}, cached.colors[idx], { stock: newStock });
+      }
+    } else if (cached) {
+      cached.stock = newStock;
     }
-    const outOfStock = newStock <= 0;
+
+    // Generic UI (grid cards, wishlist, carousels) has no color context —
+    // it always reflects the overall product stock.
+    const overallStock = cached ? (Number(cached.stock) || 0) : newStock;
+    const overallOut = overallStock <= 0;
     const safeId = CSS && CSS.escape ? CSS.escape(productId) : productId;
 
     document.querySelectorAll(`.single-add-btn[data-id="${safeId}"]`).forEach(btn => {
-      btn.disabled = outOfStock;
+      btn.disabled = overallOut;
       const label = btn.querySelector(".btn-label");
-      if (label) label.textContent = outOfStock ? "Out of Stock" : "Add to Cart";
-      else btn.textContent = outOfStock ? "Out of Stock" : "Add to Cart";
+      if (label) label.textContent = overallOut ? "Out of Stock" : "Add to Cart";
+      else btn.textContent = overallOut ? "Out of Stock" : "Add to Cart";
     });
     document.querySelectorAll(`.prod-card[data-id="${safeId}"] .prod-body`).forEach(body => {
       const oldLine = body.querySelector(".stock-line");
-      if (oldLine) oldLine.outerHTML = stockBadge(newStock);
+      if (oldLine) oldLine.outerHTML = stockBadge(overallStock);
     });
 
     // If the shopper currently has this exact product's page open, update
@@ -6466,13 +6511,41 @@ body:has(header.scrolled) .search-overlay {
       const addBtn = document.getElementById("pdpAddBtn");
       const buyBtn = document.getElementById("pdpBuyNowBtn");
       const stockLabel = document.getElementById("pdpStockLabel");
-      if (addBtn){ addBtn.disabled = outOfStock; addBtn.textContent = outOfStock ? "Out of Stock" : "Add to Cart"; }
-      if (buyBtn){ buyBtn.disabled = outOfStock; buyBtn.textContent = outOfStock ? "Out of Stock" : "Buy Now"; }
+
+      // Gate the PDP's own buttons on whichever figure is actually
+      // relevant to the shopper's current selection: the selected color's
+      // own stock if it has one, otherwise the overall stock — and out of
+      // stock if EITHER the overall stock or that selected color's stock
+      // has hit 0, per spec.
+      let pdpGateStock = overallStock;
+      const selIdx = window.__pdpSelectedColorIdx;
+      const hasSelectedColor = cached && Array.isArray(cached.colors) && typeof selIdx === "number" && cached.colors[selIdx];
+      if (hasSelectedColor){
+        const selColor = cached.colors[selIdx];
+        const selHasOwnStock = selColor && typeof selColor === "object" && selColor.stock !== undefined && selColor.stock !== null;
+        if (selHasOwnStock) pdpGateStock = Number(selColor.stock) || 0;
+      }
+      const pdpOut = overallOut || pdpGateStock <= 0;
+
+      if (addBtn){ addBtn.disabled = pdpOut; addBtn.textContent = pdpOut ? "Out of Stock" : "Add to Cart"; }
+      if (buyBtn){ buyBtn.disabled = pdpOut; buyBtn.textContent = pdpOut ? "Out of Stock" : "Buy Now"; }
       // Keep the mobile sticky purchase bar in step with the live stock.
       if (typeof window.pdpSyncStickyStock === "function") window.pdpSyncStickyStock(productId);
       if (stockLabel){
-        stockLabel.classList.toggle("out", outOfStock);
-        stockLabel.textContent = outOfStock ? "Out of Stock" : newStock + " in stock";
+        stockLabel.classList.toggle("out", pdpOut);
+        stockLabel.textContent = pdpOut ? "Out of Stock" : pdpGateStock + " in stock";
+      }
+
+      // Refresh the qty stepper (clamp qty, min/max button state, "N
+      // available" note) — but only when the color that just changed is
+      // actually the one the shopper has selected (or this update has no
+      // color at all), so an update for a color they're NOT looking at
+      // doesn't reset the stepper they're mid-interaction with.
+      const changedIsSelected = !colorName ||
+        (hasSelectedColor && cached.colors[selIdx].name &&
+         String(cached.colors[selIdx].name).toLowerCase() === String(colorName).toLowerCase());
+      if (changedIsSelected && typeof window.__pdpSyncLiveStock === "function"){
+        window.__pdpSyncLiveStock(pdpGateStock);
       }
     }
   };
@@ -6501,6 +6574,35 @@ body:has(header.scrolled) .search-overlay {
     return `<span class="prod-save">Save ${formatPrice(original - price)}</span>`;
   }
   window.prodSaveHtml = prodSaveHtml;
+
+  // Colors may be legacy plain hex strings, or {name, hex, stock} objects — normalize here.
+  function colorHex(color){
+    return typeof color === "string" ? color : (color && color.hex) || "#111111";
+  }
+  function colorLabel(color){
+    if (typeof color === "string") return "Color variant";
+    const name = color && color.name;
+    return name ? `Color variant: ${name}` : "Color variant";
+  }
+  // Builds the plain {name, hex} object that gets saved onto a cart line —
+  // handles both the legacy plain-hex-string shape and the current
+  // {name, hex, stock} object shape.
+  function colorForCart(color){
+    if (!color) return null;
+    if (typeof color === "string") return { name: null, hex: color };
+    return { name: color.name || null, hex: color.hex || colorHex(color) };
+  }
+  window.colorHex = colorHex;
+  window.colorLabel = colorLabel;
+  window.colorForCart = colorForCart;
+
+  function swatchesHtml(p){
+    if (!Array.isArray(p.colors) || p.colors.length === 0) return "";
+    return `<div class="prod-swatches">` +
+      p.colors.map((color, i) => `<button type="button" class="swatch ${i === 0 ? 'is-active' : ''}" style="--sw:${escapeHtml(colorHex(color))};" aria-label="${escapeHtml(colorLabel(color))}" title="${escapeHtml(colorLabel(color))}" onclick="event.stopPropagation(); this.parentElement.querySelectorAll('.swatch').forEach(s => s.classList.remove('is-active')); this.classList.add('is-active');"></button>`).join('') +
+    `</div>`;
+  }
+  window.swatchesHtml = swatchesHtml;
 
 
   // ---- Wishlist (client-side only, persisted in this browser) ----
@@ -6571,6 +6673,7 @@ body:has(header.scrolled) .search-overlay {
             <span class="prod-price">${priceRowHtml(p)}</span>
           </div>
           ${prodSaveHtml(p)}
+          ${swatchesHtml(p)}
           ${stockBadge(stock)}
           <div class="prod-actions">
             <button class="single-add-btn" data-id="${safeId}" ${outOfStock ? "disabled" : ""}>
@@ -6940,6 +7043,7 @@ body:has(header.scrolled) .search-overlay {
   let pdpImages = [];
   let pdpActiveImageIndex = 0;
   let pdpQty = 1;
+  let pdpSelectedColorIdx = 0; // index into product.colors for whichever swatch is active
   let pdpLightboxIndex = 0;
   let pdpCachedLogoDataUrl = null; // fetched once, reused for every card download
   let pdpStickyObserver = null; // mobile sticky purchase bar — declared here (not down by
@@ -7579,6 +7683,11 @@ body:has(header.scrolled) .search-overlay {
     pdpImages = pdpBuildImages(product);
     pdpActiveImageIndex = 0;
     pdpQty = 1;
+    pdpSelectedColorIdx = 0; // reset to the first swatch for whichever product is now loading
+    // null (not 0) until pdpApplyColorSelection actually runs below — a
+    // product with no colors at all should never look like "swatch 0 is
+    // selected" to the cross-module stock-sync code.
+    window.__pdpSelectedColorIdx = null;
 
     const stock = Number(product.stock) || 0;
     const outOfStock = stock <= 0;
@@ -7635,6 +7744,7 @@ body:has(header.scrolled) .search-overlay {
           <div class="pdp-price-row">
             <span class="pdp-price">${price}</span>
           </div>
+          ${Array.isArray(product.colors) && product.colors.length > 0 ? `<div class="prod-swatches pdp-swatches" id="pdpSwatches">${product.colors.map((color, i) => `<button type="button" class="swatch ${i === 0 ? 'is-active' : ''}" style="--sw:${pdpEscapeHtml(window.colorHex ? window.colorHex(color) : color)};" aria-label="${pdpEscapeHtml(window.colorLabel ? window.colorLabel(color) : 'Color variant')}" title="${pdpEscapeHtml(window.colorLabel ? window.colorLabel(color) : 'Color variant')}" onclick="this.parentElement.querySelectorAll('.swatch').forEach(s => s.classList.remove('is-active')); this.classList.add('is-active'); if (window.__pdpSelectColor) window.__pdpSelectColor(${i});"></button>`).join('')}</div>` : ""}
           <div class="pdp-meta-row">
             <div class="pdp-stock ${outOfStock ? "out" : ""}" id="pdpStockLabel">${outOfStock ? "Out of Stock" : stock + " in stock"}</div>
             ${warranty ? `<div class="pdp-warranty ${/month/i.test(warranty) && !/year|lifetime/i.test(warranty) ? "short" : ""}">${warranty}</div>` : ""}
@@ -7741,6 +7851,80 @@ body:has(header.scrolled) .search-overlay {
 
     let liveStock = stock;
 
+    // ---- Per-color stock: if a color has its own stock count, the swatch selection
+    // drives the displayed/available stock instead of the product's overall figure.
+    // (Cart/checkout still deduct from the product-level stock — see the note in the
+    // hero-slider/color-picker changelog for why that's a separate follow-up.)
+    function colorHasOwnStock(color){
+      return color && typeof color === "object" && color.stock !== undefined && color.stock !== null;
+    }
+    function pdpApplyColorSelection(idx){
+      pdpSelectedColorIdx = idx;
+      window.__pdpSelectedColorIdx = idx; // exposed cross-module, same pattern as window.__pdpCurrentProductId
+      const addBtn = document.getElementById("pdpAddBtn");
+      const buyBtn = document.getElementById("pdpBuyNowBtn");
+      const stockLabel = document.getElementById("pdpStockLabel");
+      const qtyNote = document.getElementById("pdpQtyNote");
+      const qtyVal = document.getElementById("pdpQtyVal");
+      const minusBtn = document.getElementById("pdpQtyMinus");
+      const plusBtn = document.getElementById("pdpQtyPlus");
+      const qtyRow = document.querySelector(".pdp-qty-row");
+      const qtyLabel = document.querySelector(".pdp-qty-label");
+
+      const color = Array.isArray(product.colors) ? product.colors[idx] : null;
+      liveStock = colorHasOwnStock(color) ? (Number(color.stock) || 0) : stock;
+      const colorOut = liveStock <= 0;
+
+      if (stockLabel){
+        stockLabel.classList.toggle("out", colorOut);
+        stockLabel.textContent = colorOut ? "Out of Stock" : liveStock + " in stock";
+      }
+      if (qtyNote) qtyNote.textContent = colorOut ? "" : liveStock + " available";
+
+      pdpQty = colorOut ? 0 : 1;
+      if (qtyVal) qtyVal.textContent = pdpQty;
+      if (minusBtn) minusBtn.disabled = pdpQty <= 1;
+      if (plusBtn) plusBtn.disabled = pdpQty >= liveStock;
+      if (qtyRow) qtyRow.style.display = colorOut ? "none" : "";
+      if (qtyLabel) qtyLabel.style.display = colorOut ? "none" : "";
+
+      if (addBtn){
+        addBtn.disabled = colorOut;
+        addBtn.textContent = colorOut ? "Out of Stock" : "Add to Cart";
+      }
+      if (buyBtn){
+        buyBtn.disabled = colorOut;
+        buyBtn.textContent = colorOut ? "Out of Stock" : "Buy Now";
+      }
+    }
+    window.__pdpSelectColor = function(idx){ pdpApplyColorSelection(idx); };
+    // Lets the cross-module live stock-sync code (applyProductStockUpdate,
+    // called right after a checkout decrements stock) clamp this PDP's qty
+    // stepper down without reaching into this closure's private state
+    // directly — same reasoning as __pdpSelectColor above.
+    window.__pdpSyncLiveStock = function(newLiveStock){
+      liveStock = newLiveStock;
+      const qtyVal = document.getElementById("pdpQtyVal");
+      const minusBtn = document.getElementById("pdpQtyMinus");
+      const plusBtn = document.getElementById("pdpQtyPlus");
+      const qtyNote = document.getElementById("pdpQtyNote");
+      const qtyRow = document.querySelector(".pdp-qty-row");
+      const qtyLabel = document.querySelector(".pdp-qty-label");
+      const out = liveStock <= 0;
+
+      if (pdpQty > liveStock) pdpQty = out ? 0 : Math.max(1, liveStock);
+      if (qtyVal) qtyVal.textContent = pdpQty;
+      if (minusBtn) minusBtn.disabled = pdpQty <= 1;
+      if (plusBtn) plusBtn.disabled = pdpQty >= liveStock;
+      if (qtyNote) qtyNote.textContent = out ? "" : liveStock + " available";
+      if (qtyRow) qtyRow.style.display = out ? "none" : "";
+      if (qtyLabel) qtyLabel.style.display = out ? "none" : "";
+    };
+    // Apply once up front in case the very first (default-active) swatch has its own stock figure.
+    if (Array.isArray(product.colors) && product.colors.length > 0 && !outOfStock){
+      pdpApplyColorSelection(0);
+    }
+
     if (!outOfStock){
       const qtyVal = document.getElementById("pdpQtyVal");
       const minusBtn = document.getElementById("pdpQtyMinus");
@@ -7762,6 +7946,12 @@ body:has(header.scrolled) .search-overlay {
       btn.disabled = true;
       const originalLabel = btn.textContent;
       btn.textContent = "Checking stock…";
+
+      // Whichever swatch is currently active, captured once per click so a
+      // stray re-render mid-request can't shift it out from under us.
+      const selectedColor = (Array.isArray(product.colors) && product.colors.length > 0)
+        ? colorForCart(product.colors[pdpSelectedColorIdx])
+        : null;
 
       try {
         const db = pdpDb || await pdpWaitForDb();
@@ -7799,13 +7989,13 @@ body:has(header.scrolled) .search-overlay {
         }
 
         if (typeof window.addToCart === "function"){
-          window.addToCart(product.id, pdpQty);
+          window.addToCart(product.id, pdpQty, selectedColor);
         }
         if (typeof afterAdd === "function") afterAdd();
       } catch (err) {
         console.error("Stock check before add-to-cart failed:", err);
         if (typeof window.addToCart === "function"){
-          window.addToCart(product.id, pdpQty);
+          window.addToCart(product.id, pdpQty, selectedColor);
         }
         if (typeof afterAdd === "function") afterAdd();
       } finally {
@@ -7902,6 +8092,7 @@ body:has(header.scrolled) .search-overlay {
     const wishlistHtml = typeof window.wishlistBtnHtml === "function" ? window.wishlistBtnHtml(id) : "";
     const discountHtml = typeof window.discountBadgeHtml === "function" ? window.discountBadgeHtml(p) : "";
     const saveHtml = typeof window.prodSaveHtml === "function" ? window.prodSaveHtml(p) : "";
+    const swatchHtml = typeof window.swatchesHtml === "function" ? window.swatchesHtml(p) : "";
 
     return `
       <div class="prod-card" data-id="${safeId}">
@@ -7920,6 +8111,7 @@ body:has(header.scrolled) .search-overlay {
             <span class="prod-price">${priceHtml}</span>
           </div>
           ${saveHtml}
+          ${swatchHtml}
           ${stockLineHtml}
           <div class="prod-actions">
             <button class="single-add-btn" data-id="${safeId}" ${outOfStock ? "disabled" : ""}>
@@ -8470,8 +8662,24 @@ function showToast(message){
   // signed-in users, localStorage for guests). They're attached to `window`
   // and invoked from plain onclick="" handlers, which is fine — the handler
   // fires the promise and the UI updates once it resolves.
-  window.addToCart = async function(productId, qty){
+  // Two cart lines are "the same" only if both productId AND color match —
+  // otherwise selecting a different color of the same product would
+  // silently merge into (and inflate the qty of) the first color's line.
+  // No-color vs a specific color are treated as different lines too.
+  function sameCartColor(a, b){
+    const an = a && a.name ? String(a.name).toLowerCase() : null;
+    const bn = b && b.name ? String(b.name).toLowerCase() : null;
+    if (an || bn) return an === bn;
+    const ah = a && a.hex ? String(a.hex).toLowerCase() : null;
+    const bh = b && b.hex ? String(b.hex).toLowerCase() : null;
+    return ah === bh;
+  }
+
+  window.addToCart = async function(productId, qty, selectedColorObj){
     qty = qty || 1;
+    const color = (selectedColorObj && (selectedColorObj.name || selectedColorObj.hex))
+      ? { name: selectedColorObj.name || null, hex: selectedColorObj.hex || null }
+      : null;
     const stock = getProductStock(productId);
     if (stock <= 0){
       showToast("This item is out of stock");
@@ -8484,7 +8692,7 @@ function showToast(message){
     }
 
     let cart = await loadCartData();
-    const existing = cart.find(i => i.productId === productId);
+    const existing = cart.find(i => i.productId === productId && sameCartColor(i.color || null, color));
     const currentQty = existing ? existing.qty : 0;
 
     if (currentQty + qty > stock){
@@ -8500,7 +8708,8 @@ function showToast(message){
         name: product.name || 'Unnamed product',
         price: Number(product.price) || 0,
         imageUrl: product.imageUrl || '',
-        qty
+        qty,
+        color
       });
     }
 
@@ -8617,6 +8826,7 @@ function showToast(message){
           <div class="cart-item-thumb">${thumb}</div>
           <div class="cart-item-info">
             <span class="cart-item-name">${escapeHtmlCart(item.name)}</span>
+            ${item.color && item.color.name ? `<span style="font-size:12px; color:var(--muted); display:block;">Color: ${escapeHtmlCart(item.color.name)}</span>` : ""}
             <span class="cart-item-price">${formatPriceLKR(item.price)} each</span>
             <span class="cart-item-delivery">Estimated Delivery: 1–3 business days</span>
             <div class="cart-item-qty">
@@ -8688,6 +8898,7 @@ function showToast(message){
           <div class="cart-thumb">${thumb}</div>
           <div class="cart-info">
             <h3>${escapeHtmlCart(item.name)}</h3>
+            ${item.color && item.color.name ? `<span style="font-size:12px; color:var(--muted); display:block;">Color: ${escapeHtmlCart(item.color.name)}</span>` : ""}
             <span class="price">${formatPriceLKR(item.price)} each</span>
             <div class="cart-item-qty">
               <button class="qty-btn" onclick="updateCartQty('${item.productId}', ${item.qty - 1})" aria-label="Decrease quantity">−</button>
@@ -8856,7 +9067,7 @@ function showToast(message){
     setDoc,
     addDoc,
     updateDoc,
-    writeBatch,
+    runTransaction,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -9045,7 +9256,10 @@ function showToast(message){
       return `
         <div class="order-summary-row">
           <span class="osr-thumb">${thumb}</span>
-          <span class="osr-name">${escapeHtmlCheckout(item.name)}</span>
+          <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;">
+            <span class="osr-name" style="flex:none;">${escapeHtmlCheckout(item.name)}</span>
+            ${item.color && item.color.name ? `<span style="font-size:12px; color:var(--muted);">Color: ${escapeHtmlCheckout(item.color.name)}</span>` : ""}
+          </span>
           <span class="osr-calc">${formatPriceLKR(item.price)} × ${item.qty} = ${formatPriceLKR(lineTotal)}</span>
         </div>`;
     }).join("");
@@ -9154,6 +9368,63 @@ function showToast(message){
   window.renderCheckoutSummary = renderCheckoutSummary;
   window.hideCheckoutError = hideCheckoutError;
 
+  // ---- Color-aware stock helpers, shared by the pre-check and the real
+  // transactional decrement below, so both agree on what "available stock"
+  // means for a given cart line. ----
+  function findColorEntry(productData, colorName){
+    if (!colorName || !Array.isArray(productData.colors)) return null;
+    const idx = productData.colors.findIndex(c =>
+      c && typeof c === "object" && c.name &&
+      String(c.name).toLowerCase() === String(colorName).toLowerCase()
+    );
+    return idx === -1 ? null : { idx, color: productData.colors[idx] };
+  }
+  // The figure that actually gates "can this cart line be fulfilled" — the
+  // matched color's own stock if it has one set, otherwise the product's
+  // overall stock (same fallback rule the decrement step uses).
+  function effectiveAvailableStock(productData, colorName){
+    const match = findColorEntry(productData, colorName);
+    if (match && match.color.stock !== undefined && match.color.stock !== null){
+      return Number(match.color.stock) || 0;
+    }
+    return Number(productData.stock) || 0;
+  }
+
+  // Atomically decrements exactly one product's stock for one cart line.
+  // Color-specific stock and the overall `stock` field are two separate
+  // tracks (mirrors the PDP's own colorHasOwnStock display logic) — a
+  // color with its own stock figure only ever has THAT figure touched;
+  // the overall field is only touched when there's no color-specific
+  // figure to defer to. Returns the resulting stock figure plus which
+  // color (if any) it belongs to, so the caller can sync the UI.
+  async function decrementProductStock(db, productId, qty, colorName){
+    let result = { newStock: 0, colorName: null };
+    await runTransaction(db, async (transaction) => {
+      const productRef = doc(db, "products", productId);
+      const snap = await transaction.get(productRef);
+      if (!snap.exists()){ result = { newStock: 0, colorName: null }; return; }
+      const data = snap.data();
+      const match = findColorEntry(data, colorName);
+
+      if (match && match.color.stock !== undefined && match.color.stock !== null){
+        const newColorStock = Math.max(0, Number(match.color.stock) - qty);
+        const updatedColors = data.colors.slice();
+        updatedColors[match.idx] = Object.assign({}, match.color, { stock: newColorStock });
+        transaction.update(productRef, { colors: updatedColors });
+        result = { newStock: newColorStock, colorName: match.color.name };
+        return;
+      }
+
+      // Fallback: no color selected, the color wasn't found on the product
+      // (e.g. removed by the admin after being added to cart), or it has
+      // no stock figure of its own — decrement the overall stock instead.
+      const newOverallStock = Math.max(0, (Number(data.stock) || 0) - qty);
+      transaction.update(productRef, { stock: newOverallStock });
+      result = { newStock: newOverallStock, colorName: null };
+    });
+    return result;
+  }
+
   function setPlacingState(isPlacing){
     const btn = document.getElementById("placeOrderBtn");
     const label = document.getElementById("placeOrderLabel");
@@ -9185,9 +9456,15 @@ function showToast(message){
       const db = await waitForDb();
 
       // ---- Re-check live stock for every cart item before creating the order ----
+      // Color-aware: a cart line for a specific color is checked against
+      // THAT color's own stock figure when it has one, not the product's
+      // overall stock — otherwise a sold-out color could still be ordered
+      // as long as some other color of the same product had stock left.
       const stockChecks = await Promise.all(cart.map(async (item) => {
         const snap = await getDoc(doc(db, "products", item.productId));
-        const currentStock = snap.exists() ? (Number(snap.data().stock) || 0) : 0;
+        const productData = snap.exists() ? snap.data() : {};
+        const colorName = item.color && item.color.name ? item.color.name : null;
+        const currentStock = snap.exists() ? effectiveAvailableStock(productData, colorName) : 0;
         return { item, currentStock, ok: currentStock >= item.qty };
       }));
 
@@ -9199,12 +9476,16 @@ function showToast(message){
       }
 
       // ---- Build order items using current price/name from Firestore product data ----
-      const orderItems = stockChecks.map(({ item }) => ({
-        productId: item.productId,
-        name: item.name,
-        price: item.price,
-        qty: item.qty
-      }));
+      const orderItems = stockChecks.map(({ item }) => {
+        const orderItem = {
+          productId: item.productId,
+          name: item.name,
+          price: item.price,
+          qty: item.qty
+        };
+        if (item.color && item.color.name) orderItem.color = item.color;
+        return orderItem;
+      });
 
       const subtotal = orderItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
       const deliveryCharge = window.getStoreDeliveryCharge ? window.getStoreDeliveryCharge() : 0;
@@ -9250,23 +9531,30 @@ function showToast(message){
       const orderRef = await addDoc(collection(db, "orders"), orderPayload);
 
       // ---- Decrement stock for each ordered product (never below 0) ----
-      // Uses the `currentStock` values we just read moments ago in the
-      // pre-order stock re-check above, so this is one extra round-trip,
-      // not a second full re-read. Batched so all product updates commit
-      // together.
+      // Each line is its own atomic read-modify-write transaction (not a
+      // batch) — a batch writes blindly with values computed from the
+      // earlier pre-check read, which is a stale-read race if two orders
+      // land close together. A transaction re-reads inside itself right
+      // before writing, so the decrement is always correct regardless of
+      // what else happened between the pre-check and now. Color-aware via
+      // decrementProductStock — see its own comment for the fallback rule.
       try {
-        const stockBatch = writeBatch(db);
-        stockChecks.forEach(({ item, currentStock }) => {
-          const newStock = Math.max(0, currentStock - item.qty);
-          stockBatch.update(doc(db, "products", item.productId), { stock: newStock });
-        });
-        await stockBatch.commit();
+        const results = await Promise.all(orderItems.map(orderItem =>
+          decrementProductStock(
+            db,
+            orderItem.productId,
+            orderItem.qty,
+            orderItem.color && orderItem.color.name ? orderItem.color.name : null
+          )
+        ));
 
         // Reflect the change immediately in the storefront UI (badges,
-        // Buy Now / Add to Cart buttons) without needing a page reload.
-        stockChecks.forEach(({ item, currentStock }) => {
-          const newStock = Math.max(0, currentStock - item.qty);
-          if (window.applyProductStockUpdate) window.applyProductStockUpdate(item.productId, newStock);
+        // Buy Now / Add to Cart buttons, PDP qty stepper) without needing
+        // a page reload.
+        results.forEach((r, i) => {
+          if (window.applyProductStockUpdate){
+            window.applyProductStockUpdate(orderItems[i].productId, r.newStock, r.colorName);
+          }
         });
       } catch (stockErr) {
         // The order itself already succeeded — don't fail the whole
@@ -9744,6 +10032,30 @@ Please confirm my order.`
   let existingImageUrl = null;
   let productImageSourceMode = "upload"; // 'upload' | 'url'
   let specRowIdCounter = 0;
+  let colorRowIdCounter = 0;
+
+  // ---- Common color name → hex lookup, used to auto-fill the swatch as the admin types a name ----
+  const COLOR_NAME_MAP = {
+    "black":"#111111","white":"#FFFFFF","off white":"#F5F5F0","ivory":"#FFFFF0",
+    "red":"#E53935","maroon":"#7B1E1E","crimson":"#DC143C","wine":"#722F37",
+    "orange":"#FB8C00","peach":"#FFCBA4",
+    "yellow":"#FDD835","gold":"#D4AF37","mustard":"#E1AD01",
+    "green":"#43A047","olive":"#808000","mint":"#98FF98","emerald":"#50C878",
+    "teal":"#009688","turquoise":"#40E0D0",
+    "blue":"#1E88E5","navy":"#1A237E","sky blue":"#87CEEB","royal blue":"#4169E1",
+    "purple":"#8E24AA","violet":"#8F00FF","lavender":"#E6E6FA","lilac":"#C8A2C8",
+    "pink":"#EC407A","rose gold":"#B76E79","hot pink":"#FF69B4","magenta":"#FF00FF",
+    "brown":"#6D4C41","beige":"#C9B79C","tan":"#D2B48C","khaki":"#C3B091","coffee":"#4B3621",
+    "gray":"#9E9E9E","grey":"#9E9E9E","charcoal":"#36454F","silver":"#C0C0C0","graphite":"#41424C",
+    "cream":"#FFFDD0","copper":"#B87333","bronze":"#CD7F32","transparent":"#FFFFFF"
+  };
+  (function populateColorNameSuggestions(){
+    const list = document.getElementById("colorNameSuggestions");
+    if (!list) return;
+    list.innerHTML = Object.keys(COLOR_NAME_MAP)
+      .map(name => `<option value="${name.replace(/\b\w/g, c => c.toUpperCase())}">`)
+      .join("");
+  })();
 
   function isFirebaseStorageUrl(url){
     return typeof url === "string" && url.includes("firebasestorage.googleapis.com");
@@ -10491,6 +10803,9 @@ Please confirm my order.`
     document.getElementById("productImageUrlInput").value = "";
     document.getElementById("productImageUrlPreview").innerHTML = "<span>Paste an image URL to preview it here.</span>";
     document.getElementById("specRowsContainer").innerHTML = "";
+    document.getElementById("colorRowsContainer").innerHTML = "";
+    const stockAutoSumHint = document.getElementById("stockAutoSumHint");
+    if (stockAutoSumHint){ stockAutoSumHint.style.display = "none"; stockAutoSumHint.textContent = ""; }
     hideProductFormError();
     ["fieldProductName","fieldProductDescription","fieldProductPrice","fieldProductStock","fieldProductCategory","fieldProductOriginalPrice"]
       .forEach(f => document.getElementById(f).classList.remove("invalid"));
@@ -10561,6 +10876,117 @@ Please confirm my order.`
       .filter(s => s.name.length > 0);
   }
 
+  // ---- Colors builder: name + hex swatch (auto-filled from the name, or hand-picked) + per-color stock ----
+  window.addColorRow = function(name, hex, stock){
+    const container = document.getElementById("colorRowsContainer");
+    const rowId = "colorRow" + (colorRowIdCounter++);
+    const row = document.createElement("div");
+    row.className = "spec-row color-row";
+    row.id = rowId;
+    const safeHex = /^#([0-9a-fA-F]{6})$/.test(hex || "") ? hex : "#111111";
+    row.innerHTML = `
+      <input type="color" class="color-hex-input" value="${safeHex}" aria-label="Color swatch" onchange="handleColorHexPicked('${rowId}')">
+      <input type="text" class="color-name-input" placeholder="Color name e.g. Black" list="colorNameSuggestions" value="${escapeHtmlAdmin(name || "")}" oninput="handleColorNameTyped('${rowId}')">
+      <input type="number" class="color-stock-input" placeholder="Stock" min="0" step="1" value="${stock === undefined || stock === null ? "" : stock}" oninput="handleColorStockInput()">
+      <button type="button" class="spec-remove-btn" onclick="removeColorRow('${rowId}')" aria-label="Remove color">×</button>
+    `;
+    container.appendChild(row);
+  };
+
+  window.removeColorRow = function(rowId){
+    const row = document.getElementById(rowId);
+    if (row) row.remove();
+    handleColorStockInput();
+  };
+
+  // ---- Auto-sum: total stock = sum of per-color stock quantities ----
+  // Only colors with an explicit stock value are counted (blank = "not tracked
+  // separately", same convention as collectColorsFromForm). If no color has a
+  // stock value entered yet, there's nothing to sum, so the main Stock field
+  // is left alone.
+  function sumColorStocks(){
+    const stockInputs = Array.from(document.querySelectorAll("#colorRowsContainer .color-stock-input"));
+    let total = 0;
+    let anyEntered = false;
+    stockInputs.forEach(input => {
+      const raw = input.value.trim();
+      if (raw === "") return;
+      anyEntered = true;
+      const n = Math.max(0, Math.floor(Number(raw)) || 0);
+      total += n;
+    });
+    return { total, anyEntered };
+  }
+
+  window.autoSumColorStock = function(){
+    const { total, anyEntered } = sumColorStocks();
+    const hint = document.getElementById("stockAutoSumHint");
+    if (!anyEntered){
+      if (hint){ hint.style.display = "none"; hint.textContent = ""; }
+      showToast("Enter at least one color's stock first.");
+      return;
+    }
+    document.getElementById("productStock").value = total;
+    setProductFieldError("fieldProductStock", "errProductStock", false);
+    if (hint){
+      hint.style.display = "";
+      hint.textContent = `Auto-summed from ${document.querySelectorAll("#colorRowsContainer .color-row").length} color(s): ${total}`;
+    }
+  };
+
+  // Live-recalculate as the admin types per-color stock, so the total always
+  // stays in sync without an extra click — mirrors the explicit auto-sum
+  // button above but runs automatically on every color stock edit.
+  window.handleColorStockInput = function(){
+    const { total, anyEntered } = sumColorStocks();
+    const hint = document.getElementById("stockAutoSumHint");
+    if (!anyEntered){
+      if (hint){ hint.style.display = "none"; hint.textContent = ""; }
+      return;
+    }
+    document.getElementById("productStock").value = total;
+    setProductFieldError("fieldProductStock", "errProductStock", false);
+    if (hint){
+      hint.style.display = "";
+      hint.textContent = `Auto-summed from ${document.querySelectorAll("#colorRowsContainer .color-row").length} color(s): ${total}`;
+    }
+  };
+
+  // Auto-fill the swatch as soon as the typed name matches a known color —
+  // matches on every keystroke so it "just works" without needing a selection.
+  window.handleColorNameTyped = function(rowId){
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    const nameInput = row.querySelector(".color-name-input");
+    const hexInput = row.querySelector(".color-hex-input");
+    const typed = (nameInput.value || "").trim().toLowerCase();
+    if (COLOR_NAME_MAP[typed]) hexInput.value = COLOR_NAME_MAP[typed];
+  };
+
+  // If the admin manually picks an exact shade, that always wins over the name-based guess.
+  window.handleColorHexPicked = function(rowId){
+    // Nothing else to sync — the native color input already shows the picked shade.
+    // Hook kept for symmetry / future use.
+  };
+
+  function collectColorsFromForm(){
+    return Array.from(document.querySelectorAll("#colorRowsContainer .color-row"))
+      .map(row => {
+        const name = row.querySelector(".color-name-input").value.trim();
+        const hex = row.querySelector(".color-hex-input").value || "#111111";
+        const stockRaw = row.querySelector(".color-stock-input").value.trim();
+        // Leaving stock blank means "not tracked separately" — the storefront then
+        // falls back to the product's overall stock for that color, rather than
+        // silently treating it as 0 / out of stock.
+        const color = { name, hex };
+        if (stockRaw !== ""){
+          color.stock = Math.max(0, Math.floor(Number(stockRaw)) || 0);
+        }
+        return color;
+      })
+      .filter(c => c.name.length > 0);
+  }
+
   // ---- Open / close product form modal ----
   // mode: 'create' | 'edit' | 'duplicate'
   //   'duplicate' pre-fills every field from an existing product (like edit)
@@ -10589,6 +11015,19 @@ Please confirm my order.`
       if (Array.isArray(p.specifications)){
         p.specifications.forEach(spec => {
           if (spec && (spec.name || spec.value)) window.addSpecificationRow(spec.name, spec.value);
+        });
+      }
+
+      if (Array.isArray(p.colors)){
+        p.colors.forEach(color => {
+          // Legacy products saved colors as plain hex strings with no name/stock —
+          // bring those in with an empty name and the product's overall stock,
+          // so nothing is lost and the admin can just fill in names as needed.
+          if (typeof color === "string"){
+            window.addColorRow("", color, p.stock ?? 0);
+          } else if (color && typeof color === "object"){
+            window.addColorRow(color.name || "", color.hex || "", color.stock ?? p.stock ?? 0);
+          }
         });
       }
 
@@ -10657,6 +11096,7 @@ Please confirm my order.`
     const originalPriceRaw = document.getElementById("productOriginalPrice").value.trim();
     const stockRaw = document.getElementById("productStock").value.trim();
     const category = document.getElementById("productCategory").value.trim();
+    const colors = collectColorsFromForm();
     const imageUrlRaw = document.getElementById("productImageUrlInput").value.trim();
 
     const price = Number(priceRaw);
@@ -10667,7 +11107,7 @@ Please confirm my order.`
     const descriptionValid = description.length > 0;
     const priceValid = priceRaw !== "" && !isNaN(price) && price > 0;
     const originalPriceValid = originalPriceRaw === "" || (!isNaN(originalPrice) && originalPrice > price);
-    const stockValid = stockRaw !== "" && Number.isInteger(stock) && stock >= 0;
+    const stockValid = stockRaw !== "" && !isNaN(stock) && Number.isInteger(stock) && stock >= 0;
     const categoryValid = category.length > 0;
 
     let imageValid;
@@ -10690,7 +11130,7 @@ Please confirm my order.`
     return {
       name, brand, warranty, description, overview, price,
       originalPrice: originalPriceRaw === "" ? null : originalPrice,
-      stock, category,
+      stock, category, colors,
       specifications: collectSpecificationsFromForm(),
       active: document.getElementById("productActive").checked,
       freeBackCover: document.getElementById("productFreeBackCover").checked
