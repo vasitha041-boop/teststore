@@ -727,6 +727,70 @@
 
   .visually-hidden{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
+  /* ============ HERO SLIDER ALIGNMENT FIX (desktop only) ============ */
+  /* Desktop-only: the header combines .wrap (centers a 1320px box) and
+     .nav (adds 32px padding) on the SAME element — <div class="wrap nav">
+     — so the logo actually sits 32px INSIDE that centered 1320px box, not
+     flush with its raw edge. The hero text needs that same inner 32px
+     inset applied on the centered content box itself (not on the outer
+     full-width .dplex-slide-text, where it gets neutralized by the inner
+     box's own auto-centering) to truly land flush with the logo.
+     Scoped to min-width:769px so mobile (already correct per the
+     reference file) is untouched. */
+  @media (min-width: 769px) {
+    /* 1. Outer text layer goes edge-to-edge with no padding of its own —
+       the inset now lives on the centered content box below, mirroring
+       how .wrap (centering) and .nav (padding) combine on the header. */
+    .dplex-slide-text {
+      padding: 0 !important;
+    }
+
+    /* 2. Constrain the hero content boundary to the same 1320px wrapper as
+       the header, then add the same 32px inset .nav applies inside it. */
+    .dplex-slide-content {
+      max-width: 1320px !important;
+      width: 100% !important;
+      margin: 0 auto !important;
+      padding: 0 32px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* 2b. Slide 1's special full-bleed layout must stay full-width,
+       un-centered, and unpadded, or its absolutely-positioned title/desc/
+       button anchors (which assume a full-width parent) would shift. */
+    .dplex-slide[data-index="0"] .dplex-slide-text--top-center {
+      padding: 0 !important;
+    }
+    .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-slide-content {
+      max-width: none !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* 3. Middle-left variant: content box spans the full 1320px boundary
+       (with the same 32px inset) so its left edge lines up with the logo,
+       instead of being its own narrow, separately-centered box. */
+    .dplex-slide-text--middle-left .dplex-slide-content {
+      max-width: 1320px !important;
+      padding: 0 32px !important;
+      align-items: flex-start !important;
+    }
+
+    /* 4. ...and the 640px width restriction moves down to the text caption
+       itself, so the paragraph still wraps at a readable width while
+       staying flush-left inside the 1320px box. */
+    .dplex-slide-text--middle-left .dplex-caption {
+      max-width: 640px !important;
+    }
+
+    /* 5. Align the bottom pagination dots to the same wrapper boundary */
+    .dplex-dots {
+      max-width: 1320px !important;
+      padding: 0 32px !important;
+    }
+  }
+
   /* ============ BASEUS-STYLE HEADER OVERRIDES ============ */
   header {
     background: #FFFFFF !important;
@@ -11233,6 +11297,7 @@ Please confirm my order.`
         originalPrice: formData.originalPrice, // null when not set — safe fallback for existing products
         stock: formData.stock,
         category: formData.category,
+        colors: formData.colors,
         active: formData.active,
         freeBackCover: formData.freeBackCover,
         imageUrl: imageUrl || ""
