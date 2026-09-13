@@ -254,9 +254,9 @@
 
   .navcart{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;flex-shrink:0;line-height:1;}
   .navcart > *{flex:0 0 auto;align-self:center;}
-  .icon-btn{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,transform .15s;position:relative;flex-shrink:0;}
+  .icon-btn{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,transform .15s;position:relative;flex-shrink:0;}
   .icon-btn:hover{border-color:var(--ink);transform:translateY(-1px);}
-  .icon-btn svg{width:18px;height:18px;stroke:var(--ink);}
+  .icon-btn svg{width:20px;height:20px;stroke:var(--ink);}
   .icon-btn.search-toggle{display:flex;}
   /* Only the inline box that sits directly in the header nav is replaced by
      the icon — the search overlay it opens is a separate element and is
@@ -288,9 +288,9 @@
   .search-overlay-bar{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);background:#fff;}
   .search-input-pill{flex:1;display:flex;align-items:center;gap:10px;background:#F5F5F7;border-radius:99px;padding:0 16px;height:48px;border:1.5px solid transparent;transition:0.2s;}
   .search-input-pill:focus-within{background:#fff;border-color:#111;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
-  .search-input-pill .search-icon{width:18px;height:18px;stroke:#8E8E93;flex-shrink:0;}
+  .search-input-pill .search-icon{width:18px;height:18px;stroke:#767676;flex-shrink:0;}
   .search-overlay-input{flex:1;border:none;outline:none;background:transparent;font-size:15px;color:#111;height:100%;padding:0;}
-  .search-overlay-input::placeholder{color:#8E8E93;}
+  .search-overlay-input::placeholder{color:#767676;}
   .search-overlay-input:focus-visible{outline:none !important;}
   .search-overlay-close-btn{background:none;border:none;font-size:15px;font-weight:600;color:#111;cursor:pointer;padding:0;flex-shrink:0;}
   .search-overlay-body.wrap{padding:20px;}
@@ -353,7 +353,7 @@
   .icon-btn.nav-cart-empty .cart-badge{display:none;}
 
   /* ---- WCAG 2.5.5 touch targets: 44x44 minimum ---- */
-  .icon-btn, .burger, .cart-drawer-close{
+  .burger, .cart-drawer-close{
     min-width:44px;min-height:44px;
     display:inline-flex;align-items:center;justify-content:center;
   }
@@ -507,7 +507,7 @@
   .spin-modal-close:active{transform:scale(.94);}
   .spin-modal-close:focus-visible{outline:2px solid #111;outline-offset:2px;}
   .spin-modal-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:#111111;letter-spacing:-0.02em;line-height:1.25;margin-bottom:6px;}
-  .spin-modal-sub{font-family:'Inter',sans-serif;font-size:13px;color:#8E8E93;line-height:1.4;margin-bottom:24px;}
+  .spin-modal-sub{font-family:'Inter',sans-serif;font-size:13px;color:#767676;line-height:1.4;margin-bottom:24px;}
   .spin-reel-wrap{background:#F5F5F7;border-radius:16px;padding:20px 16px;margin-bottom:20px;overflow:hidden;}
   .spin-reel-row{display:flex;align-items:center;justify-content:center;gap:0;}
   .spin-reel-window{width:32px;height:70px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);}
@@ -518,25 +518,23 @@
   @keyframes spinReelLand{0%{transform:scale(1.2);}60%{transform:scale(.94);}100%{transform:scale(1);}}
   .spin-modal-result{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;min-height:34px;margin-bottom:20px;line-height:1.5;color:#111111;}
   .spin-modal-result.win{color:#1F8A43;}
-  .spin-modal-result.lose{color:#8E8E93;}
-  .spin-modal-result.hint{color:#8E8E93;font-weight:400;}
+  .spin-modal-result.lose{color:#767676;}
+  .spin-modal-result.hint{color:#767676;font-weight:400;}
   .spin-modal-btn{width:100%;min-height:48px;background:#111111;color:#FFFFFF;border:none;border-radius:99px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:background .2s ease,transform .2s ease;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
   .spin-modal-btn:hover:not(:disabled){background:#000000;transform:translateY(-1px);}
   .spin-modal-btn:active:not(:disabled){transform:scale(.98);}
   .spin-modal-btn:focus-visible{outline:2px solid #111;outline-offset:3px;}
-  .spin-modal-btn:disabled{background:#E5E5EA;color:#8E8E93;cursor:not-allowed;transform:none;}
+  .spin-modal-btn:disabled{background:#E5E5EA;color:#767676;cursor:not-allowed;transform:none;}
   .spin-modal-btn svg{flex-shrink:0;}
 
   /* ---- Claimed state: compact discount badge + next-unlock countdown ---- */
   .spin-claimed-badge{display:inline-flex;align-items:center;background:#111111;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.01em;padding:7px 18px;border-radius:99px;margin-bottom:20px;}
-  .spin-countdown-label{font-size:10.5px;font-weight:700;letter-spacing:0.08em;color:#8E8E93;text-transform:uppercase;margin-bottom:6px;}
+  .spin-countdown-label{font-size:10.5px;font-weight:700;letter-spacing:0.08em;color:#767676;text-transform:uppercase;margin-bottom:6px;}
   .spin-countdown-time{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;font-weight:600;color:#111111;margin-bottom:12px;white-space:nowrap;}
   .spin-countdown-track{width:100%;height:3px;background:#F0F0F2;border-radius:99px;overflow:hidden;margin-bottom:24px;}
   .spin-countdown-fill{height:100%;width:0%;background:#111111;border-radius:99px;transition:width 1s linear;}
   @media (max-width:480px){
     .spin-countdown-time{font-size:13px;}
-  }
-  @media (max-width:480px){
     .spin-modal-card{max-width:100%;padding:28px 20px 20px;border-radius:20px;}
     .spin-reel-num,.spin-reel-percent{font-size:40px;}
     .spin-modal-title{font-size:18px;}
@@ -549,99 +547,228 @@
   .hero-price-float strong{font-family:'Sora';font-size:16px;}
   .hero-visual-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
 
-  /* ============ HERO SLIDER — UGREEN-exact structure, sizing & nav bar ============ */
-  .dplex-hero-section{padding:0;}
-  .dplex-hero{position:relative;width:100%;height:100vh;max-height:800px;overflow:hidden;background:#111;opacity:1;transition:opacity .25s ease;}
-  .dplex-hero.hero-loading{opacity:0;}
-  .dplex-hero-track{position:relative;width:100%;height:100%;}
-  /* slides sit side-by-side off-canvas and translate in horizontally, like UGREEN's swiper */
-  .dplex-hero-slide{position:absolute;inset:0;display:block;width:100%;height:100%;color:#fff;transform:translate3d(100%,0,0);pointer-events:none;transition:transform .6s cubic-bezier(0.32,0.72,0,1);background:linear-gradient(120deg,#f2f4f8,#e5e9f0,#f2f4f8);background-size:200% 200%;will-change:transform;}
-  .dplex-hero-slide.is-active{transform:translate3d(0,0,0);pointer-events:auto;z-index:1;}
-  .dplex-hero-slide.no-anim{transition:none;}
-  .dplex-hero-media{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;}
-  .dplex-hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
-
-  /* text block: max-width 1360px, top offset via --pc-top / --mobile-top per slide, matches UGREEN exactly */
-  .dplex-hero-content{position:absolute;max-width:1360px;width:100%;top:var(--pc-top,132px);left:50%;transform:translateX(-50%);color:#fff;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px;}
-  .dplex-hero-eyebrow{display:inline-block;padding:8px 16px;background:#e8f6cf;border-radius:30px;font-weight:500;line-height:1;text-align:center;color:#000;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
-  .dplex-hero-title{font-size:40px;font-weight:600;line-height:1.1;margin:0 0 8px;color:inherit;}
-  .dplex-hero-desc{font-size:16px;font-weight:400;line-height:1.4;margin:0 0 24px;color:inherit;}
-  .dplex-hero-actions{display:flex;gap:12px;}
-  .dplex-hero-actions a{display:flex;align-items:center;justify-content:center;padding:10px 32px;border-radius:50px;font-size:16px;font-weight:400;line-height:1.5;border:1px solid #fff;color:inherit;transition:all .3s ease;}
-  .dplex-hero-actions .learn-more-btn{background-color:transparent;color:#fff;}
-  .dplex-hero-actions .learn-more-btn:hover{background-color:#fff;color:#000;}
-  .dplex-hero-actions .buy-now-btn{background-color:#fff;color:#000;border-color:#fff;}
-  .dplex-hero-actions .buy-now-btn:hover{background-color:#000;border-color:#000;color:#fff;}
-
-  /* dark colour-scheme slides: black text on light imagery, inverted buttons */
-  .dplex-hero-slide.color-scheme-dark .dplex-hero-content{color:#000;}
-  .dplex-hero-slide.color-scheme-dark .dplex-hero-actions .learn-more-btn{background-color:transparent;color:#000;border-color:#000;}
-  .dplex-hero-slide.color-scheme-dark .dplex-hero-actions .learn-more-btn:hover{background-color:#000;color:#fff;}
-  .dplex-hero-slide.color-scheme-dark .dplex-hero-actions .buy-now-btn{background-color:#000;color:#fff;border-color:#000;}
-  .dplex-hero-slide.color-scheme-dark .dplex-hero-actions .buy-now-btn:hover{border-color:#404040;background-color:#404040;}
-  .dplex-hero-slide.color-scheme-dark::before{content:'';position:absolute;top:0;left:0;width:100%;height:60px;background:linear-gradient(180deg,rgba(0,0,0,0.20) 0%,rgba(0,0,0,0.00) 100%);pointer-events:none;z-index:1;}
-
-  /* prev / next nav buttons — 45px white circle, hidden until hover, matches UGREEN exactly */
-  .dplex-hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:45px;height:45px;border-radius:50%;background-color:#fff;color:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;padding:0;border:none;opacity:.65;}
-  .dplex-hero:hover .dplex-hero-arrow{opacity:1;}
-  .dplex-hero .dplex-hero-arrow:hover{opacity:1 !important;}
-  .dplex-hero-arrow svg{width:7px;height:12px;stroke:currentColor;fill:none;pointer-events:none;}
-  .dplex-hero-arrow-prev{left:16px;}
-  .dplex-hero-arrow-next{right:16px;}
-
-  /* pagination — progress-bar segments with slide-name labels, matches UGREEN exactly */
-  .dplex-hero-pagination{pointer-events:none;}
-  .dplex-hero-point-list{position:absolute;left:50%;transform:translateX(-50%);bottom:40px;z-index:5;display:flex;justify-content:center;align-items:flex-end;gap:20px;pointer-events:auto;}
-  .dplex-hero-point-inner{cursor:pointer;max-width:150px;flex:1;pointer-events:auto;position:relative;z-index:1;}
-  .dplex-hero-point-text{display:none;font-size:14px;font-weight:600;line-height:1.5;width:100%;color:rgba(255,255,255,0.55);transition:all .3s ease;margin-bottom:8px;}
-  .dplex-hero-point-text.active{color:#fff;}
-  .dplex-hero-point-inner:hover .dplex-hero-point-text{color:#fff;}
-  .dplex-hero-point{height:3px;background-color:rgba(255,255,255,0.3);flex:1;position:relative;transition:width .2s;}
-  .dplex-hero-point-progress{background-color:#fff;position:absolute;top:0;left:0;width:0;height:100%;}
-  .dplex-hero-point-progress.filling{transition:width linear;}
-
-  /* Desktop: show each segment's slide-title label above its progress bar
-     (mobile keeps them hidden — .dplex-hero-point-text stays display:none
-     there, set in the max-width:768px block below). */
-  @media(min-width:769px){
-    .dplex-hero-point-text{display:block !important;}
+  /* ================================================================
+     HERO SLIDER (adapted from a Baseus-style slideshow concept —
+     see the HTML comment above the markup for why the demo photos
+     were swapped for solid colour panels)
+     ================================================================ */
+  :root{
+    --slide-heading-font-weight:700;
+    --slide-button-border-radius:30px;
+    --slide-container-gutter:40px;
+    --slide-autoplay-duration:8s;
+    --slide-progress-bar-color:255,255,255;
   }
+  .dplex-slideshow{position:relative;width:100%;display:block;margin:0;padding:0;background:#111;overflow:hidden;opacity:0;transition:opacity .4s ease;}
+  .dplex-slideshow.became-visible{opacity:1;}
+  .dplex-slide{position:absolute;inset:0;width:100%;opacity:0;visibility:hidden;transition:opacity .8s cubic-bezier(.22,1,.36,1),visibility .8s;pointer-events:none;z-index:1;}
+  .dplex-slide.is-active{position:relative;opacity:1;visibility:visible;pointer-events:auto;z-index:2;}
+  .dplex-slide-link{display:block;position:relative;width:100%;text-decoration:none;color:inherit;}
+  .dplex-slide-image-wrapper{position:relative;width:100%;display:block;overflow:hidden;aspect-ratio:2.6667;}
+  @media(max-width:768px){ .dplex-slide-image-wrapper{aspect-ratio:0.664;} }
 
-  @media(prefers-reduced-motion: reduce){
-    .dplex-hero-slide{transition:none;}
-    .dplex-hero-point-progress.filling{transition:none;}
+  .dplex-slide-text{position:absolute;inset:0;z-index:3;pointer-events:none;display:flex;padding:0 var(--slide-container-gutter);}
+  .dplex-slide-text--top-center{align-items:flex-start;justify-content:center;text-align:center;padding-top:clamp(40px,7vh,80px);}
+  .dplex-slide-text--middle-left{align-items:center;justify-content:flex-start;text-align:left;}
+  .dplex-slide-text--middle-center{align-items:center;justify-content:center;text-align:center;}
+  .dplex-slide-content{max-width:1600px;width:100%;display:flex;flex-direction:column;pointer-events:auto;}
+  .dplex-slide-text--top-center .dplex-slide-content{align-items:center;}
+  .dplex-slide-text--middle-left .dplex-slide-content{align-items:flex-start;max-width:640px;padding-left:80px;}
+  .dplex-slide-text--middle-center .dplex-slide-content{align-items:center;}
+
+  .dplex-caption{display:flex;flex-direction:column;gap:0;}
+  .dplex-title{font-family:'Sora',sans-serif;font-weight:var(--slide-heading-font-weight);line-height:1.05;letter-spacing:-0.02em;margin:0 0 20px;font-size:clamp(28px,3vw,48px);}
+  .dplex-title--lg{font-size:clamp(32px,3.75vw,60px);}
+  .dplex-title--md{font-size:clamp(24px,2.5vw,40px);}
+  .dplex-title--sm{font-size:clamp(22px,2.3vw,36px);}
+  .dplex-desc{font-family:'Inter',sans-serif;font-weight:500;line-height:1.3;color:inherit;font-size:clamp(15px,1.6vw,18px);margin:0;opacity:.85;}
+
+  .dplex-slide-btn{display:inline-flex;align-items:center;justify-content:center;width:12rem;height:3rem;line-height:3rem;padding:0;border-radius:var(--slide-button-border-radius);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.12);transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,background .2s ease,color .2s ease;white-space:nowrap;margin-top:20px;}
+  .dplex-slide-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,0.22);}
+  .dplex-slide-btn:active{transform:translateY(0) scale(0.98);}
+  .dplex-slide-btn--white{background:#FFFFFF;color:#111111;}
+  .dplex-slide-btn--white:hover{background:#F5F5F7;}
+  .dplex-slide-btn--black{background:#111111;color:#FFFFFF;}
+  .dplex-slide-btn--black:hover{background:#000000;}
+  .dplex-slide-btn--mt-20{margin-top:20px;}
+  .dplex-slide-btn--mt-5{margin-top:5px;}
+
+  /* Slide 1 — special layout: title top, button pinned to bottom */
+  /* These used to be scoped only by [data-index="0"], meaning ANY slide an
+     admin moves into the first position — even a middle-left slide like
+     "Designed to Disappear" — would get hijacked into this centered/
+     absolute layout. The title+desc becoming absolutely positioned (with
+     fixed top offsets) removes them from the flex flow, so the button —
+     now the only in-flow child — collapses to the top-left of the slide
+     instead of sitting below the heading. Gating every rule on the actual
+     `--top-center` class (not just position) ties this special layout to
+     the slide's real configuration, not merely which index it lands on. */
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center{position:absolute;inset:0;pointer-events:none;padding:0;}
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-slide-content{position:absolute;inset:0;pointer-events:none;max-width:none;width:100%;}
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-caption{position:relative;width:100%;height:100%;display:block;pointer-events:none;}
+  /* Title + description share ONE absolutely-positioned anchor (top-block)
+     instead of each having its own independent `top` clamp() — previously
+     a two-line title's real height could exceed the fixed 40-90px gap
+     between the two anchors and the description would render overlapping
+     the second title line. Positioning the shared wrapper once and letting
+     title/desc stack in normal flow inside it means the description always
+     sits right after the title, no matter how many lines the title wraps to. */
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-top-block{position:absolute;left:0;right:0;top:clamp(40px,8vh,90px);text-align:center;pointer-events:auto;padding:0 var(--slide-container-gutter);}
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-title{position:static;margin:0 0 12px;}
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-desc{position:static;margin:0;}
+  .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-cta-anchor{position:absolute;left:50%;bottom:clamp(70px,12vh,110px);transform:translateX(-50%);pointer-events:auto;display:inline-block;text-decoration:none;}
+  .dplex-slide-btn--slide-1{margin-top:0 !important;}
+
+  /* Navigation arrows */
+  .dplex-slide-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:48px;height:48px;padding:0;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#111;background:#FFFFFF;box-shadow:0 6px 20px rgba(0,0,0,0.22);transition:background .25s ease,transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,opacity .25s ease;opacity:.9;-webkit-tap-highlight-color:transparent;}
+  .dplex-slide-arrow:hover{background:#fff;opacity:1;box-shadow:0 10px 28px rgba(0,0,0,0.28);transform:translateY(-50%) scale(1.08);}
+  .dplex-slide-arrow:active{transform:translateY(-50%) scale(0.94);transition-duration:.1s;}
+  .dplex-slide-arrow:focus-visible{outline:2px solid #fff;outline-offset:3px;opacity:1;}
+  .dplex-slide-arrow svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;pointer-events:none;transition:transform .25s cubic-bezier(.16,1,.3,1);}
+  .dplex-slide-arrow--prev{left:24px;}
+  .dplex-slide-arrow--next{right:24px;}
+  .dplex-slide-arrow--prev:hover svg{transform:translateX(-2px);}
+  .dplex-slide-arrow--next:hover svg{transform:translateX(2px);}
+  .dplex-slide-arrow:disabled{opacity:0.3;cursor:not-allowed;pointer-events:none;}
+
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow{top:auto;bottom:22px;transform:none;}
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow--prev{left:auto;right:calc(var(--slide-container-gutter) + 130px);}
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow--next{right:var(--slide-container-gutter);}
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow:hover{transform:scale(1.08);}
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow:active{transform:scale(0.94);}
+
+  /* Pagination dots */
+  .dplex-dots{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:8px;padding:0 var(--slide-container-gutter);max-width:100%;transition:left .35s ease,transform .35s ease;}
+  .dplex-slideshow--bottom-arrows .dplex-dots{left:var(--slide-container-gutter);transform:none;}
+  .dplex-dot{width:36px;height:3px;border-radius:99px;background:rgba(255,255,255,0.32);border:none;padding:0;cursor:pointer;position:relative;overflow:hidden;transition:background .3s ease,width .3s ease;flex-shrink:0;}
+  .dplex-dot:hover{background:rgba(255,255,255,0.55);}
+  .dplex-dot.is-current{background:rgba(255,255,255,0.25);width:48px;}
+  .dplex-dot.is-current::after{content:'';position:absolute;left:0;top:0;bottom:0;width:0%;background:rgb(var(--slide-progress-bar-color));border-radius:99px;animation:dplexDotProgress var(--slide-autoplay-duration) linear forwards;}
+  .dplex-slideshow.is-paused .dplex-dot.is-current::after{animation-play-state:paused;}
+  @keyframes dplexDotProgress{from{width:0%;}to{width:100%;}}
+
+  @media(max-width:1024px){
+    :root{--slide-container-gutter:32px;}
+    .dplex-title--lg{font-size:42px;}
+    .dplex-title--md{font-size:32px;}
+    .dplex-title--sm{font-size:30px;}
+    .dplex-desc{font-size:16px;}
+    .dplex-slide-text--middle-left .dplex-slide-content{padding-left:64px;}
+    .dplex-slide-arrow{width:44px;height:44px;}
+    .dplex-slide-arrow--prev{left:16px;}
+    .dplex-slide-arrow--next{right:16px;}
+    .dplex-slide-arrow svg{width:16px;height:16px;}
+    .dplex-slideshow--bottom-arrows .dplex-slide-arrow--prev{right:calc(var(--slide-container-gutter) + 120px);}
   }
 
   @media(max-width:768px){
-    .dplex-hero{max-height:500px;}
-    .dplex-hero-content{top:var(--mobile-top,76px);text-align:center;}
-    .dplex-hero-title{font-size:28px;margin-bottom:8px;}
-    .dplex-hero-desc{font-size:14px;margin-bottom:16px;}
-    .dplex-hero-eyebrow{font-size:12px;margin-bottom:4px;}
-    .dplex-hero-actions{width:100%;justify-content:center;}
-    .dplex-hero-actions a{font-size:14px;min-width:140px;max-width:100%;padding:8px 32px;}
-
-    .dplex-hero-point-list{position:initial;padding:0 40px;transform:none;gap:8px;height:100%;}
-    .dplex-hero-point-inner{max-width:50%;height:100%;display:flex;align-items:center;}
-    .dplex-hero-pagination{position:absolute;bottom:24px;left:0;width:100%;height:24px;margin:0;z-index:5;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-    .dplex-hero-pagination .dplex-hero-point-list,
-    .dplex-hero-pagination .dplex-hero-arrow{pointer-events:auto;}
-
-    .dplex-hero-arrow{width:24px;height:24px;background-color:transparent;color:#fff;z-index:2;opacity:1;}
-    .dplex-hero-slide.color-scheme-dark ~ .dplex-hero-arrow{color:#000;}
-    .dplex-hero-arrow-prev{left:12px;}
-    .dplex-hero-arrow-next{right:12px;}
+    :root{--slide-container-gutter:24px;}
+    .dplex-slide-text,
+    .dplex-slide-text--middle-left,
+    .dplex-slide-text--middle-center{align-items:flex-start;justify-content:center;text-align:center;padding-top:clamp(36px,6vh,60px);}
+    .dplex-slide-content,
+    .dplex-slide-text--middle-left .dplex-slide-content{align-items:center;max-width:100%;padding-left:0;}
+    .dplex-title--lg{font-size:clamp(26px,7vw,36px);margin-bottom:12px;}
+    .dplex-title--md{font-size:clamp(22px,6vw,30px);margin-bottom:8px;}
+    .dplex-title--sm{font-size:clamp(22px,6vw,30px);margin-bottom:8px;}
+    .dplex-desc{font-size:clamp(14px,4vw,18px);line-height:1.3;}
+    .dplex-slide-btn{width:10rem;height:2.75rem;line-height:2.75rem;font-size:14px;}
+    .dplex-slide-btn--mt-20{margin-top:14px;}
+    .dplex-slide-btn--mt-5{margin-top:10px;}
+    .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-top-block{top:clamp(36px,6vh,60px);}
+    .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-cta-anchor{bottom:clamp(88px,16vh,140px);}
+    .dplex-slide-arrow,
+    .dplex-slideshow--bottom-arrows .dplex-slide-arrow{width:40px;height:40px;top:auto;bottom:22px;transform:none;opacity:.9;}
+    .dplex-slide-arrow--prev,
+    .dplex-slideshow--bottom-arrows .dplex-slide-arrow--prev{left:auto;right:calc(var(--slide-container-gutter) + 96px);}
+    .dplex-slide-arrow--next,
+    .dplex-slideshow--bottom-arrows .dplex-slide-arrow--next{right:var(--slide-container-gutter);}
+    .dplex-slide-arrow svg{width:15px;height:15px;stroke-width:2.2;}
+    .dplex-slide-arrow:hover,
+    .dplex-slideshow--bottom-arrows .dplex-slide-arrow:hover{transform:none;background:#FFFFFF;}
+    .dplex-dots,
+    .dplex-slideshow--bottom-arrows .dplex-dots{left:var(--slide-container-gutter);right:auto;bottom:26px;transform:none;padding:0;gap:6px;}
+    .dplex-dot{width:26px;}
+    .dplex-dot.is-current{width:36px;}
   }
 
-  /* WCAG 2.2.2: a visible control to pause auto-advancing content. */
-  .dplex-hero-playpause{position:absolute;right:20px;bottom:0;z-index:6;width:28px;height:28px;border-radius:50%;
-    background:rgba(255,255,255,0.16);border:none;color:#fff;display:flex;align-items:center;justify-content:center;
-    cursor:pointer;pointer-events:auto;transition:background .2s;flex-shrink:0;}
-  .dplex-hero-playpause:hover{background:rgba(255,255,255,0.3);}
-  .dplex-hero-playpause svg{width:13px;height:13px;display:block;}
-  @media(max-width:768px){.dplex-hero-playpause{position:static;margin-left:10px;width:24px;height:24px;}}
+  @media(max-width:380px){
+    .dplex-title--lg{font-size:22px;}
+    .dplex-title--md{font-size:20px;}
+    .dplex-title--sm{font-size:20px;}
+    .dplex-desc{font-size:13px;}
+    .dplex-slide-btn{width:9rem;font-size:13px;}
+    .dplex-slide[data-index="0"] .dplex-slide-text--top-center .dplex-cta-anchor{bottom:clamp(80px,14vh,120px);}
+    .dplex-slide-arrow{display:none;}
+    .dplex-dots,
+    .dplex-slideshow--bottom-arrows .dplex-dots{left:50%;transform:translateX(-50%);}
+  }
 
-  @keyframes dplexPlaceholderGradient{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+  @media(prefers-reduced-motion:reduce){
+    .dplex-slide,
+    .dplex-dots{transition:none;}
+    .dplex-dot.is-current::after{animation-duration:0.1s;}
+    .dplex-slide-btn,
+    .dplex-slide-arrow,
+    .dplex-slide-arrow svg{transition:none;}
+  }
+
+  .visually-hidden{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+  /* ============ BASEUS-STYLE HEADER OVERRIDES ============ */
+  header {
+    background: #FFFFFF !important;
+    border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+    backdrop-filter: none !important;
+  }
+  .nav { position: relative; justify-content: space-between; }
+
+  /* Push the Home page down to clear the permanently solid header */
+  #homeSections {
+    padding-top: var(--header-height);
+  }
+
+  /* Force black text/icons for the permanently solid white background */
+  .logo { color: #111111 !important; }
+  .logo img, .store-logo-img { filter: brightness(0) !important; }
+  .navlinks a { color: #111111 !important; text-shadow: none !important; font-size: 14.5px; font-weight: 500; }
+  .icon-btn, .burger { color: #111111 !important; }
+  .icon-btn svg, .burger svg { stroke: #111111 !important; }
+
+  /* Absolute centering for Desktop Links */
+  @media(min-width: 901px) {
+    .navlinks {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      gap: 36px;
+    }
+  }
+
+  /* "Store ↗" Link Styles */
+  .header-store-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #111111;
+    margin-right: 16px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .header-store-link:hover { opacity: 0.7; }
+  .header-store-link svg { width: 14px; height: 14px; stroke: currentColor; }
+  @media(max-width: 768px) { .header-store-link { display: none; } }
+
+  /* Match Baseus Cart Badge */
+  .cart-badge {
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+    top: -2px !important;
+    right: -4px !important;
+  }
 
   /* marquee */
   .marquee-wrap{margin:0;width:100%;}
@@ -717,18 +844,18 @@
   #footerLightLines .lights path{fill:#fff;}
   .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.1);}
   .foot-brand .logo{color:#fff;margin-bottom:14px;}
-  .foot-brand p{font-size:13px;line-height:1.6;color:#A5A5A5;max-width:260px;margin:0;}
+  .foot-brand p{font-size:13px;line-height:1.6;color:#767676;max-width:260px;margin:0;}
   .foot-col h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:16px;text-transform:none;}
-  .foot-col a{display:block;font-size:13px;color:#A5A5A5;margin-bottom:11px;transition:color .2s;}
+  .foot-col a{display:block;font-size:13px;color:#767676;margin-bottom:11px;transition:color .2s;}
   .foot-col a:hover{color:#fff;}
-  .foot-news p{font-size:13px;color:#A5A5A5;margin:0 0 14px;line-height:1.5;}
+  .foot-news p{font-size:13px;color:#767676;margin:0 0 14px;line-height:1.5;}
   .foot-form{display:flex;gap:8px;}
   .foot-form input{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-pill);padding:10px 16px;color:#fff;font-size:13px;font-family:'Inter';}
-  .foot-form input::placeholder{color:#8A8A8A;}
+  .foot-form input::placeholder{color:#767676;}
   .foot-form button{background:#fff;color:var(--ink);border:none;border-radius:var(--radius-pill);padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
   .foot-social{display:flex;gap:10px;margin-top:18px;}
   .foot-social a{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;}
-  .foot-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#8A8A8A;padding:20px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#767676;padding:20px 0;}
 
   /* ============ PRODUCT CARDS ============ */
   .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
@@ -741,28 +868,38 @@
   .prod-card:hover .prod-thumb img{transform:scale(1.05);}
   .badge{position:absolute;top:12px;left:12px;z-index:10;background:#fff;color:var(--ink);font-size:11px;font-weight:600;letter-spacing:0.02em;padding:5px 10px;line-height:1;border-radius:99px;}
   .prod-body{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1;}
-  .prod-cat{font-size:10px;font-weight:600;color:#A1A1A6;text-transform:uppercase;letter-spacing:0.06em;}
-  .prod-name{font-size:15px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;}
+  .prod-cat{font-size:10px;font-weight:600;color:#767676;text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;gap:5px;}
+  .prod-brand-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:#111111;font-weight:700;letter-spacing:0.02em;}
+  /* min-height is line-height-relative (not a fixed px) so 1-line vs 2-line names reserve
+     the same space at every breakpoint, including the smaller mobile font-size below. */
+  .prod-name{font-size:15px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;}
   .prod-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
   .prod-price{font-family:'Sora';font-weight:600;font-size:16px;}
   .prod-price del{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px;}
-  .add-btn{flex:1;height:44px;border-radius:var(--radius-pill);background:var(--ink);color:#fff;border:none;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s;padding:0 14px;}
-  .add-btn-icon{display:none;flex-shrink:0;}
-  .add-btn:hover{background:var(--accent);}
+  .prod-save{font-size:11.5px;font-weight:600;color:#1F8A43;margin-top:-6px;}
+  .stock-line{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:#1F8A43;margin-top:-6px;}
+  .stock-line .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+  .stock-line.low{color:#B45309;}
+  .stock-line.out{color:#767676;}
   /* ---- "Quiet Luxury" action row: soft grey pill + circle, going obsidian/brand on hover ---- */
   .prod-actions{display:flex;align-items:center;height:44px;margin-top:14px;}
-  .single-add-btn{width:100%;height:100%;border-radius:99px;background:#111111;color:#FFFFFF;border:none;font-size:14px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:background .22s ease,transform .22s ease,box-shadow .22s ease;-webkit-tap-highlight-color:transparent;}
+  .single-add-btn{width:100%;height:100%;border-radius:99px;background:#111111;color:#FFFFFF;border:none;font-size:14px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:background .22s ease,transform .22s ease,box-shadow .22s ease;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
   .single-add-btn:hover:not([disabled]){background:#000000;transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,0.18);}
-  .single-add-btn[disabled]{background:#E5E5EA;color:#8E8E93;cursor:not-allowed;transform:none;box-shadow:none;}
+  .single-add-btn[disabled]{background:#E5E5EA;color:#767676;cursor:not-allowed;transform:none;box-shadow:none;}
+  .single-add-btn .btn-icon{display:none;flex-shrink:0;}
 
-  /* Mobile: same quiet-luxury pill/circle, simply scaled down (desktop untouched) */
+  /* Mobile: same quiet-luxury pill, simply scaled down (desktop untouched).
+     .prod-actions height matches the base 44px WCAG tap-target minimum —
+     it was previously shrunk to 40px here, which is what broke that. */
   @media(max-width:768px){
     .prod-name{font-size:13px;}
     .prod-price{font-size:13px;}
-    .prod-actions{height:40px;}
     .single-add-btn{font-size:13.5px;}
+    /* Icon-only once the button is actually actionable — Out of Stock keeps
+       its full label since there's nothing to tap into an icon for. */
+    .single-add-btn:not([disabled]) .btn-label{display:none;}
+    .single-add-btn:not([disabled]) .btn-icon{display:inline-flex;}
   }
-  .prod-btns{display:flex;gap:8px;}
 
   /* ---- Product Card Style variants (Admin → Store Settings → productCardStyle) ---- */
   /* "classic" is the default/original design above — untouched. */
@@ -771,8 +908,8 @@
   body.card-style-minimal .prod-thumb{border-radius:12px;}
   body.card-style-minimal .prod-cat{display:none;}
   body.card-style-minimal .prod-body{padding:12px 2px 16px;}
-  body.card-style-minimal .add-btn{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
-  body.card-style-minimal .add-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+  body.card-style-minimal .single-add-btn{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  body.card-style-minimal .single-add-btn:hover:not([disabled]){background:var(--ink);color:#fff;border-color:var(--ink);}
 
   body.card-style-modern .prod-card{border:none;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,0.07);}
   body.card-style-modern .prod-card:hover{transform:translateY(-6px);box-shadow:none;}
@@ -780,30 +917,30 @@
   body.card-style-modern .prod-cat{display:inline-block;background:var(--teal);color:#fff;padding:3px 10px;border-radius:var(--radius-pill);font-size:10px;letter-spacing:0.02em;}
   body.card-style-modern .prod-name{font-size:15.5px;}
   body.card-style-modern .prod-price{font-size:17px;}
-  body.card-style-modern .add-btn{border-radius:var(--radius-pill);}
 
   .section-alt{background:var(--paper);}
 
   /* ---- Firestore product card additions ---- */
   .prod-thumb{background:#F0F0F2;}
   .prod-thumb img.prod-thumb-img{width:100%;height:100%;object-fit:cover;display:block;}
-  .prod-thumb-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;color:#A1A1A6;}
-  .stock-badge{top:auto;bottom:12px;left:12px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111111;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:1px solid rgba(255,255,255,0.4);}
-  .stock-badge.low{background:rgba(254,243,199,0.9);color:#B45309;border-color:rgba(251,191,36,0.3);}
-  .stock-badge.out{background:rgba(245,245,247,0.9);color:#8E8E93;border-color:rgba(0,0,0,0.05);}
-  .stock-badge:not(.low):not(.out){display:none !important;}
-  .add-btn[disabled]{background:#CFCFCF;cursor:not-allowed;}
-  .add-btn[disabled]:hover{background:#CFCFCF;}
+  .prod-thumb-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;color:#767676;}
   .discount-badge{background:#111111;color:#FFFFFF;box-shadow:0 4px 12px rgba(0,0,0,0.12);}
 
-  /* Product Card DPLEX Brand Badge */
-  .prod-brand-badge{position:absolute;top:12px;left:12px;z-index:10;background:#000000;padding:5px 9px;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.18);pointer-events:none;}
-  .prod-brand-badge img{height:11px;width:auto;max-width:54px;object-fit:contain;display:block;}
-  .prod-thumb-fallback-text{font-size:13px;font-weight:600;color:#A1A1A6;background:transparent;padding:0 20px;text-align:center;}
+  .prod-thumb-fallback-text{font-size:13px;font-weight:600;color:#767676;background:transparent;padding:0 20px;text-align:center;}
   .wishlist-btn{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1);transition:transform .15s;z-index:2;}
   .wishlist-btn:hover{transform:scale(1.08);}
   .wishlist-btn svg{width:16px;height:16px;stroke:var(--ink);fill:none;transition:fill .15s,stroke .15s;}
   .wishlist-btn.active svg{fill:var(--accent);stroke:var(--accent);}
+
+  /* Desktop hover "Quick View" affordance, bottom-right of the thumb — jumps
+     straight to the same PDP a card click already opens, just discoverable
+     without having to hover the whole card first. */
+  .quick-view{position:absolute;bottom:12px;right:12px;z-index:2;width:32px;height:32px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+  .quick-view svg{width:15px;height:15px;stroke:var(--ink);fill:none;}
+  @media(hover:hover){
+    .quick-view{opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;}
+    .prod-card:hover .quick-view{opacity:1;transform:translateY(0);}
+  }
 
   /* ---- Loading skeleton ---- */
   .skel-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;}
@@ -828,7 +965,7 @@
   .cart-drawer.open .cart-drawer-panel{transform:translateX(0);}
   .cart-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:22px 20px 18px;border-bottom:1px solid var(--line);}
   .cart-drawer-head h3{font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--ink);}
-  .cart-drawer-close{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:#8E8E93;font-size:13px;font-weight:600;padding:0;transition:color .18s ease;}
+  .cart-drawer-close{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:#767676;font-size:13px;font-weight:600;padding:0;transition:color .18s ease;}
 
   /* ---- Account Quick Menu Drawer ---- */
   .account-drawer-panel{width:min(340px,85vw);}
@@ -845,7 +982,7 @@
   .cart-drawer-close:hover{color:var(--ink);}
   .cart-drawer-items{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px;}
   .cart-item{display:flex;gap:12px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:20px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.02);align-items:center;}
-  .cart-item-thumb{width:60px;height:60px;border-radius:10px;background:#F0F0F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:20px;color:#A1A1A6;}
+  .cart-item-thumb{width:60px;height:60px;border-radius:10px;background:#F0F0F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:20px;color:#767676;}
   .cart-item-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
   .cart-item-name{font-size:13.5px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -860,7 +997,7 @@
   .cart-item-qty .qty-val{min-width:36px;text-align:center;font-size:14px;font-weight:600;color:#111111;}
   .cart-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;}
   .cart-item-subtotal{font-family:'Sora';font-size:13.5px;font-weight:600;}
-  .cart-item-remove{font-size:13px;color:#8E8E93;text-decoration:none;font-weight:500;cursor:pointer;background:none;border:none;padding:4px 0;font-family:inherit;transition:color .2s ease;}
+  .cart-item-remove{font-size:13px;color:#767676;text-decoration:none;font-weight:500;cursor:pointer;background:none;border:none;padding:4px 0;font-family:inherit;transition:color .2s ease;}
   .cart-item-remove:hover{color:#FF3B30;text-decoration:none;}
 
   .cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;gap:14px;color:var(--muted);flex:1;}
@@ -868,7 +1005,7 @@
   .cart-empty p{font-size:15px;font-weight:600;color:var(--ink);margin:0;}
 
   .cart-drawer-foot{background:#FFFFFF;border-top:1px solid rgba(0,0,0,0.04);padding:24px 20px 32px;display:flex;flex-direction:column;gap:10px;}
-  .cart-item-delivery{font-size:11.5px;color:#8E8E93;font-weight:500;margin-top:2px;}
+  .cart-item-delivery{font-size:11.5px;color:#767676;font-weight:500;margin-top:2px;}
   .cart-foot-actions{display:flex;gap:10px;margin-top:4px;}
   .cart-foot-secondary{flex:1;height:46px;border-radius:99px;background:#F5F5F7;color:#111111;border:none;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:background .2s ease;-webkit-tap-highlight-color:transparent;}
   .cart-foot-secondary:hover{background:#E8E8ED;}
@@ -877,7 +1014,7 @@
   .cart-sum-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);}
   .cart-sum-row.total{font-size:16px;font-weight:600;color:var(--ink);font-family:'Sora';}
   .checkout-col-right .cart-sum-row{margin-bottom:10px;}
-  .cart-clear-btn{background:transparent;border:none;padding:8px;font-size:13px;font-weight:500;cursor:pointer;color:#8E8E93;transition:color .2s ease;}
+  .cart-clear-btn{background:transparent;border:none;padding:8px;font-size:13px;font-weight:500;cursor:pointer;color:#767676;transition:color .2s ease;}
   .cart-clear-btn:hover{border:none;color:#111111;}
 
   /* ============ TIER-1 FULL CART PAGE ============ */
@@ -886,7 +1023,7 @@
   .premium-cart-page .pdp-back{margin-bottom:24px;}
   /* Steps Progress */
   .cart-steps{display:flex;align-items:center;justify-content:center;gap:16px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:99px;padding:16px 32px;margin-bottom:40px;box-shadow:0 4px 24px rgba(0,0,0,0.02);}
-  .cart-steps .step{font-weight:500;color:#8E8E93;font-size:14px;}
+  .cart-steps .step{font-weight:500;color:#767676;font-size:14px;}
   .cart-steps .step.active{color:#111111;font-weight:700;}
   .step-divider{width:40px;height:1px;background:rgba(0,0,0,0.1);}
   /* Layout Split */
@@ -895,11 +1032,11 @@
   .cart-totals-col{flex:1;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:24px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.02);position:sticky;top:100px;}
   /* Item Card */
   .cart-item-card{display:flex;align-items:center;gap:24px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,0.02);}
-  .cart-thumb{width:80px;height:80px;border-radius:12px;object-fit:cover;background:#F5F5F7;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;color:#A1A1A6;overflow:hidden;}
+  .cart-thumb{width:80px;height:80px;border-radius:12px;object-fit:cover;background:#F5F5F7;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;color:#767676;overflow:hidden;}
   .cart-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .cart-info{flex:1;min-width:0;}
   .cart-info h3{font-size:16px;font-weight:600;color:#111111;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .cart-info .price{color:#8E8E93;font-weight:500;font-size:13.5px;}
+  .cart-info .price{color:#767676;font-weight:500;font-size:13.5px;}
   /* Quantity pill — identical to the Cart Drawer's */
   .cart-item-card .cart-item-qty{display:inline-flex;align-items:center;gap:0;background:#F5F5F7;border-radius:99px;padding:4px;margin-top:10px;}
   .cart-item-card .cart-item-qty .qty-btn{width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:16px;font-weight:500;color:#111111;transition:transform .2s ease,box-shadow .2s ease;}
@@ -908,7 +1045,7 @@
   /* Right-hand price + remove */
   .cart-item-card .cart-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0;}
   .cart-item-card .cart-item-subtotal{font-family:'Sora';font-size:15px;font-weight:600;color:#111111;}
-  .remove-btn{background:none;border:none;font-size:22px;line-height:1;color:#8E8E93;cursor:pointer;transition:color .2s ease;padding:0;}
+  .remove-btn{background:none;border:none;font-size:22px;line-height:1;color:#767676;cursor:pointer;transition:color .2s ease;padding:0;}
   .remove-btn:hover{color:#FF3B30;}
   /* Coupon */
   .cart-coupon-row{display:flex;gap:12px;margin-bottom:20px;}
@@ -919,7 +1056,7 @@
   /* Totals */
   .cart-totals-col hr{border:none;border-top:1px solid rgba(0,0,0,0.06);margin:20px 0;}
   .cart-totals-col h2{font-size:20px;font-weight:700;letter-spacing:-0.01em;color:#111111;margin-bottom:24px;}
-  .totals-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;color:#8E8E93;font-size:14px;}
+  .totals-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;color:#767676;font-size:14px;}
   .totals-row:last-of-type{margin-bottom:0;}
   .totals-row strong{color:#111111;font-weight:600;}
   .totals-row.grand-total{font-size:18px;font-weight:700;color:#111111;margin-bottom:0;}
@@ -963,7 +1100,7 @@
   .modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
   .modal-close svg{width:16px;height:16px;stroke:var(--ink);}
   .modal-grid{display:grid;grid-template-columns:1fr 1fr;}
-  .modal-thumb{aspect-ratio:1/1;background:#F0F0F2;display:flex;align-items:center;justify-content:center;font-size:48px;color:#A1A1A6;overflow:hidden;}
+  .modal-thumb{aspect-ratio:1/1;background:#F0F0F2;display:flex;align-items:center;justify-content:center;font-size:48px;color:#767676;overflow:hidden;}
   .modal-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .modal-info{padding:28px 26px;display:flex;flex-direction:column;}
   .modal-cat{font-size:11px;font-weight:500;color:var(--teal);text-transform:uppercase;letter-spacing:0.04em;}
@@ -996,7 +1133,7 @@
   /* ---- PDP: single-line compact back-to-category bar (replaces the
        old stacked breadcrumbs + separate "Back to products" button) ---- */
   .pdp-top-nav{margin-bottom:16px;display:flex;align-items:center;}
-  .pdp-back-compact{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:#8E8E93;cursor:pointer;transition:color .15s ease;font-family:inherit;}
+  .pdp-back-compact{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:#767676;cursor:pointer;transition:color .15s ease;font-family:inherit;}
   .pdp-back-compact:hover{color:#111111;}
 
   .pdp-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:48px;align-items:flex-start;}
@@ -1027,7 +1164,7 @@
   .pdp-meta-row .pdp-stock{margin-top:0;}
   .pdp-meta-row .pdp-warranty{margin-top:0;}
   .pdp-stock::before{display:none;}
-  .pdp-stock.out{color:#8E8E93;background:#F5F5F7;}
+  .pdp-stock.out{color:#767676;background:#F5F5F7;}
   .pdp-stock.out::before{display:none;}
   .pdp-divider{height:1px;background:var(--line);margin:24px 0;}
   .pdp-desc-label{font-size:13px;font-weight:600;margin-bottom:8px;}
@@ -1037,7 +1174,7 @@
   .pdp-qty-row .qty-btn{width:44px;height:44px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.08);box-shadow:0 4px 12px rgba(0,0,0,0.04);font-size:20px;font-weight:500;color:#111111;display:flex;align-items:center;justify-content:center;transition:transform .2s ease,box-shadow .2s ease;}
   .pdp-qty-row .qty-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
   .pdp-qty-row .qty-val{font-size:15px;font-weight:600;min-width:44px;text-align:center;color:#111111;}
-  .pdp-qty-note{margin-left:8px;color:#8E8E93;font-size:13px;}
+  .pdp-qty-note{margin-left:8px;color:#767676;font-size:13px;}
   .pdp-add-btn{margin-top:26px;background:#FFFFFF;color:#111111;border:1.5px solid #D1D1D6;box-shadow:0 2px 8px rgba(0,0,0,0.02);border-radius:99px;padding:12px 24px;min-height:56px;font-size:15px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;transition:all .3s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;justify-content:center;gap:8px;}
   .pdp-actions-row{display:flex;gap:14px;margin-top:32px;}
   .pdp-actions-row .pdp-add-btn{margin-top:0;flex:1;}
@@ -1063,7 +1200,7 @@
     .pdp-sticky-bar.show{transform:translateY(0);opacity:1;pointer-events:auto;}
     .pdp-sticky-info{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
     .pdp-sticky-thumb{width:40px;height:40px;flex-shrink:0;border-radius:10px;overflow:hidden;
-      background:#F0F0F2;display:flex;align-items:center;justify-content:center;font-size:18px;color:#A1A1A6;}
+      background:#F0F0F2;display:flex;align-items:center;justify-content:center;font-size:18px;color:#767676;}
     .pdp-sticky-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
     .pdp-sticky-text{min-width:0;display:flex;flex-direction:column;gap:1px;}
     .pdp-sticky-name{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.25;
@@ -1115,12 +1252,12 @@
   .pcr-logo-badge{background:#000000;padding:8px 16px;border-radius:10px;display:inline-flex;align-items:center;}
   .pcr-logo-img{height:20px;width:auto;display:block;}
   .pcr-logo-text{color:#FFFFFF;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;letter-spacing:0.04em;line-height:1;}
-  .pcr-tagline{font-family:'Sora',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#8E8E93;}
+  .pcr-tagline{font-family:'Sora',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#767676;}
   .pcr-domain{font-size:16px;font-weight:600;color:#111111;letter-spacing:0.02em;}
   .pcr-imagewrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
   .pcr-image{width:660px;height:660px;object-fit:contain;border-radius:28px;box-shadow:0 30px 70px rgba(0,0,0,0.14);background:#FFFFFF;}
   .pcr-bottom{text-align:center;position:relative;z-index:1;}
-  .pcr-cat{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8E8E93;margin-bottom:10px;}
+  .pcr-cat{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#767676;margin-bottom:10px;}
   /* Clip to 2 lines via a fixed max-height (32px * 1.25 line-height * 2 lines)
      instead of -webkit-line-clamp, which html2canvas also renders unreliably. */
   .pcr-name{font-family:'Sora',sans-serif;font-size:32px;font-weight:700;color:#111111;letter-spacing:-0.01em;line-height:1.25;max-height:80px;overflow:hidden;}
@@ -1195,7 +1332,7 @@
   }
   .pdp-delivery-info span {
     font-size: 12px;
-    color: #8E8E93;
+    color: #767676;
     line-height: 1.35;
     white-space: normal;
     word-break: break-word;
@@ -1229,7 +1366,7 @@
   }
   .pdp-help-text span {
     font-size: 12px;
-    color: #8E8E93;
+    color: #767676;
     line-height: 1.3;
   }
   .pdp-help-actions {
@@ -1424,7 +1561,7 @@
   .checkout-body h2{font-size:20px;font-weight:600;margin-bottom:18px;}
   .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
-  .form-group label .label-optional{font-size:13px;font-weight:400;color:#8E8E93;}
+  .form-group label .label-optional{font-size:13px;font-weight:400;color:#767676;}
   .form-group input,.form-group textarea,.form-group select{width:100%;background:#F5F5F7;border:1px solid transparent;border-radius:var(--radius-input);padding:12px 14px;min-height:var(--control-h);font-size:13.5px;font-family:'Inter';color:var(--ink);box-shadow:none;transition:all .2s ease;}
   .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;background:#FFFFFF;border-color:#111111;box-shadow:0 0 0 4px rgba(0,0,0,0.05);}
   .warranty-select-row{display:flex;align-items:center;gap:12px;}
@@ -1471,7 +1608,7 @@
   .payment-method-card.active .pm-radio::after{content:'';position:absolute;inset:3px;background:#111111;border-radius:50%;}
   .pm-info{display:flex;flex-direction:column;line-height:1.3;}
   .pm-info strong{font-size:13.5px;color:#111111;font-weight:600;}
-  .pm-info span{font-size:11.5px;color:#8E8E93;margin-top:2px;font-weight:500;}
+  .pm-info span{font-size:11.5px;color:#767676;margin-top:2px;font-weight:500;}
 
   /* Bank Details Panel */
   .bank-details-panel{background:#F5F5F7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;border:1px solid rgba(0,0,0,0.03);}
@@ -1479,11 +1616,11 @@
   .bd-bank-icon{width:32px;height:32px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,0.03);}
   .bd-info-list{display:flex;flex-direction:column;gap:10px;}
   .bd-item{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .bd-lbl{font-size:13px;font-weight:500;color:#8E8E93;}
+  .bd-lbl{font-size:13px;font-weight:500;color:#767676;}
   .bd-copy-wrap{display:flex;align-items:center;gap:6px;}
   .bd-val{background:#FFFFFF;border:1px solid rgba(0,0,0,0.06);padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600;color:#111111;min-width:140px;text-align:left;}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:0.05em;}
-  .copy-icon-btn{background:transparent;border:1px solid rgba(0,0,0,0.1);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#8E8E93;transition:all 0.2s;flex-shrink:0;}
+  .copy-icon-btn{background:transparent;border:1px solid rgba(0,0,0,0.1);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#767676;transition:all 0.2s;flex-shrink:0;}
   .copy-icon-btn:hover{background:#111111;color:#FFFFFF;border-color:#111111;}
   .copy-icon-btn svg{width:14px;height:14px;}
 
@@ -1500,7 +1637,7 @@
 
   .order-summary{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:16px 0;display:flex;flex-direction:column;gap:10px;max-height:220px;overflow-y:auto;}
   .order-summary-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;gap:10px;}
-  .order-summary-row .osr-thumb{width:44px;height:44px;border-radius:9px;background:#F0F0F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:16px;color:#A1A1A6;}
+  .order-summary-row .osr-thumb{width:44px;height:44px;border-radius:9px;background:#F0F0F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:16px;color:#767676;}
   .order-summary-row .osr-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .order-summary-row .osr-name{color:var(--ink);font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .order-summary-row .osr-calc{color:var(--muted);flex-shrink:0;}
@@ -1511,7 +1648,7 @@
 
   .place-order-btn{width:100%;background:#111111 !important;color:#FFFFFF !important;border:none;border-radius:99px;padding:12px 24px;min-height:56px;font-size:16px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;box-shadow:none;transition:all .3s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;justify-content:center;gap:8px;}
   .place-order-btn:hover:not(:disabled){background:#000000 !important;transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,0.12);}
-  .place-order-btn:disabled{background:#8A8A8A !important;cursor:not-allowed;transform:none;box-shadow:none;}
+  .place-order-btn:disabled{background:#767676 !important;cursor:not-allowed;transform:none;box-shadow:none;}
   /* ---- Unified conversion CTAs: drawer 'Proceed to Checkout' matches product Buy Now ---- */
   #checkoutBtn{background:#111111 !important;color:#FFFFFF !important;border-radius:99px;min-height:56px;font-size:15px;font-weight:600;letter-spacing:-0.01em;border:none;box-shadow:none;transition:all .3s cubic-bezier(0.16,1,0.3,1);}
   #checkoutBtn:hover{background:#000000 !important;transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,0.12);}
@@ -1519,14 +1656,15 @@
      Layered layout: decorative art flanks a centred text column, and the
      CTA is a 3D 'pressable' button built from a shadow layer + face. ---- */
   /* ---- Daily Perk: minimal full-bleed single-line banner ---- */
-  .perk-fullwidth-section{width:100%;margin:0 0 48px;padding:18px 0;background:#09090B;
+  .perk-fullwidth-section{width:100%;margin:0 0 48px;padding:20px 0;background:#0A0A0B;
     border-top:1px solid rgba(255,255,255,0.08);
-    border-bottom:1px solid rgba(255,255,255,0.08);}
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    position:relative;overflow:hidden;}
   .perk-strip-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;}
   .perk-strip-content{display:flex;align-items:center;gap:16px;min-width:0;}
-  .perk-badge{flex-shrink:0;display:inline-flex;align-items:center;background:#fff;color:#09090B;
-    font-family:'Sora',Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;
-    line-height:1;padding:6px 12px;border-radius:var(--radius-pill);white-space:nowrap;}
+  .perk-badge{flex-shrink:0;display:inline-flex;align-items:center;background:linear-gradient(180deg,#FFE9A8,#D4A548);color:#0A0A0B;
+    font-family:'Sora',Arial,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;line-height:1;padding:7px 13px;border-radius:var(--radius-pill);white-space:nowrap;}
   .perk-headline{font-family:'Sora',Arial,sans-serif;font-size:16px;font-weight:500;
     letter-spacing:-.01em;line-height:1.3;color:#fff;margin:0;min-width:0;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -1611,7 +1749,7 @@
   .success-check-icon{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;background:#F5F5F7;display:flex;align-items:center;justify-content:center;color:#111111;}
   .success-check-icon svg{width:26px;height:26px;}
   .success-heading{font-size:22px;font-weight:600;color:#111111;margin:0 0 6px;letter-spacing:-0.01em;}
-  .success-subheading{font-size:14px;color:#8E8E93;margin:0;line-height:1.5;}
+  .success-subheading{font-size:14px;color:#767676;margin:0;line-height:1.5;}
 
   /* -- Progress stepper -- */
   .success-stepper{display:flex;align-items:flex-start;padding:22px 4px;margin-bottom:28px;border-top:1px solid #E5E5EA;border-bottom:1px solid #E5E5EA;}
@@ -1621,13 +1759,13 @@
   .step-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid #E5E5EA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
   .step-dot svg{width:11px;height:11px;}
   .step-col.done .step-dot{background:#111111;border-color:#111111;}
-  .step-label{font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#8E8E93;white-space:nowrap;}
+  .step-label{font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#767676;white-space:nowrap;}
   .step-col.done .step-label{color:#111111;}
 
   /* -- Order ID + meta -- */
   .success-order-meta{margin-bottom:28px;}
   .meta-id-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #E5E5EA;}
-  .meta-id-label{font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#8E8E93;flex-shrink:0;}
+  .meta-id-label{font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#767676;flex-shrink:0;}
   .order-id-copy{display:flex;align-items:center;gap:8px;min-width:0;}
   #successOrderId{font-size:14px;font-weight:700;color:#111111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:inline-block;vertical-align:middle;}
   .copy-id-btn{width:26px;height:26px;border-radius:50%;border:1px solid #E5E5EA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;padding:0;transition:all .15s ease;color:#111111;}
@@ -1636,18 +1774,18 @@
   .copy-id-btn.copied{border-color:#B7E0C8;background:#E4F5EC;color:#1F8A43;}
   .meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
   .meta-col{display:flex;flex-direction:column;gap:4px;min-width:0;}
-  .meta-col span{font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#8E8E93;}
+  .meta-col span{font-size:10.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#767676;}
   .meta-col strong{color:#111111;font-weight:700;font-size:14px;word-break:break-word;}
 
-  .success-note{font-size:14px;color:#8E8E93;margin-bottom:36px;}
+  .success-note{font-size:14px;color:#767676;margin-bottom:36px;}
   .success-section-title{font-size:18px;font-weight:700;color:#111111;margin-bottom:16px;letter-spacing:-0.01em;}
   .success-table{width:100%;border-collapse:collapse;margin-bottom:36px;font-size:14px;}
   .success-table th{text-align:left;padding:12px 0;border-bottom:2px solid #E5E5EA;color:#111111;font-weight:700;}
   .success-table td{padding:14px 0;border-bottom:1px solid #F0F0F2;color:#111111;}
-  .success-table tbody td:first-child{color:#8E8E93;font-weight:500;}
+  .success-table tbody td:first-child{color:#767676;font-weight:500;}
   .success-table tbody td:last-child{font-weight:600;}
   .success-table tfoot td:first-child{font-weight:600;color:#111111;}
-  .success-table tfoot td:last-child{color:#8E8E93;font-weight:500;}
+  .success-table tfoot td:last-child{color:#767676;font-weight:500;}
   .success-table tr.grand-total td{font-size:16px;font-weight:700 !important;color:#111111 !important;border-bottom:none;padding-top:18px;}
   .success-table tr#successBonusRow td:last-child{color:#1F8A43;font-weight:600;}
 
@@ -1655,7 +1793,7 @@
   .success-addresses{background:#F5F5F7;border-radius:16px;padding:24px;margin-bottom:32px;}
   .address-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px;}
   .address-field{min-width:0;}
-  .address-micro-label{display:block;font-size:10.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8E8E93;margin-bottom:8px;}
+  .address-micro-label{display:block;font-size:10.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#767676;margin-bottom:8px;}
   .address-field-body{font-size:14px;line-height:1.6;color:#6E6E73;font-weight:500;}
   .address-field-body div{word-break:break-word;}
   #successAddressName{color:#111111;font-weight:600;margin-bottom:2px;}
@@ -1670,14 +1808,14 @@
   .copy-link-btn svg{width:16px;height:16px;flex-shrink:0;}
   .copy-link-btn:hover{background:#F5F5F7;border-color:#111111 !important;}
   .copy-link-btn.copied{background:#E4F5EC;border-color:#B7E0C8 !important;color:#1F8A43;}
-  .success-continue-link{display:block;width:100%;text-align:center;background:none;border:none;padding:10px;margin:0;font-size:14px;font-weight:600;color:#8E8E93;cursor:pointer;transition:color .15s ease;font-family:inherit;}
+  .success-continue-link{display:block;width:100%;text-align:center;background:none;border:none;padding:10px;margin:0;font-size:14px;font-weight:600;color:#767676;cursor:pointer;transition:color .15s ease;font-family:inherit;}
   .success-continue-link:hover{color:#111111;text-decoration:underline;}
 
   /* Shown while a shared receipt link is being fetched, or if it fails. */
   .success-state-msg{max-width:680px;margin:0 auto;background:#FFFFFF;border:1px solid rgba(0,0,0,0.04);
     border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.02);padding:48px 32px;text-align:center;}
   .success-state-msg h2{font-size:20px;font-weight:700;color:#111111;margin-bottom:8px;}
-  .success-state-msg p{font-size:14px;color:#8E8E93;margin-bottom:24px;}
+  .success-state-msg p{font-size:14px;color:#767676;margin-bottom:24px;}
   .success-state-msg .btn-primary{border-radius:99px;min-height:48px;padding:0 28px;background:#111111;color:#fff;border:none;cursor:pointer;}
 
   @media(max-width:600px){
@@ -1706,16 +1844,16 @@
   .admin-login-error.show{display:block;}
   .admin-login-btn{width:100%;background:#111111 !important;color:#FFFFFF !important;border:none;border-radius:99px;padding:12px 24px;min-height:56px;font-size:14.5px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;}
   .admin-login-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.12);}
-  .admin-login-btn:disabled{background:#8A8A8A !important;cursor:not-allowed;}
+  .admin-login-btn:disabled{background:#767676 !important;cursor:not-allowed;}
   .back-to-store{display:block;text-align:center;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:18px;cursor:pointer;}
   .back-to-store:hover{color:var(--ink);}
 
   /* ============ ADMIN DASHBOARD ============ */
   .admin-shell{display:none;min-height:100vh;grid-template-columns:230px 1fr;}
   .admin-shell.open{display:grid;}
-  .admin-sidebar{background:#111111;color:#8E8E93;border-right:none;padding:22px 16px;display:flex;flex-direction:column;gap:4px;}
+  .admin-sidebar{background:#111111;color:#767676;border-right:none;padding:22px 16px;display:flex;flex-direction:column;gap:4px;}
   .admin-sidebar .logo{color:#fff;margin-bottom:22px;padding:0 6px;}
-  .admin-nav-item{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;font-size:13.5px;font-weight:500;cursor:pointer;color:#8E8E93;transition:all .2s;background:none;border:none;text-align:left;width:100%;font-family:inherit;}
+  .admin-nav-item{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;font-size:13.5px;font-weight:500;cursor:pointer;color:#767676;transition:all .2s;background:none;border:none;text-align:left;width:100%;font-family:inherit;}
   .admin-nav-item svg{width:16px;height:16px;stroke:currentColor;flex-shrink:0;}
   .admin-nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
   .admin-nav-item.active{background:rgba(255,255,255,0.1);color:#fff;}
@@ -1764,7 +1902,7 @@
   }
   .admin-table-wrap{overflow-x:auto;}
   table.admin-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
-  table.admin-table th{text-align:left;padding:12px 20px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#8E8E93;background:#FFFFFF;border-bottom:1px solid rgba(0,0,0,0.04);white-space:nowrap;}
+  table.admin-table th{text-align:left;padding:12px 20px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#767676;background:#FFFFFF;border-bottom:1px solid rgba(0,0,0,0.04);white-space:nowrap;}
   table.admin-table td{padding:13px 20px;border-top:1px solid var(--line);vertical-align:middle;}
   table.admin-table tr:hover td{background:#FBF8F3;}
   .pill{display:inline-block;padding:4px 11px;border-radius:var(--radius-pill);font-size:11px;font-weight:600;}
@@ -1788,7 +1926,7 @@
 
   .prod-thumb-cell{width:52px;height:52px;border-radius:10px;overflow:hidden;background:#F0F0F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .prod-thumb-cell img{width:100%;height:100%;object-fit:cover;display:block;}
-  .prod-thumb-cell span{font-size:18px;color:#A1A1A6;}
+  .prod-thumb-cell span{font-size:18px;color:#767676;}
 
   .admin-actions{display:flex;gap:6px;flex-wrap:wrap;}
   .admin-action-btn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s;flex-shrink:0;}
@@ -1818,12 +1956,11 @@
   .product-form-box{max-width:560px;}
   .product-form-body{padding:28px 26px;}
   .product-form-body h2{font-size:20px;font-weight:600;margin-bottom:18px;}
-  .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   .image-upload-area{border:1.5px dashed var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .2s;margin-bottom:6px;}
   .image-upload-area:hover{border-color:var(--accent);}
   .image-upload-preview{width:64px;height:64px;border-radius:10px;overflow:hidden;background:#F0F0F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .image-upload-preview img{width:100%;height:100%;object-fit:cover;display:block;}
-  .image-upload-preview span{font-size:20px;color:#A1A1A6;}
+  .image-upload-preview span{font-size:20px;color:#767676;}
   .image-upload-text{font-size:12.5px;color:var(--muted);}
   .image-upload-text strong{display:block;font-size:13.5px;color:var(--ink);margin-bottom:2px;}
   .upload-progress-wrap{margin:0 0 14px;height:6px;border-radius:var(--radius-pill);background:var(--line);overflow:hidden;display:none;}
@@ -1857,8 +1994,11 @@
 
   /* ---- Hero Slider admin: per-slide desktop/mobile image editor ---- */
   .hero-slide-row{border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;background:#FBFAF7;}
-  .hero-slide-row-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .hero-slide-row-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;}
   .hero-slide-row-head strong{font-size:13.5px;font-family:'Sora';}
+  .hero-slide-row-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .hero-slide-duplicate{background:none;border:1px solid var(--line);color:#111111;border-radius:var(--radius-pill);padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;}
+  .hero-slide-duplicate:hover{background:#EAEAEC;}
   .hero-slide-remove{background:none;border:1px solid var(--line);color:#B3261E;border-radius:var(--radius-pill);padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;}
   .hero-slide-remove:hover{background:#FDEDEC;}
   .hero-slide-imgs{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -2040,8 +2180,6 @@
     .prod-grid{grid-template-columns:1fr 1fr;gap:12px;}
     .prod-actions{margin-top:auto;}
     .hero-float-icon{width:46px;bottom:-12px;left:-8px;}
-    .add-btn:not([disabled]) .add-btn-text{display:none;}
-    .add-btn:not([disabled]) .add-btn-icon{display:inline-flex;}
     .section{padding:40px 0;}
     .admin-btn span.admin-label{display:none;}
     .admin-btn{padding:0 12px;}
@@ -2153,6 +2291,7 @@
 
 /* ---------- 4. HEADER ---------- */
 :root{ --header-height:68px; }
+:root{ --header-height:64px; } /* Baseus fix: slightly slimmer, premium feel (desktop) */
 @media(max-width:768px){ :root{ --header-height:60px; } }
 
 header.scrolled{
@@ -2214,49 +2353,30 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
 .icon-btn:hover{ box-shadow:var(--sh-xs); }
 .icon-btn:active{ transform:scale(.94); }
 
-/* ---------- 5. HERO ---------- */
-.dplex-hero-eyebrow{
-  background:rgba(255,255,255,.16);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.24);
-  color:#fff;
-}
-.dplex-hero-slide.color-scheme-dark .dplex-hero-eyebrow{
-  background:rgba(0,0,0,.08);
-  border-color:rgba(0,0,0,.14);
-  color:#000;
-}
-.dplex-hero-title{
-  font-size:clamp(30px,4.6vw,52px);
-  letter-spacing:-0.02em;
-}
-.dplex-hero-desc{ font-size:clamp(14px,1.6vw,16px); }
-.dplex-hero-actions a{
-  min-height:52px;
-  padding:0 32px;
-  transition:transform .25s var(--ease-spring),background-color .3s var(--ease-out),
-             color .3s var(--ease-out),border-color .3s var(--ease-out),box-shadow .3s var(--ease-out);
-}
-.dplex-hero-actions a:hover{ box-shadow:var(--sh-md); }
-.dplex-hero-actions a:active{ transform:scale(.96); }
-
 /* ---------- 6. SECTION HEADS ---------- */
 .section-head a{
   display:inline-flex;
   align-items:center;
-  gap:6px;
+  gap:10px;
   border-bottom-color:transparent;
   color:var(--ink);
   transition:color .25s var(--ease-out);
 }
-.section-head a::after{
-  content:"→";
-  display:inline-block;
-  transition:transform .3s var(--ease-spring);
+.view-all-arrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#F0F0F0;
+  color:var(--ink);
+  flex-shrink:0;
+  transition:background .25s var(--ease-out), transform .3s var(--ease-spring);
 }
-.section-head a:hover{ border-bottom-color:var(--ink); }
-.section-head a:hover::after{ transform:translateX(4px); }
+.view-all-arrow svg{ width:15px; height:15px; }
+.section-head a:hover{ border-bottom-color:transparent; }
+.section-head a:hover .view-all-arrow{ background:var(--ink); color:#fff; transform:translateX(3px); }
 
 /* ---------- 7. PRODUCT CARDS ---------- */
 .prod-card{
@@ -2303,9 +2423,6 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
 }
 .single-add-btn:hover:not([disabled])::before{ left:130%; }
 .single-add-btn:active:not([disabled]){ transform:scale(.97); }
-
-.add-btn{ transition:background-color .3s var(--ease-out),transform .25s var(--ease-spring); }
-.add-btn:active{ transform:scale(.97); }
 
 /* ---------- 8. CATEGORY TILES ---------- */
 /* Superseded by the shadow-clipping fix in the base stylesheet
@@ -2408,12 +2525,11 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   .prod-grid{ gap:14px; }
   .prod-body{ padding:12px; }
   .cart-item,.cart-item-card{ padding:14px; }
-  .dplex-hero-title{ font-size:clamp(26px,8vw,34px); }
   .checkout-col-left,.checkout-col-right{ padding:24px 20px; }
   .success-page-container{ padding:24px 20px; }
   /* touch devices can't hover to reveal the wishlist button, so it stays put */
   .wishlist-btn{ opacity:1; transform:none; }
-  .icon-btn,.wishlist-btn,.qty-btn,.foot-social a{ min-width:44px; min-height:44px; }
+  .wishlist-btn,.qty-btn,.foot-social a{ min-width:44px; min-height:44px; }
 }
 
 /* ---------- 16. ACCESSIBILITY ---------- */
@@ -2444,6 +2560,274 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     }
   }
 }
+
+/* ---------- BASEUS MINIMAL HEADER FIX ----------
+   1. Hamburger must only ever appear on mobile/tablet — it was leaking
+      onto desktop and cluttering the right side next to the icons.
+   2. The announcement bar's drop-shadow (::after) muddies the crisp
+      white header sitting right below it — removed entirely.
+   3. Slim, single hairline header border instead of whatever the
+      scroll-state transition was leaving behind.
+   4. Tighter icon spacing on the right to match the minimal look. */
+.burger { display: none !important; }
+@media(max-width: 900px) {
+  .burger { display: inline-flex !important; }
+}
+
+.announce-bar::after { display: none !important; }
+
+header {
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+}
+
+.navcart { gap: 10px; }
+
+/* ============ PREMIUM EDGE-TO-EDGE PRODUCT CARDS ============ */
+.prod-card {
+  background: #FFFFFF !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(0,0,0,0.04) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  transition: box-shadow .3s ease, transform .3s cubic-bezier(.16,1,.3,1) !important;
+}
+.prod-card:hover {
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Edge-to-Edge Image Area */
+.prod-thumb {
+  position: relative !important;
+  aspect-ratio: 1/1 !important;
+  background: #F5F5F7 !important;
+  padding: 0 !important; /* Edge to edge, no white space */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  border-radius: 14px 14px 0 0 !important;
+  border-bottom: none !important;
+}
+.prod-thumb img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* Fill the whole box */
+  display: block !important;
+  transition: transform .6s cubic-bezier(.16,1,.3,1) !important;
+}
+.prod-card:hover .prod-thumb img {
+  transform: scale(1.05) !important;
+}
+
+/* Hide Unwanted Elements */
+.prod-brand-badge,
+.prod-cat,
+.stock-line,
+.prod-save,
+.prod-actions,
+.quick-view {
+  display: none !important;
+}
+
+/* Badges (Discount etc.) */
+.badge, .discount-badge, .stock-badge {
+  position: absolute !important;
+  top: 14px !important;
+  right: 14px !important;
+  left: auto !important;
+  z-index: 3 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 26px !important;
+  padding: 0 12px !important;
+  background: #111111 !important;
+  color: #FFFFFF !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1 !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+.discount-badge {
+  background: #8A2BE2 !important; /* Flat purple */
+}
+
+/* Wishlist Heart - Shows on Hover */
+.wishlist-btn {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  right: auto !important;
+  z-index: 4 !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255,255,255,0.9) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+  opacity: 0 !important;
+  transform: scale(0.9) !important;
+  transition: opacity .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1) !important;
+}
+@media (hover: hover) {
+  .prod-card:hover .wishlist-btn { opacity: 1 !important; transform: scale(1) !important; }
+}
+.wishlist-btn.active { opacity: 1 !important; transform: scale(1) !important; }
+.wishlist-btn:hover { transform: scale(1.08) !important; }
+.wishlist-btn svg {
+  width: 16px !important; height: 16px !important;
+  stroke: #111111 !important; fill: none !important;
+  stroke-width: 1.8 !important;
+}
+.wishlist-btn.active svg { fill: #111111 !important; }
+
+/* Body & Typography */
+.prod-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  padding: 16px 20px 22px !important;
+}
+.prod-name {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: #111111 !important;
+  letter-spacing: -0.015em !important;
+  margin: 0 !important;
+  min-height: auto !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+}
+.prod-row {
+  margin-top: 0 !important;
+  justify-content: flex-start !important;
+}
+.prod-price {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: #767676 !important;
+  letter-spacing: -0.005em !important;
+}
+.prod-price del {
+  font-size: 13px !important;
+  color: #C7C2B7 !important;
+  margin-left: 8px !important;
+  font-weight: 500 !important;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 520px) {
+  .prod-body { padding: 14px 14px 18px !important; gap: 6px !important; }
+  .prod-name { font-size: 13px !important; line-height: 1.35 !important; }
+  .prod-price { font-size: 13.5px !important; }
+  .prod-price del { font-size: 11.5px !important; }
+  .badge, .discount-badge {
+    top: 10px !important; right: 10px !important; left: auto !important;
+    height: 22px !important; padding: 0 10px !important;
+    font-size: 10.5px !important;
+  }
+  .wishlist-btn {
+    top: 10px !important; left: 10px !important; right: auto !important;
+    width: 28px !important; height: 28px !important;
+    opacity: 1 !important; transform: scale(1) !important;
+  }
+}
+
+/* ============ PREMIUM UPPER HEADER & LAYOUT FIX ============ */
+/* 0. Required for position:sticky to actually work: overflow-x:hidden on
+   html/body (used elsewhere to stop horizontal scroll) makes the browser
+   auto-promote overflow-y to `auto` on both, turning them into scroll
+   containers whose presence silently breaks `position:sticky` on any
+   descendant (confirmed: header computed to position:sticky but never
+   actually stuck on scroll without this fix). `overflow-x:clip` blocks
+   horizontal overflow the same way without creating that scroll
+   container, so sticky headers work correctly. */
+html, body {
+  overflow-x: clip !important;
+}
+
+/* 1. Make Announcement Bar scroll away naturally */
+.announce-bar {
+  position: relative !important;
+  top: auto !important;
+  z-index: 100 !important;
+}
+
+/* 2. Make Header Sticky (Locks to top smoothly without taking up double space) */
+header {
+  position: sticky !important;
+  top: 0 !important;
+  background: #FFFFFF !important;
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+  z-index: 150 !important;
+}
+
+/* 3. Remove old fixed padding hacks to restore natural spacing */
+body {
+  padding-top: 0 !important;
+}
+html {
+  scroll-padding-top: var(--header-height) !important;
+}
+#homeSections {
+  padding-top: 0 !important;
+}
+/* Search overlay: the flat var(--header-height) offset is only correct
+   once the header is actually pinned at top:0 (i.e. after scrolling
+   past the now-in-flow announce bar). At rest -- the announce bar is
+   still visible above it -- so opening search there needs the taller
+   offset, or the overlay overlaps the bottom of the nav. */
+.search-overlay {
+  top: calc(var(--announce-h) + var(--header-height)) !important;
+}
+/* #searchOverlay actually comes BEFORE header in the DOM, so the
+   general sibling combinator (~) used above can never match it --
+   :has() targets it via the shared ancestor instead, independent of
+   sibling order. */
+body:has(header.scrolled) .search-overlay {
+  top: var(--header-height) !important;
+}
+
+/* 4. Fine-tune Header Icons & Logo for visual balance */
+.logo img, .store-logo-img {
+  max-height: 18px !important;
+}
+.navcart {
+  gap: 12px !important;
+}
+.icon-btn, .burger {
+  width: 36px !important;
+  height: 36px !important;
+}
+.icon-btn svg, .burger svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 1.8 !important;
+}
+.cart-badge {
+  top: -4px !important;
+  right: -4px !important;
+}
+
 </style>
 </head>
 <body>
@@ -3398,18 +3782,19 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     </div>
 
     <div class="navcart">
+      <a href="#products" class="header-store-link">Store <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a>
       <button class="icon-btn search-toggle" onclick="toggleMobileSearch()" aria-label="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <button class="icon-btn account-toggle" onclick="openAccountDrawer()" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.75 20.2A9.25 9.25 0 0 1 12 13.6a9.25 9.25 0 0 1 9.25 6.6c0 .58-.42 1.05-.94 1.05H3.69c-.52 0-.94-.47-.94-1.05Z"/><circle cx="12" cy="6.22" r="3.47"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </button>
       <button class="icon-btn" id="cartIconBtn" aria-label="Cart" onclick="openCartDrawer()">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         <span class="cart-badge" id="cartcount">0</span>
       </button>
       <button class="burger" onclick="toggleMobileMenu(true)" aria-label="Menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
     </div>
   </div>
@@ -3471,351 +3856,439 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   }
 })();
 </script>
-<section class="dplex-hero-section">
-  <div class="dplex-hero hero-loading" id="dplexHero" role="region" aria-roledescription="carousel" aria-label="Featured promotions">
-    <div class="dplex-hero-track" id="dplexHeroTrack"></div>
-    <button type="button" class="dplex-hero-arrow dplex-hero-arrow-prev" id="dplexHeroPrev" aria-label="Previous slide">
-      <svg viewBox="0 0 7 12" fill="none"><path d="M6 11L1 6L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button type="button" class="dplex-hero-arrow dplex-hero-arrow-next" id="dplexHeroNext" aria-label="Next slide">
-      <svg viewBox="0 0 7 12" fill="none"><path d="M1 1L6 6L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="dplex-hero-pagination">
-      <div class="dplex-hero-point-list" id="dplexHeroDots" role="tablist" aria-label="Slide navigation"></div>
-      <button type="button" class="dplex-hero-playpause" id="dplexHeroPlayPause" onclick="dplexToggleAutoplay()" aria-label="Pause slideshow" aria-pressed="false">
-        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
-      </button>
+
+<!-- ================================================================
+     HERO SLIDER — adapted from a Baseus-style slideshow concept.
+     NOTE: the original demo used Baseus's own live product photography
+     and marketing copy; that's a competitor's real, copyrighted content
+     and can't ship on this storefront. The 5 slides below use plain
+     Quiet-Luxury colour panels + placeholder copy instead — swap in
+     real DPLEX photography/copy per slide whenever it's ready. The
+     yellow/brown accent buttons from the original were also dropped in
+     favour of the site's existing white/black pill system.
+     ================================================================ -->
+<section class="section section--flush" style="margin:0;padding:0;">
+  <div class="dplex-slideshow" id="dplexSlideshow">
+
+    <div class="dplex-slide is-active" data-index="0" data-arrow-mode="center" data-text-color="light">
+      <a class="dplex-slide-link" href="#products">
+        <div class="dplex-slide-image-wrapper" style="background:linear-gradient(135deg,#111111,#2b2b2e);"></div>
+      </a>
+      <div class="dplex-slide-text dplex-slide-text--top-center">
+        <div class="dplex-slide-content">
+          <div class="dplex-caption" style="color:#FFFFFF;">
+            <div class="dplex-top-block">
+              <div class="dplex-title dplex-title--lg">QUIET LUXURY,<br>EVERY DAY CARRY</div>
+              <div class="dplex-desc">New season arrivals, considered down to the last detail</div>
+            </div>
+            <a href="#products" class="dplex-cta-anchor">
+              <button class="dplex-slide-btn dplex-slide-btn--white dplex-slide-btn--slide-1">Shop New Arrivals</button>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="dplex-slide" data-index="1" data-arrow-mode="bottom" data-text-color="light">
+      <a class="dplex-slide-link" href="#products">
+        <div class="dplex-slide-image-wrapper" style="background:linear-gradient(120deg,#3a3a3e,#111111 70%);"></div>
+      </a>
+      <div class="dplex-slide-text dplex-slide-text--middle-left">
+        <div class="dplex-slide-content">
+          <div class="dplex-caption" style="color:#ffffff;">
+            <div class="dplex-title dplex-title--md">Designed to Disappear</div>
+            <div class="dplex-desc">Minimalist tech for a calmer desk</div>
+            <a href="#products"><button class="dplex-slide-btn dplex-slide-btn--white dplex-slide-btn--mt-20">Explore the Range</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dplex-slide" data-index="2" data-arrow-mode="center" data-text-color="dark">
+      <a class="dplex-slide-link" href="#products">
+        <div class="dplex-slide-image-wrapper" style="background:linear-gradient(135deg,#F5F5F7,#E5E5EA);"></div>
+      </a>
+      <div class="dplex-slide-text dplex-slide-text--middle-center">
+        <div class="dplex-slide-content">
+          <div class="dplex-caption" style="color:#111111;">
+            <div class="dplex-title dplex-title--md">Built for the Long Run</div>
+            <div class="dplex-desc">Everyday essentials, made to last</div>
+            <a href="#products"><button class="dplex-slide-btn dplex-slide-btn--black dplex-slide-btn--mt-20">Shop Essentials</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dplex-slide" data-index="3" data-arrow-mode="bottom" data-text-color="dark">
+      <div class="dplex-slide-image-wrapper" style="background:linear-gradient(120deg,#8E8E93,#F5F5F7 80%);"></div>
+      <div class="dplex-slide-text dplex-slide-text--middle-left">
+        <div class="dplex-slide-content">
+          <div class="dplex-caption" style="color:#111111;">
+            <div class="dplex-title dplex-title--sm">Sound, Rethought</div>
+            <div class="dplex-desc">Precision audio, engineered quiet</div>
+            <a href="#products"><button class="dplex-slide-btn dplex-slide-btn--black dplex-slide-btn--mt-5">Discover Audio</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dplex-slide" data-index="4" data-arrow-mode="bottom" data-text-color="light">
+      <a class="dplex-slide-link" href="#products">
+        <div class="dplex-slide-image-wrapper" style="background:linear-gradient(135deg,#111111,#111111 40%,#2b2b2e);"></div>
+      </a>
+      <div class="dplex-slide-text dplex-slide-text--middle-left">
+        <div class="dplex-slide-content">
+          <div class="dplex-caption" style="color:#ffffff;">
+            <div class="dplex-title dplex-title--sm">Power That Travels</div>
+            <div class="dplex-desc">Chargers and cables, considered</div>
+            <a href="#products"><button class="dplex-slide-btn dplex-slide-btn--white dplex-slide-btn--mt-20">Shop Power</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dplex-dots" id="dplexDots" role="tablist" aria-label="Slide navigation">
+      <button class="dplex-dot is-current" data-slide="0" role="tab" aria-selected="true" aria-label="Go to slide 1"><span class="visually-hidden">Go to slide 1</span></button>
+      <button class="dplex-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Go to slide 2"><span class="visually-hidden">Go to slide 2</span></button>
+      <button class="dplex-dot" data-slide="2" role="tab" aria-selected="false" aria-label="Go to slide 3"><span class="visually-hidden">Go to slide 3</span></button>
+      <button class="dplex-dot" data-slide="3" role="tab" aria-selected="false" aria-label="Go to slide 4"><span class="visually-hidden">Go to slide 4</span></button>
+      <button class="dplex-dot" data-slide="4" role="tab" aria-selected="false" aria-label="Go to slide 5"><span class="visually-hidden">Go to slide 5</span></button>
+    </div>
+
+    <button type="button" class="dplex-slide-arrow dplex-slide-arrow--prev" id="dplexSlidePrev" aria-label="Previous slide">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button type="button" class="dplex-slide-arrow dplex-slide-arrow--next" id="dplexSlideNext" aria-label="Next slide">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+
   </div>
 </section>
+
+<script>
+(function(){
+  'use strict';
+
+  var slideshow = document.getElementById('dplexSlideshow');
+  if (!slideshow) return;
+
+  var dotsWrap = document.getElementById('dplexDots');
+  var prevBtn = document.getElementById('dplexSlidePrev');
+  var nextBtn = document.getElementById('dplexSlideNext');
+  var AUTOPLAY_MS = 8000;
+  var current = 0;
+  var total = 0;
+  var timer = null;
+  var isPaused = false;
+  var slides = [];
+  var dots = [];
+
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function escapeHtmlDplexHero(str){
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function updateArrowMode(){
+    var activeSlide = slides[current];
+    var mode = activeSlide && activeSlide.getAttribute('data-arrow-mode');
+    if (mode === 'bottom'){
+      slideshow.classList.add('dplex-slideshow--bottom-arrows');
+    } else {
+      slideshow.classList.remove('dplex-slideshow--bottom-arrows');
+    }
+  }
+
+  function goToSlide(index){
+    if (total === 0) return;
+    if (index === current) return;
+
+    var outgoing = slides[current];
+    if (outgoing){
+      outgoing.classList.remove('is-active');
+      outgoing.setAttribute('aria-hidden', 'true');
+    }
+
+    current = ((index % total) + total) % total;
+
+    var incoming = slides[current];
+    if (incoming){
+      incoming.classList.add('is-active');
+      incoming.setAttribute('aria-hidden', 'false');
+    }
+
+    dots.forEach(function(dot, i){
+      var isCurrent = i === current;
+      dot.classList.toggle('is-current', isCurrent);
+      dot.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+      if (isCurrent){ void dot.offsetWidth; }
+    });
+
+    updateArrowMode();
+
+    if (prevBtn) prevBtn.disabled = total <= 1;
+    if (nextBtn) nextBtn.disabled = total <= 1;
+  }
+
+  function nextSlide(){ goToSlide(current + 1); }
+  function prevSlide(){ goToSlide(current - 1); }
+
+  function startAutoplay(){
+    stopAutoplay();
+    if (prefersReduced || total <= 1) return;
+    timer = setInterval(nextSlide, AUTOPLAY_MS);
+    slideshow.classList.remove('is-paused');
+  }
+  function stopAutoplay(){
+    if (timer){ clearInterval(timer); timer = null; }
+  }
+  function pauseAutoplay(){
+    if (isPaused) return;
+    isPaused = true;
+    stopAutoplay();
+    slideshow.classList.add('is-paused');
+  }
+  function resumeAutoplay(){
+    if (!isPaused) return;
+    isPaused = false;
+    slideshow.classList.remove('is-paused');
+    startAutoplay();
+  }
+
+  // ---- Static (never-regenerated) controls: arrows, hover/visibility/
+  //      keyboard/touch. Dots use event delegation on their wrapper
+  //      since dot elements themselves get replaced whenever
+  //      renderDplexHeroSlides() regenerates the slideshow. ------------
+  if (prevBtn){
+    prevBtn.addEventListener('click', function(){
+      prevSlide(); stopAutoplay(); startAutoplay();
+    });
+  }
+  if (nextBtn){
+    nextBtn.addEventListener('click', function(){
+      nextSlide(); stopAutoplay(); startAutoplay();
+    });
+  }
+
+  if (dotsWrap){
+    dotsWrap.addEventListener('click', function(e){
+      var dot = e.target.closest('.dplex-dot');
+      if (!dot || !dotsWrap.contains(dot)) return;
+      var idx = parseInt(dot.getAttribute('data-slide'), 10);
+      if (isNaN(idx)) return;
+      goToSlide(idx);
+      stopAutoplay();
+      startAutoplay();
+    });
+  }
+
+  slideshow.addEventListener('mouseenter', pauseAutoplay);
+  slideshow.addEventListener('mouseleave', resumeAutoplay);
+
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) pauseAutoplay();
+    else resumeAutoplay();
+  });
+
+  slideshow.setAttribute('tabindex', '-1');
+  slideshow.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowLeft'){ prevSlide(); stopAutoplay(); startAutoplay(); }
+    else if (e.key === 'ArrowRight'){ nextSlide(); stopAutoplay(); startAutoplay(); }
+  });
+
+  var touchStartX = null, touchStartY = null;
+  var SWIPE_THRESHOLD = 40;
+
+  slideshow.addEventListener('touchstart', function(e){
+    var t = e.changedTouches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+  }, { passive: true });
+
+  slideshow.addEventListener('touchend', function(e){
+    if (touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)){
+      if (dx < 0) nextSlide();
+      else prevSlide();
+      stopAutoplay();
+      startAutoplay();
+    }
+    touchStartX = null;
+    touchStartY = null;
+  }, { passive: true });
+
+  // ---- (Re)bind to whatever slide/dot elements currently exist in the
+  //      DOM. Called on first load, and again after renderDplexHeroSlides()
+  //      regenerates the markup from admin-saved data. -------------------
+  function rebindAndStart(){
+    slides = Array.prototype.slice.call(slideshow.querySelectorAll('.dplex-slide'));
+    dots = dotsWrap ? Array.prototype.slice.call(dotsWrap.querySelectorAll('.dplex-dot')) : [];
+    total = slides.length;
+    current = 0;
+    slides.forEach(function(s, i){
+      s.classList.toggle('is-active', i === 0);
+      s.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+    });
+    dots.forEach(function(d, i){
+      d.classList.toggle('is-current', i === 0);
+      d.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    });
+    updateArrowMode();
+    if (prevBtn) prevBtn.disabled = total <= 1;
+    if (nextBtn) nextBtn.disabled = total <= 1;
+    startAutoplay();
+  }
+
+  // ---- Admin-driven slide generation ---------------------------------
+  // Builds .dplex-slide markup from the fields the admin panel saves
+  // (desktopImage, mobileImage, title, description, primaryButtonText,
+  // primaryButtonAction). Baseus/Quiet-Luxury-specific per-slide styling
+  // (arrowMode, titleSize, textPosition, buttonColor, captionColor) is
+  // honored when a slide object explicitly provides it, and otherwise
+  // falls back to: top-center text, --lg title, center arrows, white
+  // button, #FFFFFF caption -- the same defaults approved for this
+  // slideshow's admin-override path previously.
+  function dplexSlideMarkup(slide, index){
+    var desktopImage = escapeHtmlDplexHero(slide.desktopImage || slide.imageUrl || '');
+    var mobileImage = escapeHtmlDplexHero(slide.mobileImage || slide.desktopImage || slide.imageUrl || '');
+    var title = slide.title || '';
+    var description = slide.description || '';
+    var buttonText = slide.primaryButtonText || 'Shop Now';
+    var buttonAction = slide.primaryButtonAction || '#products';
+
+    var arrowMode = slide.arrowMode || 'center';
+    var titleSize = slide.titleSize || '--lg';
+    var textPosition = (slide.textPosition && typeof slide.textPosition === 'string')
+      ? slide.textPosition
+      : 'top-center';
+    var buttonColor = slide.buttonColor || 'white';
+    if (['white', 'black'].indexOf(buttonColor) === -1) buttonColor = 'white';
+    var captionColor = slide.captionColor || '#FFFFFF';
+    var textColorAttr = /^#f|white/i.test(captionColor) ? 'light' : 'dark';
+
+    var linkOpen = '<a class="dplex-slide-link" href="' + escapeHtmlDplexHero(buttonAction) + '">';
+    var linkClose = '</a>';
+
+    var imageBlock =
+      '<div class="dplex-slide-image-wrapper">' +
+        '<img src="' + desktopImage + '" alt="' + escapeHtmlDplexHero(title || 'Promotional banner') + '" ' +
+          'style="width:100%;height:100%;object-fit:cover;display:block;" ' +
+          'srcset="' + mobileImage + ' 768w, ' + desktopImage + ' 1600w" sizes="100vw">' +
+      '</div>';
+
+    // No title -> image-only slide.
+    if (!title){
+      return (
+        '<div class="dplex-slide" data-index="' + index + '" data-arrow-mode="' + escapeHtmlDplexHero(arrowMode) + '" data-text-color="' + textColorAttr + '">' +
+          linkOpen + imageBlock + linkClose +
+        '</div>'
+      );
+    }
+
+    var textPositionClass = 'dplex-slide-text--' + (
+      ['top-center', 'middle-left', 'middle-center'].indexOf(textPosition) > -1 ? textPosition : 'top-center'
+    );
+
+    var textBlock =
+      '<div class="dplex-slide-text ' + textPositionClass + '">' +
+        '<div class="dplex-slide-content">' +
+          '<div class="dplex-caption" style="color:' + escapeHtmlDplexHero(captionColor) + ';">' +
+            '<div class="dplex-top-block">' +
+              '<div class="dplex-title dplex-title' + titleSize + '">' + escapeHtmlDplexHero(title) + '</div>' +
+              (description ? '<div class="dplex-desc">' + escapeHtmlDplexHero(description) + '</div>' : '') +
+            '</div>' +
+            '<a href="' + escapeHtmlDplexHero(buttonAction) + '" class="dplex-cta-anchor"><button class="dplex-slide-btn dplex-slide-btn--' + buttonColor + ' dplex-slide-btn--mt-20">' + escapeHtmlDplexHero(buttonText) + '</button></a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    return (
+      '<div class="dplex-slide" data-index="' + index + '" data-arrow-mode="' + escapeHtmlDplexHero(arrowMode) + '" data-text-color="' + textColorAttr + '">' +
+        linkOpen + imageBlock + linkClose +
+        textBlock +
+      '</div>'
+    );
+  }
+
+  function dplexDotsMarkup(count){
+    var out = '';
+    for (var i = 0; i < count; i++){
+      out += '<button class="dplex-dot' + (i === 0 ? ' is-current' : '') + '" data-slide="' + i + '" role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '" aria-label="Go to slide ' + (i + 1) + '"><span class="visually-hidden">Go to slide ' + (i + 1) + '</span></button>';
+    }
+    return out;
+  }
+
+  // ---- Public entry point: regenerate every slide from admin data ---
+  // This is the bridge the Admin Panel's "Save Settings" flow calls --
+  // it previously called window.renderDplexHeroSlides expecting it to
+  // exist, but no such function was ever wired up for this markup, so
+  // saved hero slides never reached the storefront. This closes that gap.
+  function renderDplexHeroSlides(slidesData){
+    if (!Array.isArray(slidesData) || slidesData.length === 0) return;
+
+    stopAutoplay();
+
+    var slideHtml = slidesData.map(function(slide, i){ return dplexSlideMarkup(slide, i); }).join('');
+
+    // Only the slide elements + the dots wrapper are regenerated -- the
+    // arrow buttons are left completely alone (never destroyed), so
+    // their listeners bound above never need to be re-attached.
+    var existingDots = document.getElementById('dplexDots');
+    var existingSlides = slideshow.querySelectorAll('.dplex-slide');
+    existingSlides.forEach(function(s){ s.remove(); });
+
+    if (existingDots){
+      existingDots.insertAdjacentHTML('beforebegin', slideHtml);
+      existingDots.innerHTML = dplexDotsMarkup(slidesData.length);
+    } else {
+      slideshow.insertAdjacentHTML('beforeend', slideHtml);
+    }
+
+    rebindAndStart();
+  }
+
+  window.renderDplexHeroSlides = renderDplexHeroSlides;
+
+  // Mirrors the 5 slides hard-coded above, in the same shape the Admin
+  // Panel's Hero Slider editor and renderDplexHeroSlides() both expect.
+  // Without this, the admin form has nothing to pre-fill from until a
+  // slide has actually been saved once, so it looks empty/"missing" even
+  // though the slides above are live on the storefront right now. The
+  // slides above use plain colour gradients rather than real photos, so
+  // desktopImage/mobileImage start blank — fill in real image URLs here
+  // once photography is ready and they'll flow straight into the editor.
+  window.dplexHeroDefaultSlides = [
+    { id: 'slide-0', desktopImage: '', mobileImage: '', title: 'QUIET LUXURY, EVERY DAY CARRY', description: 'New season arrivals, considered down to the last detail', primaryButtonText: 'Shop New Arrivals', primaryButtonAction: '#products', arrowMode: 'center', titleSize: '--lg', textPosition: 'top-center', buttonColor: 'white', captionColor: '#FFFFFF' },
+    { id: 'slide-1', desktopImage: '', mobileImage: '', title: 'Designed to Disappear', description: 'Minimalist tech for a calmer desk', primaryButtonText: 'Explore the Range', primaryButtonAction: '#products', arrowMode: 'bottom', titleSize: '--md', textPosition: 'middle-left', buttonColor: 'white', captionColor: '#FFFFFF' },
+    { id: 'slide-2', desktopImage: '', mobileImage: '', title: 'Built for the Long Run', description: 'Everyday essentials, made to last', primaryButtonText: 'Shop Essentials', primaryButtonAction: '#products', arrowMode: 'center', titleSize: '--md', textPosition: 'middle-center', buttonColor: 'black', captionColor: '#111111' },
+    { id: 'slide-3', desktopImage: '', mobileImage: '', title: 'Sound, Rethought', description: 'Precision audio, engineered quiet', primaryButtonText: 'Discover Audio', primaryButtonAction: '#products', arrowMode: 'bottom', titleSize: '--sm', textPosition: 'middle-left', buttonColor: 'black', captionColor: '#111111' },
+    { id: 'slide-4', desktopImage: '', mobileImage: '', title: 'Power That Travels', description: 'Chargers and cables, considered', primaryButtonText: 'Shop Power', primaryButtonAction: '#products', arrowMode: 'bottom', titleSize: '--sm', textPosition: 'middle-left', buttonColor: 'white', captionColor: '#FFFFFF' }
+  ];
+
+  requestAnimationFrame(function(){
+    slideshow.classList.add('became-visible');
+  });
+  rebindAndStart();
+
+  document.addEventListener('storeSettings:ready', function(e){
+    var settings = (e && e.detail) || {};
+    if (Array.isArray(settings.heroSlides) && settings.heroSlides.length > 0){
+      renderDplexHeroSlides(settings.heroSlides);
+    }
+  });
+})();
+</script>
 
 <!-- Legacy hero visual elements — kept (hidden) so the existing Store Settings "Hero Image URL" feature
      keeps working without errors. The multi-slide Admin system will replace this in a later part. -->
 <div id="heroVisual" style="display:none;" aria-hidden="true">
   <span id="heroVisualPlaceholder"></span>
 </div>
-
-<script type="module">
-  // ---- DPlex Hero Slider: default demo data, used until Admin → Hero Slider saves its own slides ----
-  let dplexHeroSlides = [
-    {
-      id: 'slide-new-arrivals',
-      desktopImage: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=1600&q=80',
-      mobileImage: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=900&q=80',
-      eyebrow: '',
-      title: 'Upgrade Your Everyday Tech',
-      description: 'Discover the latest gadgets and accessories designed for your everyday life.',
-      primaryButtonText: 'Shop Now',
-      primaryButtonAction: '#products',
-      secondaryButtonText: 'Explore Products',
-      secondaryButtonAction: '#products',
-      textPosition: { pcTop: '132px', mobileTop: '76px' },
-      textColor: 'light'
-    },
-    {
-      id: 'slide-smart-simple-powerful',
-      desktopImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80',
-      mobileImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80',
-      eyebrow: '',
-      title: 'Technology That Fits Your Life',
-      description: 'Premium products, modern design and reliable performance.',
-      primaryButtonText: 'Shop Collection',
-      primaryButtonAction: '#products',
-      secondaryButtonText: 'View Products',
-      secondaryButtonAction: '#products',
-      textPosition: { pcTop: '132px', mobileTop: '76px' },
-      textColor: 'dark'
-    },
-    {
-      id: 'slide-special-offers',
-      desktopImage: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1600&q=80',
-      mobileImage: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80',
-      eyebrow: '',
-      title: 'Great Deals. Every Day.',
-      description: "Find amazing products at prices you'll love.",
-      primaryButtonText: 'Shop Deals',
-      primaryButtonAction: '#products',
-      secondaryButtonText: 'View Products',
-      secondaryButtonAction: '#products',
-      textPosition: { pcTop: '132px', mobileTop: '76px' },
-      textColor: 'light'
-    }
-  ];
-
-  const dplexHeroState = { current: 0, autoplayTimer: null, bound: false };
-
-  // ---- Re-render the slider markup from whatever slide data is passed in ----
-  // Called on first load AND any time Admin → Hero Slider saves new desktop/mobile images.
-  function renderDplexHeroSlides(slides){
-    const heroEl = document.getElementById('dplexHero');
-    const track = document.getElementById('dplexHeroTrack');
-    if (!heroEl || !track) return;
-    if (!Array.isArray(slides) || slides.length === 0) return;
-
-    dplexHeroSlides = slides;
-    const dotsWrap = document.getElementById('dplexHeroDots');
-
-    dplexHeroState.current = 0;
-    if (dplexHeroState.autoplayTimer){
-      clearInterval(dplexHeroState.autoplayTimer);
-      dplexHeroState.autoplayTimer = null;
-    }
-
-    // ---- Build all slides (stacked, crossfade via CSS) — UGREEN-exact markup ----
-    track.innerHTML = dplexHeroSlides.map((slide, i) => {
-      const isDark = slide.textColor === 'dark';
-      const pcTop = (slide.textPosition && slide.textPosition.pcTop) || '132px';
-      const mobileTop = (slide.textPosition && slide.textPosition.mobileTop) || '76px';
-      return `
-      <div class="dplex-hero-slide${i === 0 ? ' is-active' : ''}${isDark ? ' color-scheme-dark' : ''}" data-index="${i}" aria-hidden="${i === 0 ? 'false' : 'true'}">
-        <picture class="dplex-hero-media">
-          <source media="(max-width:768px)" srcset="${slide.mobileImage}">
-          <img class="dplex-hero-img" src="${slide.desktopImage}" alt="${slide.title}">
-        </picture>
-        <div class="dplex-hero-content" style="--pc-top:${pcTop};--mobile-top:${mobileTop};">
-          ${slide.eyebrow ? `<span class="dplex-hero-eyebrow">${slide.eyebrow}</span>` : ''}
-          <h1 class="dplex-hero-title">${slide.title}</h1>
-          <p class="dplex-hero-desc">${slide.description}</p>
-          <div class="dplex-hero-actions">
-            ${slide.secondaryButtonText ? `
-            <a href="${slide.secondaryButtonAction}" class="learn-more-btn">${slide.secondaryButtonText}</a>` : ''}
-            <a href="${slide.primaryButtonAction}" class="buy-now-btn">${slide.primaryButtonText}</a>
-          </div>
-        </div>
-      </div>
-    `;
-    }).join('');
-
-    if (dotsWrap){
-      dotsWrap.innerHTML = dplexHeroSlides.map((s, i) => `
-        <div class="dplex-hero-point-inner" role="tab" tabindex="0" aria-label="Go to slide ${i + 1}" aria-selected="${i === 0 ? 'true' : 'false'}">
-          <span class="dplex-hero-point-text${i === 0 ? ' active' : ''}">${s.eyebrow || s.title}</span>
-          <div class="dplex-hero-point${i === 0 ? ' active' : ''}">
-            <div class="dplex-hero-point-progress" style="width:0%;"></div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    if (!dplexHeroState.bound){
-      bindDplexHeroControls();
-      dplexHeroState.bound = true;
-    }
-
-    startDplexAutoplay();
-  }
-
-  // ---- Controls are bound once; they always read the current slides/state ----
-  function bindDplexHeroControls(){
-    const heroEl = document.getElementById('dplexHero');
-    const track = document.getElementById('dplexHeroTrack');
-    const prevBtn = document.getElementById('dplexHeroPrev');
-    const nextBtn = document.getElementById('dplexHeroNext');
-    if (!heroEl || !track) return;
-
-    const reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-
-    if (prevBtn) prevBtn.addEventListener('click', () => { dplexPrevSlide(); startDplexAutoplay(); });
-    if (nextBtn) nextBtn.addEventListener('click', () => { dplexNextSlide(); startDplexAutoplay(); });
-
-    // ---- Indicators: delegated so they keep working after Admin re-renders the slides ----
-    const dotsWrap = document.getElementById('dplexHeroDots');
-    if (dotsWrap){
-      function dplexActivateDot(target){
-        const inner = target.closest('.dplex-hero-point-inner');
-        if (!inner) return;
-        const all = Array.from(dotsWrap.querySelectorAll('.dplex-hero-point-inner'));
-        const i = all.indexOf(inner);
-        if (i < 0 || i === dplexHeroState.current) return;
-        dplexGoToSlide(i, i > dplexHeroState.current ? 1 : -1);
-        startDplexAutoplay();
-      }
-      dotsWrap.addEventListener('click', (e) => dplexActivateDot(e.target));
-      dotsWrap.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
-          e.preventDefault();
-          dplexActivateDot(e.target);
-        }
-      });
-    }
-
-    // ---- Hover pause (desktop): stop the timer AND freeze the progress bar mid-fill ----
-    heroEl.addEventListener('mouseenter', () => {
-      stopDplexAutoplay();
-      dplexFreezeActiveProgress();
-    });
-    heroEl.addEventListener('mouseleave', () => startDplexAutoplay());
-
-    // ---- Keyboard: only acts while focus is within the hero controls ----
-    heroEl.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft'){ dplexPrevSlide(); startDplexAutoplay(); }
-      else if (e.key === 'ArrowRight'){ dplexNextSlide(); startDplexAutoplay(); }
-    });
-
-    // ---- Touch swipe (never blocks vertical scrolling — no preventDefault) ----
-    let touchStartX = null;
-    let touchStartY = null;
-    const SWIPE_THRESHOLD = 40;
-
-    track.addEventListener('touchstart', (e) => {
-      const t = e.changedTouches[0];
-      touchStartX = t.clientX;
-      touchStartY = t.clientY;
-    }, { passive: true });
-
-    track.addEventListener('touchend', (e) => {
-      if (touchStartX === null) return;
-      const t = e.changedTouches[0];
-      const deltaX = t.clientX - touchStartX;
-      const deltaY = t.clientY - touchStartY;
-      if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)){
-        if (deltaX < 0) dplexNextSlide(); else dplexPrevSlide();
-        startDplexAutoplay();
-      }
-      touchStartX = null;
-      touchStartY = null;
-    }, { passive: true });
-
-    window.dplexHeroReducedMotion = reducedMotion;
-  }
-
-  function dplexGoToSlide(index, direction){
-    const track = document.getElementById('dplexHeroTrack');
-    const dotsWrap = document.getElementById('dplexHeroDots');
-    if (!track) return;
-    const total = dplexHeroSlides.length;
-    const slideEls = Array.from(track.querySelectorAll('.dplex-hero-slide'));
-    const dotEls = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.dplex-hero-point-inner')) : [];
-    const current = dplexHeroState.current;
-    const nextIndex = ((index % total) + total) % total;
-    if (nextIndex === current || !slideEls[current] || !slideEls[nextIndex]) return;
-
-    // Direction decides which edge the incoming slide enters from. Falls back to the
-    // shortest visual path when a dot jumps straight to another slide.
-    const dir = typeof direction === 'number' ? direction : (nextIndex > current ? 1 : -1);
-    const outgoing = slideEls[current];
-    const incoming = slideEls[nextIndex];
-
-    // Park the incoming slide on the far edge with animation off, then slide it in.
-    incoming.classList.add('no-anim');
-    incoming.style.transform = `translate3d(${dir > 0 ? 100 : -100}%,0,0)`;
-    void incoming.offsetWidth; // force reflow so the next change animates
-
-    incoming.classList.remove('no-anim');
-    outgoing.style.transform = `translate3d(${dir > 0 ? -100 : 100}%,0,0)`;
-    incoming.style.transform = 'translate3d(0,0,0)';
-
-    outgoing.classList.remove('is-active');
-    outgoing.setAttribute('aria-hidden', 'true');
-    incoming.classList.add('is-active');
-    incoming.setAttribute('aria-hidden', 'false');
-
-    if (dotEls[current]){
-      dotEls[current].setAttribute('aria-selected', 'false');
-      dotEls[current].querySelector('.dplex-hero-point-text').classList.remove('active');
-      dotEls[current].querySelector('.dplex-hero-point').classList.remove('active');
-      dotEls[current].querySelector('.dplex-hero-point-progress').style.width = '0%';
-    }
-    if (dotEls[nextIndex]){
-      dotEls[nextIndex].setAttribute('aria-selected', 'true');
-      dotEls[nextIndex].querySelector('.dplex-hero-point-text').classList.add('active');
-      dotEls[nextIndex].querySelector('.dplex-hero-point').classList.add('active');
-    }
-
-    dplexHeroState.current = nextIndex;
-  }
-
-  // Explicit direction keeps the loop seamless: slide 3 → 1 still slides forward.
-  function dplexNextSlide(){ dplexGoToSlide(dplexHeroState.current + 1, 1); }
-  function dplexPrevSlide(){ dplexGoToSlide(dplexHeroState.current - 1, -1); }
-
-  function stopDplexAutoplay(){
-    if (dplexHeroState.autoplayTimer){
-      clearInterval(dplexHeroState.autoplayTimer);
-      dplexHeroState.autoplayTimer = null;
-    }
-  }
-
-  // Pin the bar at whatever width it has reached so it stops growing while paused.
-  function dplexFreezeActiveProgress(){
-    const dotsWrap = document.getElementById('dplexHeroDots');
-    const dotEls = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.dplex-hero-point-inner')) : [];
-    const bar = dotEls[dplexHeroState.current] && dotEls[dplexHeroState.current].querySelector('.dplex-hero-point-progress');
-    if (!bar) return;
-    const shown = getComputedStyle(bar).width;
-    const trackWidth = bar.parentElement ? bar.parentElement.offsetWidth : 0;
-    bar.classList.remove('filling');
-    bar.style.transitionDuration = '0ms';
-    bar.style.width = trackWidth ? ((parseFloat(shown) / trackWidth) * 100) + '%' : shown;
-  }
-
-  function dplexFillActiveProgress(){
-    const dotsWrap = document.getElementById('dplexHeroDots');
-    const dotEls = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.dplex-hero-point-inner')) : [];
-    const bar = dotEls[dplexHeroState.current] && dotEls[dplexHeroState.current].querySelector('.dplex-hero-point-progress');
-    if (!bar) return;
-    bar.classList.remove('filling');
-    bar.style.transitionDuration = '0ms';
-    bar.style.width = '0%';
-    // force reflow so the next width change animates
-    void bar.offsetWidth;
-    requestAnimationFrame(() => {
-      bar.classList.add('filling');
-      bar.style.transitionDuration = '5000ms';
-      bar.style.width = '100%';
-    });
-  }
-
-  function startDplexAutoplay(){
-    stopDplexAutoplay();
-    if (window.dplexHeroReducedMotion || dplexHeroSlides.length <= 1) return;
-    dplexFillActiveProgress();
-    dplexHeroState.autoplayTimer = setInterval(() => { dplexNextSlide(); dplexFillActiveProgress(); }, 5000);
-  }
-
-  // ---- Manual pause/play (WCAG 2.2.2) ----
-  let dplexAutoplayPaused = false;
-  function dplexToggleAutoplay(){
-    const btn = document.getElementById('dplexHeroPlayPause');
-    dplexAutoplayPaused = !dplexAutoplayPaused;
-    if (dplexAutoplayPaused){
-      stopDplexAutoplay();
-      dplexFreezeActiveProgress();
-    } else {
-      startDplexAutoplay();
-    }
-    if (btn){
-      btn.setAttribute('aria-pressed', String(dplexAutoplayPaused));
-      btn.setAttribute('aria-label', dplexAutoplayPaused ? 'Play slideshow' : 'Pause slideshow');
-      const pauseIcon = btn.querySelector('.icon-pause');
-      const playIcon = btn.querySelector('.icon-play');
-      if (pauseIcon) pauseIcon.style.display = dplexAutoplayPaused ? 'none' : '';
-      if (playIcon) playIcon.style.display = dplexAutoplayPaused ? '' : 'none';
-    }
-  }
-  window.dplexToggleAutoplay = dplexToggleAutoplay;
-
-  function initDplexHero(){
-    // First paint uses the built-in default slides; Admin-saved slides (if any)
-    // arrive moments later via the storeSettings:ready listener below and re-render in place.
-    renderDplexHeroSlides(dplexHeroSlides);
-  }
-
-  window.renderDplexHeroSlides = renderDplexHeroSlides;
-  window.dplexHeroDefaultSlides = dplexHeroSlides.map(s => Object.assign({}, s));
-
-  document.addEventListener('DOMContentLoaded', initDplexHero);
-  // ---- Swap in Admin-saved slides (with their own desktop/mobile images) once settings load ----
-  document.addEventListener('storeSettings:ready', (e) => {
-    const settings = e.detail || {};
-    if (Array.isArray(settings.heroSlides) && settings.heroSlides.length > 0){
-      renderDplexHeroSlides(settings.heroSlides);
-    }
-    const heroEl = document.getElementById('dplexHero');
-    if (heroEl) heroEl.classList.remove('hero-loading');
-  });
-</script>
 
 <div class="marquee-wrap">
 <div class="marquee-band">
@@ -3854,7 +4327,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   <div class="wrap">
     <div class="section-head">
       <h2>Shop by category</h2>
-      <a href="#">View all</a>
+      <a href="#">View all<span class="view-all-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></a>
     </div>
     <div class="cat-carousel">
       <div class="cat-track cat-loading" id="catTrack">
@@ -4019,7 +4492,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   <div class="wrap">
     <div class="section-head">
       <h2>Featured Products</h2>
-      <a href="#">View all</a>
+      <a href="#">View all<span class="view-all-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></a>
     </div>
     <div class="tab-row">
       <button class="tab-pill active" data-category="all">All</button>
@@ -4040,7 +4513,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   <div class="wrap">
     <div class="section-head">
       <h2>New Arrivals</h2>
-      <a href="#">View all</a>
+      <a href="#">View all<span class="view-all-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></a>
     </div>
     <div class="prod-grid" id="newArrivalsGrid">
       <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line w80"></div><div class="skel-line w60"></div></div></div>
@@ -4306,7 +4779,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
             <input type="file" accept="image/*,.pdf" onchange="document.getElementById('fileName').textContent = this.files[0]?.name || 'No file chosen'">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Upload Transfer Receipt
-            <span id="fileName" style="font-weight:400; color:#8E8E93; font-size:11.5px;">JPG, PNG or PDF</span>
+            <span id="fileName" style="font-weight:400; color:#767676; font-size:11.5px;">JPG, PNG or PDF</span>
           </label>
         </div>
 
@@ -4452,7 +4925,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
         <p>We use the information we collect to process your orders, communicate with you about your purchases, and provide customer support. We do not sell your personal data to third parties.</p>
         <h3 style="color:#111; margin-top:16px; font-size:18px;">3. Security</h3>
         <p>We implement industry-standard security measures to protect your personal data. All payment information is processed securely through encrypted connections.</p>
-        <p style="margin-top:24px; font-size:13.5px; color:#8E8E93;">Last updated: September 2026</p>
+        <p style="margin-top:24px; font-size:13.5px; color:#767676;">Last updated: September 2026</p>
       </div>
     </div>
   </div>
@@ -4471,7 +4944,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
       <!-- Guest View (Sign In / Register) -->
       <div id="cpGuestView">
         <h2 style="font-size: 24px; font-weight: 700; color: #111111; margin-bottom: 8px; text-align: center;">Customer Account</h2>
-        <p style="font-size: 14px; color: #8E8E93; margin-bottom: 24px; text-align: center;">Sign in or create an account to view your orders.</p>
+        <p style="font-size: 14px; color: #767676; margin-bottom: 24px; text-align: center;">Sign in or create an account to view your orders.</p>
 
         <!-- Tab Selector -->
         <div class="tab-row" style="justify-content: center; margin-bottom: 24px;">
@@ -4492,7 +4965,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
             <input type="password" id="cpSignInPassword" placeholder="••••••••" autocomplete="current-password">
           </div>
           <div style="text-align: right; margin-bottom: 16px;">
-            <button type="button" onclick="cpForgotPassword()" style="background:none; border:none; color:#8E8E93; font-size:13px; cursor:pointer;">Forgot password?</button>
+            <button type="button" onclick="cpForgotPassword()" style="background:none; border:none; color:#767676; font-size:13px; cursor:pointer;">Forgot password?</button>
           </div>
           <button type="button" class="place-order-btn" id="cpSignInBtn" onclick="cpSignIn()">
             <span class="spinner"></span>
@@ -4526,14 +4999,14 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #E5E5EA;">
           <div>
             <h2 id="cpCustomerName" style="font-size: 20px; font-weight: 700; color: #111111; margin: 0 0 4px;">Welcome</h2>
-            <span id="cpCustomerEmail" style="font-size: 13px; color: #8E8E93;"></span>
+            <span id="cpCustomerEmail" style="font-size: 13px; color: #767676;"></span>
           </div>
 <button type="button" onclick="cpLogout()" class="btn-ghost" style="padding: 8px 16px; min-height: 36px; font-size: 13px;">Log Out</button>
         </div>
 
         <h3 style="font-size: 18px; font-weight: 700; color: #111111; margin-bottom: 16px;">My Orders</h3>
         <div id="cpOrdersList" style="display:flex; flex-direction:column; gap:12px;"></div>
-        <div id="cpOrdersEmpty" style="display:none; text-align:center; padding: 40px 10px; color: #8E8E93;">
+        <div id="cpOrdersEmpty" style="display:none; text-align:center; padding: 40px 10px; color: #767676;">
           <p style="margin-bottom: 16px; font-size: 14px;">No orders placed yet.</p>
           <button type="button" class="btn-primary" onclick="closeCustomerPortal()">Start Shopping</button>
         </div>
@@ -4649,9 +5122,15 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
         <div class="logo brand-loading"><span class="logo-mark"></span>Northline</div>
         <p>Curated tech and accessories, chosen for quality and design. Built to look and feel like a real premium storefront.</p>
         <div class="foot-social">
-          <a href="#" title="Facebook">f</a>
-          <a href="#" title="Instagram">ig</a>
-          <a href="#" title="TikTok">tt</a>
+          <a href="#" title="Facebook" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+          </a>
+          <a href="#" title="Instagram" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" title="TikTok" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.87a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.3z"/></svg>
+          </a>
         </div>
       </div>
       <div class="foot-col">
@@ -4998,7 +5477,10 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
           <div class="settings-panel-body">
             <p class="settings-hint">Each slide has a separate image for desktop and mobile (like on ugreen.com) — the mobile image shows automatically on small screens.</p>
             <div id="heroSlidesAdminList"></div>
-            <button type="button" class="btn-ghost" style="margin-top:6px;" onclick="addHeroSlideRow()">+ Add Slide</button>
+            <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
+              <button type="button" class="btn-ghost" onclick="addHeroSlideRow()">+ Add Slide</button>
+              <button type="button" class="btn-ghost" onclick="resetHeroSlidesToDefault()">Reset to Default Slides</button>
+            </div>
           </div>
         </div>
 
@@ -5716,7 +6198,13 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   }
 
   // ---- Social links: show only configured, valid, non-empty URLs ----
-  const SOCIAL_ICON_LABEL = { facebook: "f", instagram: "ig", tiktok: "tt", youtube: "yt", whatsapp: "wa" };
+  const SOCIAL_ICON_SVG = {
+    facebook: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.87a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.3z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M23 12s0-3.8-.49-5.6a3.02 3.02 0 0 0-2.12-2.13C18.6 3.8 12 3.8 12 3.8s-6.6 0-8.39.47A3.02 3.02 0 0 0 1.49 6.4C1 8.2 1 12 1 12s0 3.8.49 5.6a3.02 3.02 0 0 0 2.12 2.13c1.79.47 8.39.47 8.39.47s6.6 0 8.39-.47a3.02 3.02 0 0 0 2.12-2.13C23 15.8 23 12 23 12z"/><path d="M9.75 15.02 15.5 12 9.75 8.98z" fill="#000"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.35a9.9 9.9 0 0 0 4.62 1.14h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm5.79 14.02c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.43.75-2.13 1.02-2.42.27-.29.58-.36.77-.36.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .89 2.14.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.03 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.05.17-.18.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.68.79 1.97.93.29.14.48.21.55.33.07.12.07.68-.17 1.36z"/></svg>'
+  };
   const SOCIAL_TITLE = { facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube", whatsapp: "WhatsApp" };
   function applySocialLinks(settings){
     if (!settings || !settings.socialLinks) return; // field entirely absent — keep existing footer icons untouched
@@ -5724,7 +6212,7 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     const container = document.querySelector(".foot-social");
     if (!container) return;
 
-    const entries = Object.keys(SOCIAL_ICON_LABEL)
+    const entries = Object.keys(SOCIAL_ICON_SVG)
       .map(key => ({ key, url: (sl[key] || "").trim() }))
       .filter(e => e.url && /^https?:\/\//i.test(e.url));
 
@@ -5733,9 +6221,10 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
       const a = document.createElement("a");
       a.href = url;
       a.title = SOCIAL_TITLE[key];
+      a.setAttribute("aria-label", SOCIAL_TITLE[key]);
       a.target = "_blank";
       a.rel = "noopener noreferrer";
-      a.textContent = SOCIAL_ICON_LABEL[key];
+      a.innerHTML = SOCIAL_ICON_SVG[key];
       container.appendChild(a);
     });
   }
@@ -5924,12 +6413,16 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     }[c]));
   }
 
+  // Subtle dot + text stock line, rendered in the card body (not on the image) —
+  // shown for every stock level, including the default in-stock state, since it
+  // no longer competes visually with the product photo the way an image-badge did.
   function stockBadge(stock){
     const s = Number(stock) || 0;
-    if (s <= 0) return '<span class="badge stock-badge out">Out of stock</span>';
-    if (s <= 5) return `<span class="badge stock-badge low">Only ${s} left</span>`;
-    return '<span class="badge stock-badge">In stock</span>';
+    if (s <= 0) return '<span class="stock-line out"><span class="dot"></span>Out of stock</span>';
+    if (s <= 5) return `<span class="stock-line low"><span class="dot"></span>Only ${s} left</span>`;
+    return '<span class="stock-line"><span class="dot"></span>In stock</span>';
   }
+  window.stockBadge = stockBadge;
 
   // ---- Live stock sync after an order is placed ----
   // Called by the checkout module right after it decrements Firestore stock,
@@ -5945,11 +6438,13 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
 
     document.querySelectorAll(`.single-add-btn[data-id="${safeId}"]`).forEach(btn => {
       btn.disabled = outOfStock;
-      btn.textContent = outOfStock ? 'Out of Stock' : 'Add to Cart';
+      const label = btn.querySelector(".btn-label");
+      if (label) label.textContent = outOfStock ? "Out of Stock" : "Add to Cart";
+      else btn.textContent = outOfStock ? "Out of Stock" : "Add to Cart";
     });
-    document.querySelectorAll(`.prod-card[data-id="${safeId}"] .prod-thumb`).forEach(thumb => {
-      const oldBadge = thumb.querySelector(".stock-badge");
-      if (oldBadge) oldBadge.outerHTML = stockBadge(newStock);
+    document.querySelectorAll(`.prod-card[data-id="${safeId}"] .prod-body`).forEach(body => {
+      const oldLine = body.querySelector(".stock-line");
+      if (oldLine) oldLine.outerHTML = stockBadge(newStock);
     });
 
     // If the shopper currently has this exact product's page open, update
@@ -5985,6 +6480,15 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     }
     return formatPrice(price);
   }
+  // Shoppers respond more to a concrete rupee amount than to the percentage alone.
+  function prodSaveHtml(product){
+    const price = Number(product.price) || 0;
+    const original = Number(product.originalPrice) || 0;
+    if (!(original > price)) return "";
+    return `<span class="prod-save">Save ${formatPrice(original - price)}</span>`;
+  }
+  window.prodSaveHtml = prodSaveHtml;
+
 
   // ---- Wishlist (client-side only, persisted in this browser) ----
   const WISHLIST_KEY = "northline_wishlist";
@@ -6031,29 +6535,35 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     const category = escapeHtml(p.category || "");
     const stock = Number(p.stock) || 0;
     const outOfStock = stock <= 0;
+    const safeId = escapeHtml(id);
 
     const thumbInner = isValidImageUrl(p.imageUrl)
       ? `<img class="prod-thumb-img" src="${escapeHtml(p.imageUrl)}" alt="${name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'prod-thumb-fallback prod-thumb-fallback-text',innerHTML:'Product image'}))">`
       : `<div class="prod-thumb-fallback prod-thumb-fallback-text">Product image</div>`;
 
     return `
-      <div class="prod-card" data-id="${escapeHtml(id)}">
+      <div class="prod-card" data-id="${safeId}">
         <div class="prod-thumb">
-          <div class="prod-brand-badge">
-            <img src="https://res.cloudinary.com/hzwbfomh/image/upload/Dplex_logo.svg" alt="DPLEX">
-          </div>
           ${thumbInner}
           ${wishlistBtnHtml(id)}
-          ${stockBadge(stock)}
+          ${discountBadgeHtml(p)}
+          <button class="quick-view" type="button" aria-label="Quick view" onclick="event.stopPropagation(); window.showProductDetailView && window.showProductDetailView('${safeId}');">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
         <div class="prod-body">
-          <span class="prod-cat">${category}</span>
+          <span class="prod-cat"><span class="prod-brand-mono">DPLEX</span>${category ? " · " + category : ""}</span>
           <span class="prod-name">${name}</span>
           <div class="prod-row">
             <span class="prod-price">${priceRowHtml(p)}</span>
           </div>
+          ${prodSaveHtml(p)}
+          ${stockBadge(stock)}
           <div class="prod-actions">
-            <button class="single-add-btn" data-id="${escapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Add to Cart"}</button>
+            <button class="single-add-btn" data-id="${safeId}" ${outOfStock ? "disabled" : ""}>
+              <span class="btn-label">${outOfStock ? "Out of Stock" : "Add to Cart"}</span>
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </button>
           </div>
         </div>
       </div>`;
@@ -6419,6 +6929,10 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   let pdpQty = 1;
   let pdpLightboxIndex = 0;
   let pdpCachedLogoDataUrl = null; // fetched once, reused for every card download
+  let pdpStickyObserver = null; // mobile sticky purchase bar — declared here (not down by
+    // pdpHideStickyBar's own section) because that function can be called from
+    // handlePdpHashRouting before script execution ever reaches that later line,
+    // which throws a temporal-dead-zone ReferenceError on a `let` declared too late.
 
   // ---- Internal show/hide (no history/hash side-effects — see the public
   //      window.showProductDetailView / closeProductDetailView wrappers below) ----
@@ -6975,7 +7489,6 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
   // Mirrors the main .pdp-actions-row Buy Now: it delegates the click to that
   // button, so the existing stock re-check + addToCart + openCheckout flow is
   // reused verbatim rather than duplicated here.
-  let pdpStickyObserver = null;
 
   function pdpHideStickyBar(){
     const bar = document.getElementById("pdpStickyBar");
@@ -7360,36 +7873,46 @@ header.header-dark-content:not(.scrolled) .nav-search input::placeholder{ color:
     const category = pdpEscapeHtml(p.category || "");
     const stock = Number(p.stock) || 0;
     const outOfStock = stock <= 0;
+    const safeId = pdpEscapeHtml(id);
 
     const thumbInner = pdpIsValidImageUrl(p.imageUrl)
       ? `<img class="prod-thumb-img" src="${pdpEscapeHtml(p.imageUrl)}" alt="${name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'prod-thumb-fallback prod-thumb-fallback-text',innerHTML:'Product image'}))">`
       : `<div class="prod-thumb-fallback prod-thumb-fallback-text">Product image</div>`;
 
-    const stockBadgeHtml = outOfStock
-      ? '<span class="badge stock-badge out">Out of stock</span>'
-      : (stock <= 5 ? `<span class="badge stock-badge low">Only ${stock} left</span>` : '<span class="badge stock-badge">In stock</span>');
+    const stockLineHtml = typeof window.stockBadge === "function"
+      ? window.stockBadge(stock)
+      : (outOfStock
+          ? '<span class="stock-line out"><span class="dot"></span>Out of stock</span>'
+          : (stock <= 5 ? `<span class="stock-line low"><span class="dot"></span>Only ${stock} left</span>` : '<span class="stock-line"><span class="dot"></span>In stock</span>'));
 
     const priceHtml = typeof window.priceRowHtml === "function" ? window.priceRowHtml(p) : pdpFormatPrice(p.price);
     const wishlistHtml = typeof window.wishlistBtnHtml === "function" ? window.wishlistBtnHtml(id) : "";
+    const discountHtml = typeof window.discountBadgeHtml === "function" ? window.discountBadgeHtml(p) : "";
+    const saveHtml = typeof window.prodSaveHtml === "function" ? window.prodSaveHtml(p) : "";
 
     return `
-      <div class="prod-card" data-id="${pdpEscapeHtml(id)}">
+      <div class="prod-card" data-id="${safeId}">
         <div class="prod-thumb">
-          <div class="prod-brand-badge">
-            <img src="https://res.cloudinary.com/hzwbfomh/image/upload/Dplex_logo.svg" alt="DPLEX">
-          </div>
           ${thumbInner}
           ${wishlistHtml}
-          ${stockBadgeHtml}
+          ${discountHtml}
+          <button class="quick-view" type="button" aria-label="Quick view" onclick="event.stopPropagation(); window.showProductDetailView && window.showProductDetailView('${safeId}');">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
         <div class="prod-body">
-          <span class="prod-cat">${category}</span>
+          <span class="prod-cat"><span class="prod-brand-mono">DPLEX</span>${category ? " · " + category : ""}</span>
           <span class="prod-name">${name}</span>
           <div class="prod-row">
             <span class="prod-price">${priceHtml}</span>
           </div>
+          ${saveHtml}
+          ${stockLineHtml}
           <div class="prod-actions">
-            <button class="single-add-btn" data-id="${pdpEscapeHtml(id)}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of Stock" : "Add to Cart"}</button>
+            <button class="single-add-btn" data-id="${safeId}" ${outOfStock ? "disabled" : ""}>
+              <span class="btn-label">${outOfStock ? "Out of Stock" : "Add to Cart"}</span>
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </button>
           </div>
         </div>
       </div>`;
@@ -10656,7 +11179,10 @@ Please confirm my order.`
         <div class="hero-slide-row" data-slide-index="${i}">
           <div class="hero-slide-row-head">
             <strong>Slide ${i + 1}</strong>
-            <button type="button" class="hero-slide-remove" onclick="removeHeroSlideRow(${i})">Remove</button>
+            <div class="hero-slide-row-actions">
+              <button type="button" class="hero-slide-duplicate" onclick="duplicateHeroSlideRow(${i})">Duplicate</button>
+              <button type="button" class="hero-slide-remove" onclick="removeHeroSlideRow(${i})">Remove</button>
+            </div>
           </div>
           <div class="form-group">
             <label>Title</label>
@@ -10724,16 +11250,37 @@ Please confirm my order.`
       id: "slide-custom-" + heroSlideRowSeq,
       desktopImage: "",
       mobileImage: "",
-      eyebrow: "",
       title: "New Slide",
       description: "",
       primaryButtonText: "Shop Now",
       primaryButtonAction: "#products",
-      secondaryButtonText: "View Products",
-      secondaryButtonAction: "#products",
-      textPosition: { pcTop: "132px", mobileTop: "76px" },
-      textColor: "light"
+      arrowMode: "center",
+      titleSize: "--md",
+      textPosition: "top-center",
+      buttonColor: "white",
+      captionColor: "#FFFFFF"
     });
+    renderHeroSlidesAdminForm();
+  };
+
+  // Inserts a copy of the slide right after the original — same images/text,
+  // just a fresh id so it's tracked as its own row once saved.
+  window.duplicateHeroSlideRow = function(index){
+    const source = heroSlidesAdminData[index];
+    if (!source) return;
+    heroSlideRowSeq += 1;
+    const copy = Object.assign({}, source, { id: "slide-custom-" + heroSlideRowSeq });
+    heroSlidesAdminData.splice(index + 1, 0, copy);
+    renderHeroSlidesAdminForm();
+  };
+
+  // Overwrites whatever is currently in the form (saved data or edits in
+  // progress) with the 5 built-in default slides. Nothing is written to
+  // the database until "Save Settings" is clicked afterwards.
+  window.resetHeroSlidesToDefault = function(){
+    if (!confirm("Replace all current slides with the 5 default slides? This won't save until you click Save Settings.")) return;
+    const defaults = window.dplexHeroDefaultSlides || [];
+    heroSlidesAdminData = defaults.map(function(s){ return Object.assign({}, s); });
     renderHeroSlidesAdminForm();
   };
 
@@ -10880,8 +11427,8 @@ Please confirm my order.`
     }
 
     populateStoreInfoForm(settings);
-    populateHeroSlidesForm(settings);
     populateHeroBannerForm(settings);
+    populateHeroSlidesForm(settings);
     populateProductCardForm(settings);
     populateCurrencyDeliveryForm(settings);
     populateCheckoutFieldsForm(settings);
