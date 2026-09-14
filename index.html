@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4420,6 +4422,62 @@ body:has(header.scrolled) .search-overlay {
   </div>
 </section>
 
+<!-- ============ POWER BANK PROMO STRIP (3-up banner grid) ============ -->
+<!-- Placed just below the Daily Perk banner and above "Shop by category".
+     Swap the image URLs / href targets below for the real product pages
+     once they're live in the catalog — these currently point at #products
+     as a safe default. -->
+<style>
+  .promo-strip{padding:40px 0;background:var(--paper);}
+  .promo-strip-title{margin:0 0 20px;text-align:center;font-family:'Sora',sans-serif;font-weight:700;letter-spacing:0.02em;font-size:clamp(18px,2.2vw,26px);text-transform:uppercase;color:var(--ink);}
+  .promo-strip .wrap{}
+  .promo-strip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .promo-card{display:block;border-radius:var(--radius-card);overflow:hidden;background:transparent;box-shadow:none;transition:box-shadow .2s ease,transform .2s ease;}
+  .promo-card:hover{transform:translateY(-2px);}
+  .promo-card img{display:block;width:100%;height:auto;aspect-ratio:495/247;object-fit:cover;}
+  @media (max-width:768px){
+    .promo-strip-grid{grid-template-columns:1fr;gap:14px;}
+  }
+</style>
+<section class="section promo-strip" id="powerBankPromo">
+  <div class="wrap">
+    <h2 class="promo-strip-title">Save more on power banks</h2>
+    <div class="promo-strip-grid" id="promoStripGrid">
+    <a class="promo-card" href="#products" aria-label="Shop power banks">
+      <img loading="lazy" decoding="async" width="495" height="247" src="https://i.ibb.co/Xxbrgj0V/image.png" alt="Power bank promo 1">
+    </a>
+    <a class="promo-card" href="#products" aria-label="Shop power banks">
+      <img loading="lazy" decoding="async" width="495" height="247" src="https://i.ibb.co/r2t77kTr/image.png" alt="Power bank promo 2">
+    </a>
+    <a class="promo-card" href="#products" aria-label="Shop power banks">
+      <img loading="lazy" decoding="async" width="495" height="247" src="https://i.ibb.co/jkSMbFTS/image.png" alt="Power bank promo 3">
+    </a>
+    </div>
+  </div>
+</section>
+<script>
+  // Re-renders #promoStripGrid from Admin-saved data (falls back to the 3
+  // markup images above when nothing's been saved yet). Mirrors the hero
+  // slider's own storeSettings:ready pattern.
+  window.renderPromoStrip = function(items){
+    var grid = document.getElementById("promoStripGrid");
+    if (!grid || !Array.isArray(items)) return;
+    if (items.length === 0){ grid.innerHTML = ""; return; }
+    grid.innerHTML = items.map(function(item){
+      var href = (item.link || "#products").replace(/"/g, "&quot;");
+      var src = (item.image || "").replace(/"/g, "&quot;");
+      return '<a class="promo-card" href="' + href + '" aria-label="Shop">' +
+        '<img loading="lazy" decoding="async" width="495" height="247" src="' + src + '" alt="Promo banner"></a>';
+    }).join('');
+  };
+  document.addEventListener('storeSettings:ready', function(e){
+    var settings = (e && e.detail) || {};
+    if (Array.isArray(settings.promoStrip) && settings.promoStrip.length > 0){
+      window.renderPromoStrip(settings.promoStrip);
+    }
+  });
+</script>
+
 <section class="section" id="categories">
   <div class="wrap">
     <div class="section-head">
@@ -5577,6 +5635,18 @@ body:has(header.scrolled) .search-overlay {
             <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
               <button type="button" class="btn-ghost" onclick="addHeroSlideRow()">+ Add Slide</button>
               <button type="button" class="btn-ghost" onclick="resetHeroSlidesToDefault()">Reset to Default Slides</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo Strip -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">Promo Strip (homepage banner grid)</div>
+          <div class="settings-panel-body">
+            <p class="settings-hint">The 3-up banner section between the Daily Perk bar and "Shop by category". Add, remove, or reorder image banners — each can optionally link to a URL (e.g. a product page or #products).</p>
+            <div id="promoStripAdminList"></div>
+            <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
+              <button type="button" class="btn-ghost" onclick="addPromoStripRow()">+ Add Image</button>
             </div>
           </div>
         </div>
@@ -11818,6 +11888,101 @@ Please confirm my order.`
     return { slides: heroSlidesAdminData.map(function(s){ return Object.assign({}, s); }), valid: valid };
   }
 
+  // ---- Promo Strip admin (homepage 3-up banner grid) ----
+  // Default set = the 3 banners currently on the page, so existing settings
+  // documents that predate this feature still show something on first load
+  // instead of an empty list.
+  window.dplexPromoStripDefaults = [
+    { image: "https://i.ibb.co/Xxbrgj0V/image.png", link: "#products" },
+    { image: "https://i.ibb.co/r2t77kTr/image.png", link: "#products" },
+    { image: "https://i.ibb.co/jkSMbFTS/image.png", link: "#products" }
+  ];
+
+  let promoStripAdminData = [];
+  let promoStripRowSeq = 0;
+
+  function populatePromoStripForm(settings){
+    const source = (Array.isArray(settings.promoStrip) && settings.promoStrip.length > 0)
+      ? settings.promoStrip
+      : (window.dplexPromoStripDefaults || []);
+    promoStripAdminData = source.map(function(s){ return Object.assign({}, s); });
+    renderPromoStripAdminForm();
+  }
+
+  function renderPromoStripAdminForm(){
+    const list = document.getElementById("promoStripAdminList");
+    if (!list) return;
+    list.innerHTML = promoStripAdminData.map(function(item, i){
+      const rowId = "promoStripRow" + i;
+      return `
+        <div class="hero-slide-row" data-promo-index="${i}">
+          <div class="hero-slide-row-head">
+            <strong>Image ${i + 1}</strong>
+            <div class="hero-slide-row-actions">
+              <button type="button" class="hero-slide-remove" onclick="removePromoStripRow(${i})">Remove</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Image URL</label>
+            <input type="text" id="${rowId}Img" placeholder="https://example.com/banner.png" value="${escHtmlAttr(item.image || '')}" oninput="updatePromoStripField(${i}, 'image', this.value); handlePromoStripImgPreview(${i})">
+            <div class="image-url-preview" id="${rowId}PreviewWrap" style="display:none;">
+              <img id="${rowId}PreviewImg" src="" alt="" onload="document.getElementById('${rowId}PreviewWrap').style.display='flex'" onerror="document.getElementById('${rowId}PreviewWrap').style.display='none'">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Link URL (optional — where it goes when clicked)</label>
+            <input type="text" value="${escHtmlAttr(item.link || '')}" placeholder="#products" oninput="updatePromoStripField(${i}, 'link', this.value)">
+          </div>
+        </div>
+      `;
+    }).join('') || '<p class="settings-hint">No promo images yet — add one below.</p>';
+
+    promoStripAdminData.forEach(function(item, i){
+      if (item.image) handlePromoStripImgPreview(i);
+    });
+  }
+
+  window.updatePromoStripField = function(index, field, value){
+    if (!promoStripAdminData[index]) return;
+    promoStripAdminData[index][field] = value;
+  };
+
+  window.handlePromoStripImgPreview = function(index){
+    const rowId = "promoStripRow" + index;
+    const input = document.getElementById(rowId + "Img");
+    const wrap = document.getElementById(rowId + "PreviewWrap");
+    const img = document.getElementById(rowId + "PreviewImg");
+    if (!input || !wrap || !img) return;
+    const url = input.value.trim();
+    if (isValidImageUrlAdmin(url)){
+      img.src = url;
+    } else {
+      wrap.style.display = "none";
+      img.src = "";
+    }
+  };
+
+  window.addPromoStripRow = function(){
+    promoStripRowSeq += 1;
+    promoStripAdminData.push({ id: "promo-custom-" + promoStripRowSeq, image: "", link: "#products" });
+    renderPromoStripAdminForm();
+  };
+
+  window.removePromoStripRow = function(index){
+    promoStripAdminData.splice(index, 1);
+    renderPromoStripAdminForm();
+  };
+
+  // Returns { items, valid } — valid is false if any row is missing a required image URL.
+  function collectPromoStripFromForm(){
+    let valid = true;
+    promoStripAdminData.forEach(function(item){
+      const imgOk = (item.image || "").trim() !== "" && isValidImageUrlAdmin(item.image.trim());
+      if (!imgOk) valid = false;
+    });
+    return { items: promoStripAdminData.map(function(s){ return Object.assign({}, s); }), valid: valid };
+  }
+
   function populateProductCardForm(settings){
     document.getElementById("settingsCardStyle").value = settings.productCardStyle || "classic";
   }
@@ -11947,6 +12112,7 @@ Please confirm my order.`
     populateStoreInfoForm(settings);
     populateHeroBannerForm(settings);
     populateHeroSlidesForm(settings);
+    populatePromoStripForm(settings);
     populateProductCardForm(settings);
     populateCurrencyDeliveryForm(settings);
     populateCheckoutFieldsForm(settings);
@@ -12025,6 +12191,10 @@ Please confirm my order.`
     const heroSlides = heroSlidesResult.slides;
     const heroSlidesValid = heroSlidesResult.valid;
 
+    const promoStripResult = collectPromoStripFromForm();
+    const promoStrip = promoStripResult.items;
+    const promoStripValid = promoStripResult.valid;
+
     const productCardStyle = document.getElementById("settingsCardStyle").value;
     const currency = document.getElementById("settingsCurrency").value;
     const deliveryChargeRaw = document.getElementById("settingsDeliveryCharge").value.trim();
@@ -12073,6 +12243,10 @@ Please confirm my order.`
       showToast("Each hero slide needs both a Desktop Image URL and a Mobile Image URL (starting with http:// or https://).");
       return;
     }
+    if (!promoStripValid){
+      showToast("Each promo strip image needs a valid Image URL (starting with http:// or https://).");
+      return;
+    }
     if (!deliveryChargeValid){
       showToast("Please enter a valid delivery charge (0 or more).");
       return;
@@ -12091,6 +12265,7 @@ Please confirm my order.`
         logoUrl: logoUrlRaw,
         heroImageUrl: heroImageUrlRaw,
         heroSlides,
+        promoStrip,
         colors,
         productCardStyle,
         currency,
@@ -12111,6 +12286,9 @@ Please confirm my order.`
       window.__storeSettings = Object.assign({}, window.__storeSettings, updatePayload);
       if (window.renderDplexHeroSlides && Array.isArray(heroSlides) && heroSlides.length > 0){
         window.renderDplexHeroSlides(heroSlides);
+      }
+      if (window.renderPromoStrip){
+        window.renderPromoStrip(promoStrip);
       }
       showToast("Store settings saved successfully.");
     } catch (err) {
