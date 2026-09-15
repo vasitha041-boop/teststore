@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -597,7 +595,8 @@
   .dplex-title--sm{font-size:clamp(22px,2.3vw,36px);}
   .dplex-desc{font-family:'Inter',sans-serif;font-weight:500;line-height:1.3;color:inherit;font-size:clamp(15px,1.6vw,18px);margin:0;opacity:.85;}
 
-  .dplex-slide-btn{display:inline-flex;align-items:center;justify-content:center;width:12rem;height:3rem;line-height:3rem;padding:0;border-radius:var(--slide-button-border-radius);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.12);transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,background .2s ease,color .2s ease;white-space:nowrap;margin-top:20px;}
+  .dplex-slide-btn{display:inline-flex;align-items:center;justify-content:center;width:12rem;height:3rem;line-height:3rem;padding:0;border-radius:var(--slide-button-border-radius);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;letter-spacing:-0.01em;text-decoration:none;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.12);transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,background .2s ease,color .2s ease,opacity .2s ease;white-space:nowrap;margin-top:20px;}
+  .dplex-slide-btn:hover{opacity:0.85;}
   .dplex-slide-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,0.22);}
   .dplex-slide-btn:active{transform:translateY(0) scale(0.98);}
   .dplex-slide-btn--white{background:#FFFFFF;color:#111111;}
@@ -875,6 +874,9 @@
   @media(max-width:768px){.section{padding:40px 0;}}
   .section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;}
   .section-head h2{font-size:30px;font-weight:600;}
+  @media (max-width:768px){
+    .section-head h2{font-size:20px;}
+  }
   .section-head a{font-size:14px;font-weight:600;border-bottom:1.5px solid var(--ink);padding-bottom:2px;}
 
   /* categories */
@@ -916,12 +918,23 @@
 
   footer{position:relative;overflow:hidden;background:#000;color:#D9D9D9;margin-top:0;padding:40px 0 0;}
   footer .wrap{position:relative;z-index:2;}
+  /* ---- Footer light lines: original SVG version (17 static lines + 17
+     animated light streaks), stretched to fill the full footer width/height
+     (preserveAspectRatio="none") so the lines spread edge-to-edge instead of
+     sitting in a centered block. ---- */
   #footerLightLines{position:absolute;inset:0;z-index:1;display:flex;justify-content:center;overflow:hidden;pointer-events:none;}
   #footerLightLines svg{position:absolute;width:100%;height:100%;}
   #footerLightLines .lines rect{fill:#fff;}
   #footerLightLines .lights path{fill:#fff;}
   .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.1);}
   .foot-brand .logo{color:#fff;margin-bottom:14px;}
+  /* The global ".logo img, .store-logo-img{filter:brightness(0)!important}" rule
+     (added for the solid white header) forces every logo image to black,
+     which makes an uploaded logo invisible against the footer's black
+     background. Force it white here instead — higher specificity wins over
+     that unscoped rule despite both being !important. */
+  footer .foot-brand .logo img,
+  footer .foot-brand .store-logo-img{filter:brightness(0) invert(1) !important;}
   .foot-brand p{font-size:13px;line-height:1.6;color:#767676;max-width:260px;margin:0;}
   .foot-col h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:16px;text-transform:none;}
   .foot-col a{display:block;font-size:13px;color:#767676;margin-bottom:11px;transition:color .2s;}
@@ -1082,6 +1095,11 @@
   .cart-item-name{font-size:13.5px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .cart-item-price{font-size:12.5px;color:var(--muted);}
   .cart-item-qty{display:inline-flex;align-items:center;gap:0;background:#F5F5F7;border-radius:99px;padding:4px;margin-top:6px;}
+  /* ============ FIX STRETCHED CART QUANTITY PILL ============ */
+  .cart-item-qty {
+    align-self: flex-start !important;
+    width: max-content !important;
+  }
   .qty-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;transition:border-color .2s;}
   .qty-btn:hover{border-color:var(--ink);}
   .qty-btn:disabled{opacity:0.4;cursor:not-allowed;}
@@ -1741,6 +1759,30 @@
   .checkout-error.show{display:block;}
 
   .place-order-btn{width:100%;background:#111111 !important;color:#FFFFFF !important;border:none;border-radius:99px;padding:12px 24px;min-height:56px;font-size:16px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;box-shadow:none;transition:all .3s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;justify-content:center;gap:8px;}
+  /* ============ WHATSAPP CHECKOUT INFO ============ */
+  .wa-checkout-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #F4FBF6;
+    border: 1px solid #CDEBDA;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .wa-checkout-info svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: #25D366;
+  }
+  .wa-checkout-info p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #1F8A43;
+    line-height: 1.5;
+    font-weight: 500;
+  }
   .place-order-btn:hover:not(:disabled){background:#000000 !important;transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,0.12);}
   .place-order-btn:disabled{background:#767676 !important;cursor:not-allowed;transform:none;box-shadow:none;}
   /* ---- Unified conversion CTAs: drawer 'Proceed to Checkout' matches product Buy Now ---- */
@@ -4269,6 +4311,16 @@ body:has(header.scrolled) .search-overlay {
     var captionColor = slide.captionColor || '#FFFFFF';
     var textColorAttr = /^#f|white/i.test(captionColor) ? 'light' : 'dark';
 
+    // Free-color button styling (new) — falls back to the buttonColor preset
+    // (white bg/black text or black bg/white text) so slides saved before
+    // this feature existed still render exactly as before.
+    var buttonBgColor = slide.buttonBgColor || (buttonColor === 'black' ? '#111111' : '#FFFFFF');
+    var buttonTextColor = slide.buttonTextColor || (buttonColor === 'black' ? '#FFFFFF' : '#111111');
+
+    // Per-slide title/description font family — defaults to the site's
+    // existing Sora heading font when not set.
+    var titleFont = slide.titleFont || "'Sora',sans-serif";
+
     var linkOpen = '<a class="dplex-slide-link" href="' + escapeHtmlDplexHero(buttonAction) + '">';
     var linkClose = '</a>';
 
@@ -4296,12 +4348,12 @@ body:has(header.scrolled) .search-overlay {
     var textBlock =
       '<div class="dplex-slide-text ' + textPositionClass + '">' +
         '<div class="dplex-slide-content">' +
-          '<div class="dplex-caption" style="color:' + escapeHtmlDplexHero(captionColor) + ';">' +
+          '<div class="dplex-caption" style="color:' + escapeHtmlDplexHero(captionColor) + ';font-family:' + escapeHtmlDplexHero(titleFont) + ';">' +
             '<div class="dplex-top-block">' +
               '<div class="dplex-title dplex-title' + titleSize + '">' + escapeHtmlDplexHero(title) + '</div>' +
               (description ? '<div class="dplex-desc">' + escapeHtmlDplexHero(description) + '</div>' : '') +
             '</div>' +
-            '<a href="' + escapeHtmlDplexHero(buttonAction) + '" class="dplex-cta-anchor"><button class="dplex-slide-btn dplex-slide-btn--' + buttonColor + ' dplex-slide-btn--mt-20">' + escapeHtmlDplexHero(buttonText) + '</button></a>' +
+            '<a href="' + escapeHtmlDplexHero(buttonAction) + '" class="dplex-cta-anchor"><button class="dplex-slide-btn dplex-slide-btn--mt-20" style="background:' + escapeHtmlDplexHero(buttonBgColor) + ';color:' + escapeHtmlDplexHero(buttonTextColor) + ';">' + escapeHtmlDplexHero(buttonText) + '</button></a>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -4938,9 +4990,14 @@ body:has(header.scrolled) .search-overlay {
           </label>
         </div>
 
+        <div class="wa-checkout-info">
+          <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.001 3C9.383 3 4 8.373 4 14.978c0 2.39.7 4.617 1.912 6.494L4 29l7.73-1.877a12.98 12.98 0 0 0 4.27.722h.001c6.618 0 12-5.373 12-11.978C28 8.373 22.619 3 16.001 3zm0 21.594a9.57 9.57 0 0 1-4.885-1.34l-.35-.207-3.643.885.973-3.55-.228-.365a9.53 9.53 0 0 1-1.472-5.04c0-5.278 4.31-9.575 9.61-9.575 5.298 0 9.608 4.297 9.608 9.575 0 5.279-4.31 9.617-9.613 9.617zm5.273-7.184c-.288-.144-1.706-.84-1.97-.936-.264-.096-.456-.144-.648.144-.192.288-.744.936-.912 1.128-.168.192-.336.216-.624.072-.288-.144-1.215-.448-2.314-1.428-.856-.763-1.434-1.706-1.602-1.994-.168-.288-.018-.444.126-.588.13-.129.288-.336.432-.504.144-.168.192-.288.288-.48.096-.192.048-.36-.024-.504-.072-.144-.648-1.562-.888-2.14-.234-.562-.472-.486-.648-.494l-.552-.01c-.192 0-.504.072-.768.36-.264.288-1.008.984-1.008 2.4 0 1.416 1.032 2.784 1.176 2.976.144.192 2.03 3.097 4.914 4.343.687.297 1.223.474 1.641.606.689.219 1.316.188 1.812.114.553-.083 1.706-.697 1.947-1.371.24-.673.24-1.25.168-1.371-.072-.12-.264-.192-.552-.336z"/></svg>
+          <p>After placing your order, WhatsApp will try to open automatically to confirm with our team. If your browser blocks the pop-up, just tap "Confirm via WhatsApp" on the next screen to send it yourself.</p>
+        </div>
+
         <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
           <span class="spinner"></span>
-          <span id="placeOrderLabel">Place Order</span>
+          <span id="placeOrderLabel">Place Order & Open WhatsApp</span>
         </button>
       </div>
     </div>
@@ -5271,6 +5328,83 @@ body:has(header.scrolled) .search-overlay {
       </g>
     </svg>
   </div>
+  <script>
+    // Vanilla-JS port of LightLines.tsx's animation logic. NOTE (per request):
+    // this intentionally does NOT force the SVG to stretch/fit the footer's
+    // exact box — see the CSS above (svg{height:100%}, no forced width, no
+    // preserveAspectRatio="none"). It keeps native proportions and lets the
+    // flex centering handle placement, same as the original component.
+    (function(){
+      var container = document.getElementById('footerLightLines');
+      if (!container) return;
+
+      var lightsDown = [
+        { selector: ".light4", from: -1080, to: 1080 },
+        { selector: ".light5", from: -1080, to: 1080 },
+        { selector: ".light6", from: -1080, to: 1080 },
+        { selector: ".light7", from: -1080, to: 1080 },
+        { selector: ".light8", from: -1080, to: 1080 },
+        { selector: ".light11", from: -1080, to: 1080 },
+        { selector: ".light12", from: -1080, to: 1080 },
+        { selector: ".light13", from: -1080, to: 1080 },
+        { selector: ".light14", from: -1080, to: 1080 },
+        { selector: ".light15", from: -1080, to: 1080 },
+        { selector: ".light16", from: -1080, to: 1080 }
+      ];
+      var lightsUp = [
+        { selector: ".light1", from: 1080, to: -1080 },
+        { selector: ".light2", from: 1080, to: -1080 },
+        { selector: ".light3", from: 1080, to: -1080 },
+        { selector: ".light9", from: 1080, to: -1080 },
+        { selector: ".light10", from: 1080, to: -1080 },
+        { selector: ".light17", from: 1080, to: -1080 }
+      ];
+
+      var speedMultiplier = 1;
+      var allLights = lightsDown.concat(lightsUp);
+
+      var animations = allLights.map(function(light){
+        var element = container.querySelector(light.selector);
+        var duration = ((Math.floor(Math.random() * 59) + 2) * 0.5 + 0.5) / speedMultiplier;
+        return { element: element, from: light.from, to: light.to, duration: duration };
+      });
+
+      var animationState = animations.map(function(){
+        return { startTime: performance.now() - Math.random() * 5000 }; // stagger start times
+      });
+
+      var isVisible = false;
+      var frameId = null;
+
+      function animate(time){
+        if (!isVisible){
+          frameId = requestAnimationFrame(animate);
+          return;
+        }
+        animations.forEach(function(ref, index){
+          if (!ref.element) return;
+          var state = animationState[index];
+          var elapsed = (time - state.startTime) / 1000;
+          var progress = (elapsed % ref.duration) / ref.duration;
+          var currentY = ref.from + (ref.to - ref.from) * progress;
+          ref.element.style.transform = 'translateY(' + currentY + 'px)';
+        });
+        frameId = requestAnimationFrame(animate);
+      }
+
+      var observer = new IntersectionObserver(function(entries){
+        isVisible = entries[0].isIntersecting;
+      }, { threshold: 0 });
+      observer.observe(container);
+
+      frameId = requestAnimationFrame(animate);
+
+      window.addEventListener('beforeunload', function(){
+        if (frameId) cancelAnimationFrame(frameId);
+        observer.disconnect();
+      });
+    })();
+  </script>
   <div class="wrap">
     <div class="foot-top">
       <div class="foot-brand">
@@ -9565,7 +9699,7 @@ function showToast(message){
     if (!btn) return;
     btn.disabled = isPlacing;
     btn.classList.toggle("loading", isPlacing);
-    if (label) label.textContent = isPlacing ? "Placing Order..." : "Place Order";
+    if (label) label.textContent = isPlacing ? "Placing Order..." : "Place Order & Open WhatsApp";
   }
 
   // ---- Place order ----
@@ -9721,6 +9855,22 @@ function showToast(message){
 
       window.closeCheckout();
       showOrderSuccess(orderRef.id, totalAmount);
+
+      // Best-effort auto-open of WhatsApp to confirm the order. NOTE: browsers
+      // only allow window.open() to bypass the popup blocker when it runs
+      // synchronously inside a user gesture (the click that called this
+      // function) — by the time we get here we've already awaited several
+      // Firestore calls, so that gesture window has long since expired in
+      // most browsers (Safari in particular). This call will often be
+      // silently blocked, which is exactly why the banner copy above says
+      // "will try to" rather than promising it, and why the manual
+      // "Confirm via WhatsApp" button on the success screen stays as the
+      // reliable fallback rather than being removed.
+      setTimeout(() => {
+        if (typeof confirmViaWhatsapp === 'function') {
+          confirmViaWhatsapp();
+        }
+      }, 800);
 
     } catch (err) {
       console.error("Failed to place order:", err);
@@ -11782,6 +11932,40 @@ Please confirm my order.`
           </div>
           <div class="hero-slide-imgs">
             <div class="form-group" style="margin-bottom:0;">
+              <label>Font</label>
+              <select onchange="updateHeroSlideField(${i}, 'titleFont', this.value)">
+                <option value="'Sora',sans-serif" ${(!slide.titleFont || slide.titleFont === "'Sora',sans-serif") ? 'selected' : ''}>Sora (default)</option>
+                <option value="'Inter',sans-serif" ${slide.titleFont === "'Inter',sans-serif" ? 'selected' : ''}>Inter</option>
+                <option value="Georgia,serif" ${slide.titleFont === "Georgia,serif" ? 'selected' : ''}>Georgia (serif)</option>
+                <option value="Arial,sans-serif" ${slide.titleFont === "Arial,sans-serif" ? 'selected' : ''}>Arial</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Font Color</label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="color" style="width:44px;height:36px;padding:2px;flex-shrink:0;" value="${escHtmlAttr(isHexColor(slide.captionColor) ? slide.captionColor : '#FFFFFF')}" oninput="updateHeroSlideField(${i}, 'captionColor', this.value); syncHeroSlideColorText(${i}, 'captionColor', this.value)">
+                <input type="text" id="${rowId}CaptionColorText" value="${escHtmlAttr(slide.captionColor || '#FFFFFF')}" oninput="updateHeroSlideField(${i}, 'captionColor', this.value)">
+              </div>
+            </div>
+          </div>
+          <div class="hero-slide-imgs">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Button Color</label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="color" style="width:44px;height:36px;padding:2px;flex-shrink:0;" value="${escHtmlAttr(isHexColor(slide.buttonBgColor) ? slide.buttonBgColor : (slide.buttonColor === 'black' ? '#111111' : '#FFFFFF'))}" oninput="updateHeroSlideField(${i}, 'buttonBgColor', this.value); syncHeroSlideColorText(${i}, 'buttonBgColor', this.value)">
+                <input type="text" id="${rowId}BtnBgColorText" value="${escHtmlAttr(slide.buttonBgColor || (slide.buttonColor === 'black' ? '#111111' : '#FFFFFF'))}" oninput="updateHeroSlideField(${i}, 'buttonBgColor', this.value)">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Button Text Color</label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="color" style="width:44px;height:36px;padding:2px;flex-shrink:0;" value="${escHtmlAttr(isHexColor(slide.buttonTextColor) ? slide.buttonTextColor : (slide.buttonColor === 'black' ? '#FFFFFF' : '#111111'))}" oninput="updateHeroSlideField(${i}, 'buttonTextColor', this.value); syncHeroSlideColorText(${i}, 'buttonTextColor', this.value)">
+                <input type="text" id="${rowId}BtnTextColorText" value="${escHtmlAttr(slide.buttonTextColor || (slide.buttonColor === 'black' ? '#FFFFFF' : '#111111'))}" oninput="updateHeroSlideField(${i}, 'buttonTextColor', this.value)">
+              </div>
+            </div>
+          </div>
+          <div class="hero-slide-imgs">
+            <div class="form-group" style="margin-bottom:0;">
               <label>Desktop Image URL</label>
               <input type="text" id="${rowId}Desktop" placeholder="https://example.com/desktop.jpg" value="${escHtmlAttr(slide.desktopImage || '')}" oninput="updateHeroSlideField(${i}, 'desktopImage', this.value); handleHeroSlideImgPreview(${i}, 'desktop')">
               <div class="image-url-preview" id="${rowId}DesktopPreviewWrap" style="display:none;">
@@ -11810,6 +11994,24 @@ Please confirm my order.`
   function escHtmlAttr(str){
     return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
+
+  // For the <input type="color"> swatches: that input only accepts strict
+  // #rrggbb values, so fall back to a sane default when the saved value is
+  // something else (a named color, missing, etc.) rather than erroring.
+  function isHexColor(val){
+    return typeof val === "string" && /^#[0-9A-Fa-f]{6}$/.test(val);
+  }
+
+  // Keeps the paired text input in sync when the admin uses the color-picker
+  // swatch instead of typing a hex value directly.
+  window.syncHeroSlideColorText = function(index, field, value){
+    const rowId = "heroSlideRow" + index;
+    const idMap = { captionColor: "CaptionColorText", buttonBgColor: "BtnBgColorText", buttonTextColor: "BtnTextColorText" };
+    const suffix = idMap[field];
+    if (!suffix) return;
+    const textInput = document.getElementById(rowId + suffix);
+    if (textInput) textInput.value = value;
+  };
 
   window.updateHeroSlideField = function(index, field, value){
     if (!heroSlidesAdminData[index]) return;
@@ -11846,7 +12048,10 @@ Please confirm my order.`
       titleSize: "--md",
       textPosition: "top-center",
       buttonColor: "white",
-      captionColor: "#FFFFFF"
+      captionColor: "#FFFFFF",
+      titleFont: "'Sora',sans-serif",
+      buttonBgColor: "#FFFFFF",
+      buttonTextColor: "#111111"
     });
     renderHeroSlidesAdminForm();
   };
@@ -12302,80 +12507,6 @@ Please confirm my order.`
   };
 </script>
 <!-- ============ END ADMIN LOGIN + ADMIN DASHBOARD ============ -->
-
-<!-- ============ FOOTER LIGHT LINES (vanilla-JS port of LightLines.tsx) ============ -->
-<script>
-(function(){
-  var container = document.getElementById('footerLightLines');
-  if (!container) return;
-
-  var lightsDown = [
-    { selector: ".light4", from: -1080, to: 1080 },
-    { selector: ".light5", from: -1080, to: 1080 },
-    { selector: ".light6", from: -1080, to: 1080 },
-    { selector: ".light7", from: -1080, to: 1080 },
-    { selector: ".light8", from: -1080, to: 1080 },
-    { selector: ".light11", from: -1080, to: 1080 },
-    { selector: ".light12", from: -1080, to: 1080 },
-    { selector: ".light13", from: -1080, to: 1080 },
-    { selector: ".light14", from: -1080, to: 1080 },
-    { selector: ".light15", from: -1080, to: 1080 },
-    { selector: ".light16", from: -1080, to: 1080 }
-  ];
-  var lightsUp = [
-    { selector: ".light1", from: 1080, to: -1080 },
-    { selector: ".light2", from: 1080, to: -1080 },
-    { selector: ".light3", from: 1080, to: -1080 },
-    { selector: ".light9", from: 1080, to: -1080 },
-    { selector: ".light10", from: 1080, to: -1080 },
-    { selector: ".light17", from: 1080, to: -1080 }
-  ];
-
-  var speedMultiplier = 1;
-  var allLights = lightsDown.concat(lightsUp);
-
-  var animations = allLights.map(function(light){
-    var element = container.querySelector(light.selector);
-    var duration = ((Math.floor(Math.random() * 59) + 2) * 0.5 + 0.5) / speedMultiplier;
-    return { element: element, from: light.from, to: light.to, duration: duration };
-  });
-
-  var animationState = animations.map(function(){
-    return { startTime: performance.now() - Math.random() * 5000 }; // stagger start times
-  });
-
-  var isVisible = false;
-  var frameId = null;
-
-  function animate(time){
-    if (!isVisible){
-      frameId = requestAnimationFrame(animate);
-      return;
-    }
-    animations.forEach(function(ref, index){
-      if (!ref.element) return;
-      var state = animationState[index];
-      var elapsed = (time - state.startTime) / 1000;
-      var progress = (elapsed % ref.duration) / ref.duration;
-      var currentY = ref.from + (ref.to - ref.from) * progress;
-      ref.element.style.transform = 'translateY(' + currentY + 'px)';
-    });
-    frameId = requestAnimationFrame(animate);
-  }
-
-  var observer = new IntersectionObserver(function(entries){
-    isVisible = entries[0].isIntersecting;
-  }, { threshold: 0 });
-  observer.observe(container);
-
-  frameId = requestAnimationFrame(animate);
-
-  window.addEventListener('beforeunload', function(){
-    if (frameId) cancelAnimationFrame(frameId);
-    observer.disconnect();
-  });
-})();
-</script>
 
 <!-- ============ DAILY MYSTERY PERK: 10-SECOND AUTO-INVITE TRIGGER ============
      Softly invites an engaged visitor into the spin flow 10 seconds after
