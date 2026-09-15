@@ -5054,11 +5054,11 @@ body:has(header.scrolled) .search-overlay {
       <div class="meta-grid">
         <div class="meta-col"><span>Date</span><strong id="successDate">&mdash;</strong></div>
         <div class="meta-col"><span>Total</span><strong id="successTotal">Rs. 0</strong></div>
-        <div class="meta-col"><span>Payment</span><strong>Cash on delivery</strong></div>
+        <div class="meta-col"><span>Payment</span><strong id="successPaymentMethod">Cash on delivery</strong></div>
       </div>
     </div>
 
-    <p class="success-note">Pay with cash upon delivery.</p>
+    <p class="success-note" id="successPaymentNote">Pay with cash upon delivery.</p>
 
     <h3 class="success-section-title">Order details</h3>
     <table class="success-table">
@@ -5070,7 +5070,7 @@ body:has(header.scrolled) .search-overlay {
         <tr><td>Subtotal:</td><td id="successSubtotal" style="text-align:right;">Rs. 0</td></tr>
         <tr id="successBonusRow" style="display:none;"><td id="successBonusLabel">Bonus discount:</td><td id="successBonus" style="text-align:right;">Rs. 0</td></tr>
         <tr><td>Shipping:</td><td id="successShipping" style="text-align:right;">Free shipping</td></tr>
-        <tr><td>Payment Method:</td><td style="text-align:right;">Cash on delivery</td></tr>
+        <tr><td>Payment Method:</td><td id="successPaymentTable" style="text-align:right;">Cash on delivery</td></tr>
         <tr class="grand-total"><td>Total:</td><td id="successGrandTotal" style="text-align:right;">Rs. 0</td></tr>
       </tfoot>
     </table>
@@ -5097,7 +5097,7 @@ body:has(header.scrolled) .search-overlay {
           <div class="address-field">
             <span class="address-micro-label">Payment Method</span>
             <div class="address-field-body">
-              <div>Cash on Delivery</div>
+              <div id="successPaymentAddressCol">Cash on Delivery</div>
             </div>
           </div>
         </div>
@@ -6211,9 +6211,15 @@ body:has(header.scrolled) .search-overlay {
       <div class="order-summary" id="odItems"></div>
       <div class="order-total-row"><span>Total Amount</span><span id="odTotal">Rs. 0</span></div>
 
-      <div class="payment-note">
+      <div class="payment-note" id="odPaymentMethodWrap">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        Payment Method: Cash on Delivery
+        <span id="odPaymentMethodText">Payment Method: Cash on Delivery</span>
+      </div>
+      <div id="odReceiptAction" style="margin-top: -8px; margin-bottom: 18px; display: none;">
+        <a href="#" id="odViewReceiptBtn" target="_blank" rel="noopener" class="admin-add-btn" style="display:inline-flex; width:auto; min-height:36px; padding:8px 16px; text-decoration:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          View Transfer Receipt
+        </a>
       </div>
 
       <div class="order-details-actions">
@@ -8277,9 +8283,13 @@ body:has(header.scrolled) .search-overlay {
 
     const buyNowBtn = document.getElementById("pdpBuyNowBtn");
     if (buyNowBtn){
-      buyNowBtn.addEventListener("click", () => pdpHandleAddClick(buyNowBtn, () => {
-        if (typeof window.openCheckout === "function") window.openCheckout();
-      }));
+      // Buy Now should just add to cart and let addToCart's own
+      // openCartDrawer() call show the drawer — it must NOT also open
+      // checkout here, since that was firing at the same time as the drawer
+      // opening and the two competed for the screen (the reported "UI
+      // collision"). The customer clicks "Proceed to Checkout" from inside
+      // the drawer themselves.
+      buyNowBtn.addEventListener("click", () => pdpHandleAddClick(buyNowBtn));
     }
 
     pdpSetupStickyBar(product);
@@ -9338,6 +9348,19 @@ function showToast(message){
     runTransaction,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
+
+  // window.firebaseStorage is set up once in the admin product-image module
+  // (see the getStorage(app) call there) and reused here — same pattern as
+  // window.firebaseDb below, so we don't need our own getStorage(app) call.
+  function waitForStorage(){
+    return new Promise((resolve) => {
+      if (window.firebaseStorage) return resolve(window.firebaseStorage);
+      const iv = setInterval(() => {
+        if (window.firebaseStorage) { clearInterval(iv); resolve(window.firebaseStorage); }
+      }, 30);
+    });
+  }
 
   function waitForDb(){
     return new Promise((resolve) => {
@@ -9786,6 +9809,31 @@ function showToast(message){
         return;
       }
 
+      // ---- Bank Transfer: upload the receipt to Firebase Storage ----
+      // isBankTransfer was already computed above for the mandatory-file
+      // check; re-read the file here (rather than trusting a variable held
+      // since then) in case something cleared the input between checks.
+      const paymentMethod = isBankTransfer ? "bank" : "cod";
+      let receiptUrl = "";
+      if (isBankTransfer){
+        const receiptInput = document.getElementById("bankReceiptInput");
+        const file = receiptInput && receiptInput.files && receiptInput.files[0];
+        if (file){
+          try {
+            const storage = await waitForStorage();
+            const storageRef = ref(storage, `receipts/${Date.now()}_${file.name}`);
+            const snapshot = await uploadBytes(storageRef, file);
+            receiptUrl = await getDownloadURL(snapshot.ref);
+          } catch (uploadErr) {
+            console.error("Receipt upload failed:", uploadErr);
+            showCheckoutError("Failed to upload receipt. Please try again.");
+            setPlacingState(false);
+            return; // halt order submission — an order paid by bank transfer
+                    // with no receipt on file isn't a state we want to save
+          }
+        }
+      }
+
       // ---- Build order items using current price/name from Firestore product data ----
       const orderItems = stockChecks.map(({ item }) => {
         const orderItem = {
@@ -9815,8 +9863,12 @@ function showToast(message){
         deliveryCharge,
         totalAmount,
         status: "pending",
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
+        paymentMethod
       };
+      if (paymentMethod === "bank" && receiptUrl){
+        orderPayload.receiptUrl = receiptUrl;
+      }
       if (bonusDiscountAmount > 0){
         orderPayload.bonusDiscountPct = bonusDiscountPct;
         orderPayload.bonusDiscountAmount = bonusDiscountAmount;
@@ -9887,7 +9939,8 @@ function showToast(message){
         subtotal,
         deliveryCharge,
         bonusDiscountPct,
-        bonusDiscountAmount
+        bonusDiscountAmount,
+        paymentMethod
       };
 
       localStorage.removeItem("dplex_cart");
@@ -9932,6 +9985,17 @@ function showToast(message){
     set("successDate", d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
     set("successTotal", formatPriceLKR(totalAmount));
     set("successGrandTotal", formatPriceLKR(totalAmount));
+
+    // ---- Payment method: was hardcoded to "Cash on delivery" in 4 places
+    // in the markup — now reflects what the customer actually selected. ----
+    const methodStr = (order && order.paymentMethod === "bank") ? "Bank Transfer" : "Cash on delivery";
+    const noteStr = (order && order.paymentMethod === "bank")
+      ? "Our team will verify your transfer shortly."
+      : "Pay with cash upon delivery.";
+    set("successPaymentMethod", methodStr);
+    set("successPaymentTable", methodStr);
+    set("successPaymentNote", noteStr);
+    set("successPaymentAddressCol", methodStr);
 
     const tbody = document.getElementById("successItemsTbody");
     if (tbody && order && Array.isArray(order.items)){
@@ -11042,6 +11106,26 @@ Please confirm my order.`
       : `<div class="order-summary-row"><span class="osr-name">No items found for this order.</span></div>`;
 
     document.getElementById("odTotal").textContent = formatPriceLKR(o.totalAmount);
+
+    // ---- Payment method + bank transfer receipt link ----
+    const pmWrap = document.getElementById("odPaymentMethodWrap");
+    const pmText = document.getElementById("odPaymentMethodText");
+    const receiptAction = document.getElementById("odReceiptAction");
+    const viewReceiptBtn = document.getElementById("odViewReceiptBtn");
+    if (o.paymentMethod === "bank"){
+      if (pmText) pmText.textContent = "Payment Method: Bank Transfer";
+      if (pmWrap) pmWrap.style.background = "#F0F4FF"; // light blue to stand out from the default COD styling
+      if (o.receiptUrl && viewReceiptBtn && receiptAction){
+        viewReceiptBtn.href = o.receiptUrl;
+        receiptAction.style.display = "block";
+      } else if (receiptAction){
+        receiptAction.style.display = "none";
+      }
+    } else {
+      if (pmText) pmText.textContent = "Payment Method: Cash on Delivery";
+      if (pmWrap) pmWrap.style.background = "#F5F5F7";
+      if (receiptAction) receiptAction.style.display = "none";
+    }
 
     document.getElementById("orderDetailsModal").classList.add("open");
     document.body.style.overflow = "hidden";
