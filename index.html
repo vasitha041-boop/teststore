@@ -4983,10 +4983,10 @@ body:has(header.scrolled) .search-overlay {
           </div>
 
           <label class="custom-file-upload" style="margin-top: 6px;">
-            <input type="file" accept="image/*,.pdf" onchange="document.getElementById('fileName').textContent = this.files[0]?.name || 'No file chosen'">
+            <input type="file" id="bankReceiptInput" accept="image/*,.pdf" onchange="handleReceiptUpload(this)">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Upload Transfer Receipt
-            <span id="fileName" style="font-weight:400; color:#767676; font-size:11.5px;">JPG, PNG or PDF</span>
+            <span id="fileName" style="font-weight:400; color:#767676; font-size:11.5px;">JPG, PNG or PDF (max 3 MB)</span>
           </label>
         </div>
 
@@ -9636,6 +9636,38 @@ function showToast(message){
   window.renderCheckoutSummary = renderCheckoutSummary;
   window.hideCheckoutError = hideCheckoutError;
 
+  // ---- Bank transfer receipt upload: validates size, gives inline feedback ----
+  window.handleReceiptUpload = function(input){
+    const file = input.files[0];
+    const fileNameEl = document.getElementById('fileName');
+
+    if (!file){
+      if (fileNameEl){
+        fileNameEl.textContent = 'JPG, PNG or PDF (max 3 MB)';
+        fileNameEl.style.color = '#767676';
+      }
+      return;
+    }
+
+    // 3 MB = 3 * 1024 * 1024 bytes
+    if (file.size > 3145728){
+      input.value = ''; // clear the invalid file so it can't be submitted
+      if (fileNameEl){
+        fileNameEl.textContent = 'File too large (Max 3MB)';
+        fileNameEl.style.color = '#B3261E';
+      }
+      showCheckoutError('Receipt file size must be less than 3 MB.');
+      setTimeout(hideCheckoutError, 5000);
+      return;
+    }
+
+    if (fileNameEl){
+      fileNameEl.textContent = file.name;
+      fileNameEl.style.color = '#1F8A43';
+    }
+    hideCheckoutError();
+  };
+
   // ---- Color-aware stock helpers, shared by the pre-check and the real
   // transactional decrement below, so both agree on what "available stock"
   // means for a given cart line. ----
@@ -9716,6 +9748,17 @@ function showToast(message){
     if (!cart.length){
       showCheckoutError("Your cart is empty.");
       return;
+    }
+
+    // ---- Bank Transfer: receipt upload is mandatory ----
+    const isBankTransfer = document.getElementById('pm-bank') && document.getElementById('pm-bank').classList.contains('active');
+    if (isBankTransfer){
+      const receiptInput = document.getElementById('bankReceiptInput');
+      if (!receiptInput || !receiptInput.files || receiptInput.files.length === 0){
+        showCheckoutError('Please upload your bank transfer receipt to complete the order.');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return; // placed before setPlacingState(true), so no spinner/button state to undo here
+      }
     }
 
     setPlacingState(true);
