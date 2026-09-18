@@ -3567,6 +3567,9 @@ html.dps-scroll-lock{ overflow:hidden !important; }
   .bulk-btn-dark,.bulk-btn-light{ flex:1; }
 }
 
+.bulk-row-warn{ display:block; color:#B25E00; font-size:11.5px; margin-top:2px; }
+.bulk-row.is-ok .bulk-row-warn::before{ content:"↳ "; }
+
 /* 12. Payment method cards now keyboard-focusable. */
 .payment-method-card:focus-visible{ outline:2px solid #111; outline-offset:2px; }
 
@@ -6761,6 +6764,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
         <li><b>name</b>, <b>price</b>, <b>stock</b>, <b>category</b>, <b>imageUrl</b>, <b>description</b> — required.</li>
         <li><b>originalPrice</b> — the crossed-out "was" price. Leave blank for no discount.</li>
         <li><b>colors</b> — one color per <code>;</code>, fields per <code>|</code>: <code>name|hex|stock|photo URL</code>. Hex, stock and photo can be left out: <code>Black;White</code> works, and the hex is filled in from the name.</li>
+        <li><b>stock</b> — if every color has its own stock, the total is added up for you and the stock column can stay empty. If you type a different number, the color total wins and the row says so.</li>
         <li><b>brand</b>, <b>warranty</b>, <b>overview</b>, <b>active</b> (yes/no), <b>freeGift</b> (yes/no) — optional.</li>
         <li>A row whose name already exists is skipped, so you can paste the same sheet twice safely.</li>
       </ul>
@@ -13126,7 +13130,7 @@ Please confirm my order.`
     const rows = [
       BULK_COLUMNS.join(","),
       [
-        "Baseus Bowie WM02 Earbuds","Audio","6490","8990","12",
+        "Baseus Bowie WM02 Earbuds","Audio","6490","8990","",
         "https://res.cloudinary.com/your-id/image/upload/earbuds.jpg",
         "Black|#111111|6;White|#ffffff|6","Baseus","1 Month",
         "Bluetooth 5.3 true wireless earbuds with 30h battery life.",
@@ -13243,8 +13247,25 @@ Please confirm my order.`
       headers.forEach((h, idx) => { if (h) rec[h] = String(cells[idx] == null ? "" : cells[idx]).trim(); });
 
       const problems = [];
+      const notes = [];
       const name = rec.name || "";
       const price = Number(rec.price);
+      const colorList = bulkParseColors(rec.colors);
+      // Colours with their own stock decide the total, so the sheet never has
+      // to add up by hand (and can't disagree with itself).
+      const tracked = colorList.filter(c => c.stock !== undefined);
+      const colorTotal = tracked.reduce((n, c) => n + c.stock, 0);
+      const autoSum = tracked.length > 0 && tracked.length === colorList.length;
+      if (autoSum){
+        const typed = rec.stock === "" || rec.stock === undefined ? null : Number(rec.stock);
+        if (typed === null || typed !== colorTotal){
+          if (typed !== null && !isNaN(typed)) notes.push(`stock ${typed} → ${colorTotal} (summed from colors)`);
+          else notes.push(`stock ${colorTotal} (summed from colors)`);
+        }
+        rec.stock = String(colorTotal);
+      } else if (tracked.length > 0 && tracked.length < colorList.length){
+        notes.push("some colors have no stock — using the stock column");
+      }
       const stock = Number(rec.stock);
       const originalPrice = rec.originalPrice === "" || rec.originalPrice === undefined ? null : Number(rec.originalPrice);
 
@@ -13252,7 +13273,7 @@ Please confirm my order.`
       if (!rec.description) problems.push("description is empty");
       if (!rec.category) problems.push("category is empty");
       if (rec.price === "" || isNaN(price) || price <= 0) problems.push("price must be a number above 0");
-      if (rec.stock === "" || isNaN(stock) || !Number.isInteger(stock) || stock < 0) problems.push("stock must be a whole number");
+      if (rec.stock === "" || isNaN(stock) || !Number.isInteger(stock) || stock < 0) problems.push("stock must be a whole number (or give every color its own stock)");
       if (originalPrice !== null && (isNaN(originalPrice) || originalPrice <= price)) problems.push("originalPrice must be higher than price");
       if (!isValidImageUrlAdmin(rec.imageUrl)) problems.push("imageUrl must start with http and point to an image");
 
@@ -13267,6 +13288,7 @@ Please confirm my order.`
         ok: problems.length === 0,
         skip,
         problems,
+        notes,
         data: {
           name,
           brand: rec.brand || "",
@@ -13278,7 +13300,7 @@ Please confirm my order.`
           originalPrice,
           stock,
           category: rec.category || "",
-          colors: bulkParseColors(rec.colors),
+          colors: colorList,
           active: !bulkNo(rec.active), // blank means visible
           freeBackCover: bulkYes(rec.freeGift),
           imageUrl: rec.imageUrl || ""
@@ -13301,7 +13323,7 @@ Please confirm my order.`
             <span class="bulk-row-line">Row ${r.line}</span>
             <span class="bulk-row-name">${escapeHtmlAdmin(r.data.name || "(no name)")}</span>
             <span class="bulk-row-note">${r.ok
-              ? `${r.data.colors.length ? r.data.colors.length + " colors · " : ""}Rs. ${r.data.price} · ${r.data.stock} in stock`
+              ? `${r.data.colors.length ? r.data.colors.length + " colors · " : ""}Rs. ${r.data.price} · ${r.data.stock} in stock${r.notes.length ? `<span class="bulk-row-warn">${escapeHtmlAdmin(r.notes.join(" · "))}</span>` : ""}`
               : escapeHtmlAdmin(r.problems.join(" · "))}</span>
           </div>`).join("")}
       </div>
