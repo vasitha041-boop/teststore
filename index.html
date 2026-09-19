@@ -8415,7 +8415,56 @@ html.dps-scroll-lock{ overflow:hidden !important; }
   }
   window.pdpUpdateHomeVisibility = pdpUpdateHomeVisibility;
 
+  // ---- Remember where the shopper was on the home page ----
+  let homeScrollY = 0;
+  let homeAnchor = null; // { id, offset } — the card that was opened
+  function rememberHomeScroll(productId){
+    const home = document.getElementById("homeSections");
+    if (!home || home.style.display === "none") return;
+    homeScrollY = window.scrollY || window.pageYOffset || 0;
+    homeAnchor = null;
+    if (productId){
+      // Anchoring to the card itself survives images finishing loading or
+      // reveal animations changing the page height while the PDP is open.
+      const card = home.querySelector(`.prod-card[data-id="${CSS.escape(String(productId))}"]`);
+      if (card) homeAnchor = { id: String(productId), offset: card.getBoundingClientRect().top };
+    }
+  }
+  function restoreHomeScroll(fallbackSelector){
+    const home = document.getElementById("homeSections");
+    if (homeAnchor && home){
+      const card = home.querySelector(`.prod-card[data-id="${CSS.escape(homeAnchor.id)}"]`);
+      if (card){
+        const put = () => {
+          const top = card.getBoundingClientRect().top + (window.scrollY || 0) - homeAnchor.offset;
+          window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+        };
+        put();
+        requestAnimationFrame(put);
+        [40, 120, 260].forEach(ms => setTimeout(put, ms));
+        return true;
+      }
+    }
+    const y = homeScrollY;
+    if (y > 0){
+      // The home markup is only re-shown a tick earlier, so re-apply the
+      // position across a couple of frames while the grid settles.
+      const apply = () => window.scrollTo({ top: y, behavior: "instant" });
+      apply();
+      requestAnimationFrame(apply);
+      [40, 120, 260].forEach(ms => setTimeout(apply, ms));
+      return true;
+    }
+    if (fallbackSelector){
+      const el = document.querySelector(fallbackSelector);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+    return false;
+  }
+  window.rememberHomeScroll = rememberHomeScroll;
+
   function openProductDetailInternal(productId){
+    rememberHomeScroll(productId);
     hideAllSubPages();
     const pdp = document.getElementById("productDetailView");
     if (pdp) pdp.style.display = "block";
@@ -8455,6 +8504,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
   // ---- Checkout page show/hide (mirrors the PDP pattern above) ----
   function openCheckoutPageInternal(){
+    if (window.rememberHomeScroll) window.rememberHomeScroll();
     hideAllSubPages();
     const checkoutPage = document.getElementById("checkoutPageView");
     if (checkoutPage) checkoutPage.style.display = "block";
@@ -8476,6 +8526,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
   // ---- Full Cart page show/hide (mirrors the PDP/Checkout pattern above) ----
   function openCartPageInternal(){
+    if (window.rememberHomeScroll) window.rememberHomeScroll();
     hideAllSubPages();
     const cartPage = document.getElementById("cartPageView");
     if (cartPage) cartPage.style.display = "block";
@@ -8577,10 +8628,11 @@ html.dps-scroll-lock{ overflow:hidden !important; }
   function closeProductDetailView(){
     hideProductDetailInternal();
     if (window.location.hash){
+      // Clearing the hash fires hashchange, which restores the scroll below;
+      // do it here too for the case where there was no hash to clear.
       window.location.hash = "";
     }
-    const target = document.getElementById("products");
-    if (target) target.scrollIntoView({ behavior: "smooth" });
+    restoreHomeScroll("#products");
   }
 
   function goHomeFromPdp(){
@@ -8652,6 +8704,10 @@ html.dps-scroll-lock{ overflow:hidden !important; }
       if ((wasProductOpen || wasCheckoutOpen || wasCartOpen || wasAccountOpen || wasSuccessOpen || wasLegalOpen) && hash && hash.length > 1){
         const el = document.querySelector(hash);
         if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 0);
+      } else if (wasProductOpen && (!hash || hash.length <= 1)){
+        // Leaving a product (back button or the "Back to …" link): land where
+        // the shopper was in the grid, not at the top of the page.
+        restoreHomeScroll("#products");
       }
     }
   }
