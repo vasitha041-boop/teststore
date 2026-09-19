@@ -3638,6 +3638,19 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 }
 @media(max-width:768px){ .icon-btn .cart-badge{ --badge-size:16px; font-size:9.5px !important; } }
 
+
+/* 27. "Show more products" under the grid */
+.grid-more-wrap{ display:flex; justify-content:center; margin-top:28px; }
+.grid-more-btn{
+  min-height:50px; padding:0 28px; border-radius:99px; background:#fff; color:#111;
+  border:1.5px solid #D2D2D7; font:inherit; font-size:14.5px; font-weight:600; cursor:pointer;
+  transition:border-color .2s ease, transform .15s ease;
+}
+.grid-more-btn:hover{ border-color:#111; }
+.grid-more-btn:active{ transform:scale(.97); }
+.grid-more-btn[hidden]{ display:none; }
+@media(max-width:600px){ .grid-more-btn{ width:100%; } .grid-more-wrap{ margin-top:22px; } }
+
 /* 12. Payment method cards now keyboard-focusable. */
 .payment-method-card:focus-visible{ outline:2px solid #111; outline-offset:2px; }
 
@@ -5504,6 +5517,9 @@ html.dps-scroll-lock{ overflow:hidden !important; }
       <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line w80"></div><div class="skel-line w60"></div></div></div>
       <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line w80"></div><div class="skel-line w60"></div></div></div>
       <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line w80"></div><div class="skel-line w60"></div></div></div>
+    </div>
+    <div class="grid-more-wrap">
+      <button type="button" class="grid-more-btn" id="featuredMoreBtn" hidden onclick="showMoreProducts()">Show more products</button>
     </div>
   </div>
 </section>
@@ -7928,7 +7944,11 @@ html.dps-scroll-lock{ overflow:hidden !important; }
         const featuredQuery = query(productsRef, where("active", "==", true), limit(8));
         const featuredSnap = await getDocs(featuredQuery);
         initialFeaturedDocs = featuredSnap.docs;
+        featuredVisible = FEATURED_PAGE;
         renderProducts(featuredGrid, featuredSnap.docs);
+        featuredEntries = featuredSnap.docs.map(d => ({ id: d.id, data: d.data() }));
+        // Only 8 were fetched for speed; check whether there are more to show.
+        if (featuredSnap.docs.length >= 8) ensureFullCatalogInGrid();
       } catch (err) {
         console.error("Failed to load featured products:", err);
         renderError(featuredGrid);
@@ -8050,11 +8070,32 @@ html.dps-scroll-lock{ overflow:hidden !important; }
       const db = await waitForDb();
       const catalogQuery = query(collection(db, "products"), where("active", "==", true), limit(200));
       const snap = await getDocs(catalogQuery);
-      return snap.docs.map(d => ({ id: d.id, data: d.data() }));
+      const entries = snap.docs.map(d => ({ id: d.id, data: d.data() }));
+      window.__catalogEntries = entries; // lets the grid page without re-fetching
+      return entries;
     })();
     return searchCatalogPromise;
   }
   window.loadSearchCatalog = loadSearchCatalog;
+
+  // The first paint only asks Firestore for 8 products (fast). Once the full
+  // list is in, show the "Show more" button so nothing stays hidden.
+  let catalogTopUpDone = false;
+  async function ensureFullCatalogInGrid(){
+    if (catalogTopUpDone) return;
+    catalogTopUpDone = true;
+    try {
+      const catalog = await loadSearchCatalog();
+      if (productFilterState.search || productFilterState.category !== "all") return;
+      if (catalog.length > (initialFeaturedDocs ? initialFeaturedDocs.length : 0)){
+        featuredEntries = orderedCatalog(catalog);
+        updateFeaturedMoreBtn(featuredEntries.length);
+      }
+    } catch (err){
+      console.error("Couldn't load the full product list:", err);
+      catalogTopUpDone = false;
+    }
+  }
 
   function matchesProductFilter(entry){
     const { data } = entry;
@@ -8100,13 +8141,56 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     container.innerHTML = `<div class="state-msg">No products match your search.</div>`;
   }
 
-  function renderFeaturedFromEntries(list){
+  // ---- Product grid paging ----
+  const FEATURED_PAGE = 8;
+  let featuredVisible = FEATURED_PAGE;
+  let featuredEntries = null; // the full list the grid is paging through
+
+  function updateFeaturedMoreBtn(total){
+    const btn = document.getElementById("featuredMoreBtn");
+    if (!btn) return;
+    const remaining = Math.max(0, total - featuredVisible);
+    btn.hidden = remaining <= 0;
+    btn.textContent = remaining > FEATURED_PAGE
+      ? `Show ${FEATURED_PAGE} more products (${remaining} left)`
+      : `Show ${remaining} more product${remaining === 1 ? "" : "s"}`;
+  }
+
+  window.showMoreProducts = function(){
+    if (!featuredEntries) return;
+    const before = Math.min(featuredVisible, featuredEntries.length);
+    featuredVisible += FEATURED_PAGE;
+    renderFeaturedFromEntries(featuredEntries, true);
+    // Put focus on the first newly added card so keyboard users don't lose their place.
+    const cards = document.querySelectorAll("#featuredGrid .prod-card");
+    if (cards[before]) cards[before].scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  function renderFeaturedFromEntries(list, keepPage){
     const featuredGrid = document.getElementById("featuredGrid");
     if (!featuredGrid) return;
-    if (!list.length) return renderNoMatches(featuredGrid);
-    cacheProducts(list.map(({ id, data }) => ({ id, data: () => data })));
-    featuredGrid.innerHTML = list.map(({ id, data }) => productCardHTML(id, data)).join("");
+    if (!keepPage) featuredVisible = FEATURED_PAGE;
+    featuredEntries = list;
+    if (!list.length){
+      updateFeaturedMoreBtn(0);
+      return renderNoMatches(featuredGrid);
+    }
+    const page = list.slice(0, featuredVisible);
+    cacheProducts(page.map(({ id, data }) => ({ id, data: () => data })));
+    featuredGrid.innerHTML = page.map(({ id, data }) => productCardHTML(id, data)).join("");
+    updateFeaturedMoreBtn(list.length);
     document.dispatchEvent(new CustomEvent("products:rendered"));
+  }
+
+  // Newest first, but keep whatever the quick first-paint query already showed
+  // at the top so nothing jumps around when the full list arrives.
+  function orderedCatalog(catalog){
+    const firstIds = initialFeaturedDocs ? initialFeaturedDocs.map(d => d.id) : [];
+    const rank = new Map(firstIds.map((id, i) => [id, i]));
+    const rest = catalog.filter(e => !rank.has(e.id))
+      .sort((a, b) => ((b.data.createdAt && b.data.createdAt.seconds) || 0) - ((a.data.createdAt && a.data.createdAt.seconds) || 0));
+    const head = catalog.filter(e => rank.has(e.id)).sort((a, b) => rank.get(a.id) - rank.get(b.id));
+    return head.concat(rest);
   }
 
   async function applyProductFilters(){
@@ -8116,7 +8200,13 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     // Nothing to filter by — restore the original curated Featured
     // Products instantly instead of re-running the search query.
     if (!productFilterState.search && productFilterState.category === "all"){
-      if (initialFeaturedDocs) renderProducts(featuredGrid, initialFeaturedDocs);
+      const cached = window.__catalogEntries;
+      if (cached) renderFeaturedFromEntries(orderedCatalog(cached));
+      else if (initialFeaturedDocs){
+        featuredVisible = FEATURED_PAGE;
+        renderProducts(featuredGrid, initialFeaturedDocs);
+        ensureFullCatalogInGrid();
+      }
       else await loadProducts();
       return;
     }
