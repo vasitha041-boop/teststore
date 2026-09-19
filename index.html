@@ -3126,12 +3126,12 @@ body:has(.cart-drawer.open) #toast:not(.show){ transform:translateX(-50%) transl
 
 /* 16. Sold-out product page: one clear state, one useful next step. */
 .pdp-oos-panel{ display:none; }
-.pdp-info:has(#pdpBuyNowBtn:disabled) .pdp-actions-row{ display:none !important; }
-.pdp-info:has(#pdpBuyNowBtn:disabled) .pdp-oos-panel{
+.pdp-info.is-sold-out .pdp-actions-row{ display:none !important; }
+.pdp-info.is-sold-out .pdp-oos-panel{
   display:block; margin-top:18px; background:#FFFFFF; border:1px solid rgba(0,0,0,.08);
   border-radius:18px; padding:18px;
 }
-.pdp-info:has(#pdpBuyNowBtn:disabled) .pdp-unavailable-note{ display:none !important; }
+.pdp-info.is-sold-out .pdp-unavailable-note{ display:none !important; }
 .pdp-oos-head{ display:flex; gap:12px; align-items:flex-start; }
 .pdp-oos-icon{
   width:40px; height:40px; border-radius:12px; background:#F2F2F4; color:#3A3A3C;
@@ -3156,9 +3156,9 @@ body:has(.cart-drawer.open) #toast:not(.show){ transform:translateX(-50%) transl
 @media(max-width:520px){ .pdp-oos-actions{ grid-template-columns:1fr; } }
 
 /* Quieter price area + dimmed gift when the item can't be bought */
-.pdp-info:has(#pdpBuyNowBtn:disabled) .pdp-save-pill{ display:none; }
-.pdp-info:has(#pdpBuyNowBtn:disabled) .pdp-price{ color:#6E6E73; }
-.pdp-info:has(#pdpBuyNowBtn:disabled) .pdp-freebie-banner{ opacity:.5; filter:grayscale(.6); }
+.pdp-info.is-sold-out .pdp-save-pill{ display:none; }
+.pdp-info.is-sold-out .pdp-price{ color:#6E6E73; }
+.pdp-info.is-sold-out .pdp-freebie-banner{ opacity:.5; filter:grayscale(.6); }
 
 /* Meta chips were the same colour as the page — give them a surface */
 .pdp-meta-row .pdp-stock,.pdp-meta-row .pdp-warranty{
@@ -7692,6 +7692,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
       if (addBtn){ addBtn.disabled = pdpOut; addBtn.textContent = pdpOut ? "Out of Stock" : "Add to Cart"; }
       if (buyBtn){ buyBtn.disabled = pdpOut; buyBtn.textContent = pdpOut ? "Out of Stock" : "Buy Now"; }
+      if (typeof window.__pdpSetSoldOut === "function") window.__pdpSetSoldOut(pdpOut);
       // Keep the mobile sticky purchase bar in step with the live stock.
       if (typeof window.pdpSyncStickyStock === "function") window.pdpSyncStickyStock(productId);
       if (stockLabel){
@@ -9049,8 +9050,8 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     const cached = window.__productCache ? window.__productCache[productId] : null;
     const stock = cached ? (Number(cached.stock) || 0) : null;
     const soldOut = stock !== null && stock <= 0;
-    const realBuy = document.getElementById("pdpBuyNowBtn");
-    const pdpOut = soldOut || (realBuy && realBuy.disabled);
+    const info = document.querySelector("#pdpBody .pdp-info");
+    const pdpOut = soldOut || (info && info.classList.contains("is-sold-out"));
     // Sold out: the sticky button becomes a working "Notify me" instead of a dead grey button.
     btn.disabled = false;
     btn.classList.toggle("is-notify", !!pdpOut);
@@ -9392,6 +9393,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
         buyBtn.disabled = colorOut;
         buyBtn.textContent = colorOut ? "Out of Stock" : "Buy Now";
       }
+      pdpSetSoldOut(colorOut);
     }
     window.__pdpSelectColor = function(idx, fromUser){ pdpApplyColorSelection(idx, fromUser); };
     // Lets the cross-module live stock-sync code (applyProductStockUpdate,
@@ -9416,6 +9418,8 @@ html.dps-scroll-lock{ overflow:hidden !important; }
       if (qtyRow) qtyRow.style.display = out ? "none" : "";
       if (qtyLabel) qtyLabel.style.display = out ? "none" : "";
     };
+    pdpSetSoldOut(outOfStock);
+
     // A single color is the only possible choice, so pre-select it. With two or
     // more, nothing is selected until the shopper picks one on purpose — unless
     // they already tapped a swatch on the product card.
@@ -9460,6 +9464,12 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     }
 
     // ---- Add to Cart / Buy Now: re-verify active status + live stock before adding ----
+    function pdpSetSoldOut(flag){
+      const info = document.querySelector("#pdpBody .pdp-info") || document.querySelector(".pdp-info");
+      if (info) info.classList.toggle("is-sold-out", !!flag);
+    }
+    window.__pdpSetSoldOut = pdpSetSoldOut;
+
     function pdpNeedsColor(){
       return Array.isArray(product.colors) && product.colors.length > 1 && typeof pdpSelectedColorIdx !== "number";
     }
