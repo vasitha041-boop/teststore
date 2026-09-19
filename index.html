@@ -3047,7 +3047,7 @@ body:has(header.scrolled) .search-overlay {
   .icon-btn,.burger{ width:44px !important; height:44px !important; }
   .navcart{ gap:0 !important; }
   .nav{ padding:0 12px 0 20px !important; }
-  .cart-badge{ top:2px !important; right:2px !important; }
+
 }
 
 /* 8. Footer: links stack again, readable over the light-line animation. */
@@ -3569,6 +3569,74 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
 .bulk-row-warn{ display:block; color:#B25E00; font-size:11.5px; margin-top:2px; }
 .bulk-row.is-ok .bulk-row-warn::before{ content:"↳ "; }
+
+
+/* 24. Specification templates */
+.spec-tpl-bar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.spec-tpl-select{
+  flex:1; min-width:150px; background:#fff; border:1px solid var(--line); border-radius:12px;
+  padding:9px 12px; font-size:13px; font-family:inherit; color:var(--ink); cursor:pointer;
+}
+.spec-tpl-btn{
+  min-height:38px; padding:0 14px; border-radius:12px; border:1px solid var(--line); background:#fff;
+  font:inherit; font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer;
+}
+.spec-tpl-btn:hover{ border-color:var(--ink); }
+.spec-tpl-del{ color:#B3261E; }
+.spec-tpl-del:hover{ border-color:#B3261E; }
+.spec-tpl-hint{ font-size:12px; color:#B25E00; margin:-4px 0 10px; }
+.spec-tpl-hint[hidden]{ display:none; }
+@media (max-width:560px){ .spec-tpl-btn{ flex:1; } .spec-tpl-select{ flex-basis:100%; } }
+
+
+/* 25. Hero slider controls: keep them off the headline and inside the
+      content column instead of pinned to the screen edges. */
+.dplex-slideshow{ --slide-edge: max(var(--slide-container-gutter), calc((100% - 1280px) / 2)); }
+.dplex-slide-arrow,
+.dplex-slideshow--bottom-arrows .dplex-slide-arrow{
+  top:auto !important; bottom:24px; transform:none !important;
+  background:rgba(255,255,255,.92); color:#111; box-shadow:0 6px 18px rgba(0,0,0,.18);
+}
+.dplex-slide-arrow--prev,
+.dplex-slideshow--bottom-arrows .dplex-slide-arrow--prev{ left:auto !important; right:calc(var(--slide-edge) + 56px) !important; }
+.dplex-slide-arrow--next,
+.dplex-slideshow--bottom-arrows .dplex-slide-arrow--next{ right:var(--slide-edge) !important; }
+.dplex-slide-arrow:hover,
+.dplex-slideshow--bottom-arrows .dplex-slide-arrow:hover{ transform:scale(1.06) !important; background:#fff; }
+.dplex-slide-arrow:active,
+.dplex-slideshow--bottom-arrows .dplex-slide-arrow:active{ transform:scale(.94) !important; }
+.dplex-dots,
+.dplex-slideshow--bottom-arrows .dplex-dots{ bottom:44px; }
+@media(min-width:769px){
+  .dplex-dots,
+  .dplex-slideshow--bottom-arrows .dplex-dots{ left:50% !important; right:auto; transform:translateX(-50%) !important; }
+}
+@media(max-width:768px){
+  .dplex-slide-arrow,
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow{ bottom:20px; }
+  .dplex-slide-arrow--prev,
+  .dplex-slideshow--bottom-arrows .dplex-slide-arrow--prev{ right:calc(var(--slide-edge) + 48px) !important; }
+  .dplex-dots,
+  .dplex-slideshow--bottom-arrows .dplex-dots{ left:var(--slide-edge) !important; right:auto; transform:none !important; bottom:38px; }
+}
+/* Between tablet and laptop the 2.67:1 image got so short that the headline,
+   subtitle and button overlapped each other. Give it a floor. */
+@media(min-width:769px) and (max-width:1180px){
+  .dplex-slide-image-wrapper{ aspect-ratio:auto !important; height:clamp(400px, 44vw, 470px); }
+  .dplex-slide-image-wrapper img{ width:100%; height:100%; object-fit:cover; }
+}
+
+
+/* 26. Cart badge sat on the corner of the (invisible) 44px button, far away
+      from the 18px icon. Anchor it to the icon's own top-right corner. */
+.icon-btn .cart-badge{
+  --badge-size:18px;
+  width:auto; min-width:var(--badge-size) !important; height:var(--badge-size) !important; border-radius:99px !important;
+  top:calc(50% - 9px - (var(--badge-size) / 2) + 1px) !important;
+  right:calc(50% - 9px - (var(--badge-size) / 2) + 1px) !important;
+  font-size:10px !important; line-height:1; padding:0 2px; box-sizing:border-box;
+}
+@media(max-width:768px){ .icon-btn .cart-badge{ --badge-size:16px; font-size:9.5px !important; } }
 
 /* 12. Payment method cards now keyboard-focusable. */
 .payment-method-card:focus-visible{ outline:2px solid #111; outline-offset:2px; }
@@ -6765,6 +6833,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
         <li><b>originalPrice</b> — the crossed-out "was" price. Leave blank for no discount.</li>
         <li><b>colors</b> — one color per <code>;</code>, fields per <code>|</code>: <code>name|hex|stock|photo URL</code>. Hex, stock and photo can be left out: <code>Black;White</code> works, and the hex is filled in from the name.</li>
         <li><b>stock</b> — if every color has its own stock, the total is added up for you and the stock column can stay empty. If you type a different number, the color total wins and the row says so.</li>
+        <li><b>specifications</b> — one per <code>;</code> as <code>Name:Value</code>, e.g. <code>Bluetooth:5.3;Battery:30 hours</code>. Or just write a saved template's name (e.g. <code>Smart Watch</code>) to pull that whole set in.</li>
         <li><b>brand</b>, <b>warranty</b>, <b>overview</b>, <b>active</b> (yes/no), <b>freeGift</b> (yes/no) — optional.</li>
         <li>A row whose name already exists is skipped, so you can paste the same sheet twice safely.</li>
       </ul>
@@ -6870,7 +6939,8 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
         <div class="form-group" id="fieldProductCategory">
           <label for="productCategory">Category</label>
-          <input type="text" id="productCategory" placeholder="e.g. Accessories">
+          <input type="text" id="productCategory" placeholder="e.g. Accessories" list="adminCategorySuggestions" oninput="window.hintSpecTemplate && window.hintSpecTemplate()">
+          <datalist id="adminCategorySuggestions"></datalist>
           <span class="form-error" id="errProductCategory">Category is required.</span>
         </div>
 
@@ -6885,6 +6955,15 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
         <div class="form-group">
           <label>Specifications <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+          <div class="spec-tpl-bar">
+            <select id="specTemplateSelect" class="spec-tpl-select" aria-label="Specification template">
+              <option value="">Load a template…</option>
+            </select>
+            <button type="button" class="spec-tpl-btn" onclick="applySpecTemplate()">Apply</button>
+            <button type="button" class="spec-tpl-btn" onclick="saveSpecTemplate()">Save current as template</button>
+            <button type="button" class="spec-tpl-btn spec-tpl-del" onclick="deleteSpecTemplate()" aria-label="Delete selected template">Delete</button>
+          </div>
+          <p class="spec-tpl-hint" id="specTemplateHint" hidden></p>
           <div class="spec-builder" id="specRowsContainer"></div>
           <button type="button" class="spec-add-btn" onclick="addSpecificationRow()">+ Add Specification</button>
         </div>
@@ -12855,6 +12934,15 @@ Please confirm my order.`
     document.getElementById("productImageUrlInput").value = "";
     document.getElementById("productImageUrlPreview").innerHTML = "<span>Paste an image URL to preview it here.</span>";
     document.getElementById("specRowsContainer").innerHTML = "";
+    if (window.refreshSpecTemplateOptions) window.refreshSpecTemplateOptions();
+    // category suggestions: whatever is already used in the store
+    const catList = document.getElementById("adminCategorySuggestions");
+    if (catList){
+      const names = new Set();
+      (window.__adminCategoryNames || []).forEach(n => n && names.add(n));
+      adminProductsCache.forEach(p => { if (p.category) names.add(String(p.category).trim()); });
+      catList.innerHTML = Array.from(names).sort().map(n => `<option value="${escapeHtmlAdmin(n)}"></option>`).join("");
+    }
     document.getElementById("colorRowsContainer").innerHTML = "";
     if (window.__pendingColorImageFiles) window.__pendingColorImageFiles.clear();
     const stockAutoSumHint = document.getElementById("stockAutoSumHint");
@@ -12918,6 +13006,99 @@ Please confirm my order.`
   window.removeSpecificationRow = function(rowId){
     const row = document.getElementById(rowId);
     if (row) row.remove();
+  };
+
+  // ---- Specification templates (saved per category in storeSettings) ----
+  function getSpecTemplates(){
+    const t = (window.__storeSettings && window.__storeSettings.specTemplates) || {};
+    return (t && typeof t === "object" && !Array.isArray(t)) ? t : {};
+  }
+  window.refreshSpecTemplateOptions = function(selectName){
+    const sel = document.getElementById("specTemplateSelect");
+    if (!sel) return;
+    const templates = getSpecTemplates();
+    const names = Object.keys(templates).sort((a, b) => a.localeCompare(b));
+    sel.innerHTML = `<option value="">${names.length ? "Load a template…" : "No templates saved yet"}</option>` +
+      names.map(n => `<option value="${escapeHtmlAdmin(n)}">${escapeHtmlAdmin(n)} (${(templates[n] || []).length})</option>`).join("");
+    const cat = (document.getElementById("productCategory") || {}).value || "";
+    const match = selectName || names.find(n => n.toLowerCase() === cat.trim().toLowerCase());
+    if (match) sel.value = match;
+    window.hintSpecTemplate();
+  };
+  window.hintSpecTemplate = function(){
+    const hint = document.getElementById("specTemplateHint");
+    if (!hint) return;
+    const templates = getSpecTemplates();
+    const cat = ((document.getElementById("productCategory") || {}).value || "").trim();
+    const match = Object.keys(templates).find(n => n.toLowerCase() === cat.toLowerCase());
+    const hasRows = document.querySelectorAll("#specRowsContainer .spec-row").length > 0;
+    if (match && !hasRows){
+      hint.hidden = false;
+      hint.innerHTML = `There's a <b>${escapeHtmlAdmin(match)}</b> template with ${templates[match].length} fields — press Apply to fill them in.`;
+      const sel = document.getElementById("specTemplateSelect");
+      if (sel && !sel.value) sel.value = match;
+    } else {
+      hint.hidden = true;
+    }
+  };
+  window.applySpecTemplate = function(){
+    const sel = document.getElementById("specTemplateSelect");
+    const name = sel ? sel.value : "";
+    if (!name){ showToast("Pick a template first."); return; }
+    const rows = getSpecTemplates()[name] || [];
+    if (!rows.length){ showToast("That template is empty."); return; }
+    // Keep whatever is already typed; only add the fields that are missing.
+    const existing = new Set(Array.from(document.querySelectorAll("#specRowsContainer .spec-name-input"))
+      .map(i => i.value.trim().toLowerCase()).filter(Boolean));
+    let added = 0;
+    rows.forEach(r => {
+      const nm = (r && r.name ? String(r.name) : "").trim();
+      if (!nm || existing.has(nm.toLowerCase())) return;
+      window.addSpecificationRow(nm, r.value || "");
+      existing.add(nm.toLowerCase());
+      added++;
+    });
+    showToast(added ? `${added} specification field(s) added — fill in the values.` : "Those fields are already in the form.");
+    window.hintSpecTemplate();
+  };
+  window.saveSpecTemplate = async function(){
+    const specs = collectSpecificationsFromForm();
+    if (!specs.length){ showToast("Add at least one specification first."); return; }
+    const cat = ((document.getElementById("productCategory") || {}).value || "").trim();
+    const name = (prompt("Save this specification set as a template.\n\nName it after the category so it's suggested automatically:", cat) || "").trim();
+    if (!name) return;
+    const templates = Object.assign({}, getSpecTemplates());
+    if (templates[name] && !confirm(`A template called "${name}" already exists. Replace it?`)) return;
+    // Values are saved too, so shared specs (e.g. "Warranty: 1 Month") come pre-filled.
+    templates[name] = specs.map(sp => ({ name: sp.name, value: sp.value || "" }));
+    try {
+      await waitForFirebase();
+      await updateDoc(doc(window.firebaseDb, "storeSettings", "main"), { specTemplates: templates });
+      window.__storeSettings = Object.assign({}, window.__storeSettings, { specTemplates: templates });
+      window.refreshSpecTemplateOptions(name);
+      showToast(`Template "${name}" saved.`);
+    } catch (err){
+      console.error("Failed to save spec template:", err);
+      showToast("Couldn't save the template. Please try again.");
+    }
+  };
+  window.deleteSpecTemplate = async function(){
+    const sel = document.getElementById("specTemplateSelect");
+    const name = sel ? sel.value : "";
+    if (!name){ showToast("Pick a template first."); return; }
+    if (!confirm(`Delete the "${name}" template? Products already saved are not affected.`)) return;
+    const templates = Object.assign({}, getSpecTemplates());
+    delete templates[name];
+    try {
+      await waitForFirebase();
+      await updateDoc(doc(window.firebaseDb, "storeSettings", "main"), { specTemplates: templates });
+      window.__storeSettings = Object.assign({}, window.__storeSettings, { specTemplates: templates });
+      window.refreshSpecTemplateOptions();
+      showToast(`Template "${name}" deleted.`);
+    } catch (err){
+      console.error("Failed to delete spec template:", err);
+      showToast("Couldn't delete the template. Please try again.");
+    }
   };
 
   function collectSpecificationsFromForm(){
@@ -13088,7 +13269,7 @@ Please confirm my order.`
   }
 
   // ==================== Bulk product import (CSV / spreadsheet paste) ====================
-  const BULK_COLUMNS = ["name","category","price","originalPrice","stock","imageUrl","colors","brand","warranty","description","overview","active","freeGift"];
+  const BULK_COLUMNS = ["name","category","price","originalPrice","stock","imageUrl","colors","specifications","brand","warranty","description","overview","active","freeGift"];
   const BULK_ALIASES = {
     "product":"name","productname":"name","title":"name",
     "cat":"category","categories":"category",
@@ -13099,6 +13280,7 @@ Please confirm my order.`
     "color":"colors","colours":"colors","colour":"colors","variants":"colors",
     "desc":"description","details":"description",
     "shortdescription":"overview","summary":"overview",
+    "specs":"specifications","specification":"specifications","features":"specifications",
     "visible":"active","published":"active",
     "freebackcover":"freeGift","gift":"freeGift","freecover":"freeGift"
   };
@@ -13132,7 +13314,9 @@ Please confirm my order.`
       [
         "Baseus Bowie WM02 Earbuds","Audio","6490","8990","",
         "https://res.cloudinary.com/your-id/image/upload/earbuds.jpg",
-        "Black|#111111|6;White|#ffffff|6","Baseus","1 Month",
+        "Black|#111111|6;White|#ffffff|6",
+        "Bluetooth:5.3;Battery:30 hours;Charging:Type-C",
+        "Baseus","1 Month",
         "Bluetooth 5.3 true wireless earbuds with 30h battery life.",
         "Clear calls, fast pairing","yes","no"
       ].map(bulkCsvCell).join(",")
@@ -13153,13 +13337,14 @@ Please confirm my order.`
     if (!adminProductsCache.length){ showToast("No products to export yet."); return; }
     const lines = [BULK_COLUMNS.join(",")];
     adminProductsCache.forEach(p => {
+      const specs = Array.isArray(p.specifications) ? p.specifications.map(sp => `${sp.name}:${sp.value || ""}`).join(";") : "";
       const colors = Array.isArray(p.colors) ? p.colors.map(c => {
         if (typeof c === "string") return "|" + c;
         return [c.name || "", c.hex || "", (c.stock === undefined || c.stock === null) ? "" : c.stock, c.imageUrl || ""].join("|").replace(/\|+$/, "");
       }).join(";") : "";
       lines.push([
         p.name || "", p.category || "", p.price ?? "", p.originalPrice ?? "", p.stock ?? "",
-        p.imageUrl || "", colors, p.brand || "", p.warranty || "",
+        p.imageUrl || "", colors, specs, p.brand || "", p.warranty || "",
         p.description || "", p.overview || "",
         p.active === false ? "no" : "yes", p.freeBackCover ? "yes" : "no"
       ].map(bulkCsvCell).join(","));
@@ -13213,6 +13398,26 @@ Please confirm my order.`
       out.push(color);
     });
     return out;
+  }
+
+  // "Battery:300mAh;Display:1.9 inch AMOLED" -> [{name, value}, …]
+  // A template name on its own ("Smart Watch") pulls that saved template in.
+  function bulkParseSpecs(raw){
+    const text = String(raw || "").trim();
+    if (!text) return [];
+    if (!text.includes(":")){
+      const tpl = getSpecTemplates()[Object.keys(getSpecTemplates()).find(n => n.toLowerCase() === text.toLowerCase()) || ""];
+      if (tpl) return tpl.map(sp => ({ name: sp.name, value: sp.value || "" }));
+    }
+    return text.split(";").map(part => {
+      const seg = part.trim();
+      if (!seg) return null;
+      const i = seg.indexOf(":");
+      if (i === -1) return null;
+      const name = seg.slice(0, i).trim();
+      const value = seg.slice(i + 1).trim();
+      return name ? { name, value } : null;
+    }).filter(Boolean);
   }
 
   const bulkYes = v => /^(y|yes|true|1|on|active)$/i.test(String(v || "").trim());
@@ -13295,7 +13500,7 @@ Please confirm my order.`
           warranty: rec.warranty || "",
           description: rec.description || "",
           overview: rec.overview || "",
-          specifications: [],
+          specifications: bulkParseSpecs(rec.specifications),
           price,
           originalPrice,
           stock,
@@ -13771,6 +13976,7 @@ Please confirm my order.`
       await waitForFirebase();
       const snap = await getDocs(collection(window.firebaseDb, "categories"));
       adminCategoriesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      window.__adminCategoryNames = adminCategoriesCache.map(c => c.name).filter(Boolean);
       // newest first, matching how the products table reads
       adminCategoriesCache.sort((a, b) => {
         const ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
