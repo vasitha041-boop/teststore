@@ -3651,6 +3651,14 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 .grid-more-btn[hidden]{ display:none; }
 @media(max-width:600px){ .grid-more-btn{ width:100%; } .grid-more-wrap{ margin-top:22px; } }
 
+
+/* 28. The delete confirmation is opened from inside the order/product detail
+      modal, so it has to sit above it (both are .modal-overlay, z-index 600,
+      and the details modal comes later in the DOM). */
+#deleteConfirmModal{ z-index:760 !important; }
+#deleteConfirmModal .modal-box{ box-shadow:0 30px 70px -20px rgba(0,0,0,.5); }
+#orderDetailsModal.open.has-confirm-above{ filter:brightness(.96); }
+
 /* 12. Payment method cards now keyboard-focusable. */
 .payment-method-card:focus-visible{ outline:2px solid #111; outline-offset:2px; }
 
@@ -14079,7 +14087,9 @@ Please confirm my order.`
 
   window.closeDeleteConfirm = function(){
     document.getElementById("deleteConfirmModal").classList.remove("open");
-    document.body.style.overflow = "";
+    // Another modal (e.g. the order details it was opened from) may still be
+    // on screen — only give the page its scroll back when nothing is left.
+    if (!document.querySelector(".modal-overlay.open")) document.body.style.overflow = "";
     deleteConfirmMode = null;
     deleteConfirmId = null;
   };
