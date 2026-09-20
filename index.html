@@ -3681,6 +3681,137 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     }
   });
 </script>
+
+<script>
+/* =====================================================================
+   DPLEX router — real URLs instead of #hashes.
+     /                        home
+     /p/<slug>/<id>           product page
+     /cart /checkout /account /privacy /terms /returns
+     /order/<orderId>         shareable receipt
+   Old #product/ID style links still work: they are rewritten to the new
+   path on arrival, so links already shared on WhatsApp keep working.
+   Requires the host to serve index.html for unknown paths (SPA rewrite).
+   ===================================================================== */
+(function(){
+  const LEGACY = {
+    "#cart": "/cart", "#checkout": "/checkout", "#account": "/account",
+    "#privacy": "/privacy", "#terms": "/terms", "#returns": "/returns"
+  };
+
+  function slugify(text){
+    return String(text || "")
+      .toLowerCase()
+      .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/["'’]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60) || "product";
+  }
+  window.dplexSlugify = slugify;
+
+  function productName(productId){
+    const cache = window.__productCache || {};
+    const p = cache[productId];
+    return (p && p.name) || "";
+  }
+  function productPath(productId, name){
+    return "/p/" + slugify(name || productName(productId)) + "/" + encodeURIComponent(productId);
+  }
+  window.dplexProductPath = productPath;
+  window.dplexProductUrl = function(productId, name){
+    return location.origin + productPath(productId, name);
+  };
+
+  // Turn the current URL into the route string the app already understands.
+  function routeKey(){
+    const segs = location.pathname.replace(/\/+$/, "").split("/").filter(Boolean);
+    if (segs[0] === "p" && segs.length >= 2) return "#product/" + segs[segs.length - 1];
+    if (segs[0] === "order" && segs[1]) return "#order-received/" + segs[1];
+    if (segs.length === 1){
+      const hit = LEGACY["#" + segs[0].toLowerCase()];
+      if (hit) return "#" + segs[0].toLowerCase();
+    }
+    return location.hash; // "/" plus an in-page anchor such as #products
+  }
+  window.dplexRouteKey = routeKey;
+
+  // file:// (and any non-http origin) can't use pushState, so fall back to
+  // the old #hash form there instead of throwing.
+  function pathToHash(path){
+    const [p, h] = String(path).split("#");
+    if (h) return "#" + h;
+    const segs = p.replace(/\/+$/, "").split("/").filter(Boolean);
+    if (!segs.length) return "";
+    if (segs[0] === "p" && segs.length >= 2) return "#product/" + segs[segs.length - 1];
+    if (segs[0] === "order" && segs[1]) return "#order-received/" + segs[1];
+    return LEGACY["#" + segs[0]] ? "#" + segs[0] : "";
+  }
+  const canPushState = /^https?:$/.test(location.protocol);
+
+  function navigate(path, replace){
+    if (!canPushState){
+      const target = pathToHash(path);
+      if ((location.hash || "") === target){
+        if (window.handleDplexRoute) window.handleDplexRoute();
+      } else if (target){
+        location.hash = target;
+      } else {
+        history.replaceState(null, "", location.pathname + location.search);
+        if (window.handleDplexRoute) window.handleDplexRoute();
+      }
+      return;
+    }
+    const current = location.pathname + location.search + location.hash;
+    if (current === path){
+      if (window.handleDplexRoute) window.handleDplexRoute();
+      return;
+    }
+    try {
+      history[replace ? "replaceState" : "pushState"]({ dplex: 1 }, "", path);
+    } catch (err){
+      console.warn("Navigation fell back to hash:", err);
+      const target = pathToHash(path);
+      if (target) location.hash = target;
+      return;
+    }
+    if (window.handleDplexRoute) window.handleDplexRoute();
+  }
+  window.dplexNavigate = navigate;
+
+  // Upgrade an old #hash URL to the matching path before the app routes.
+  (function upgradeLegacyHash(){
+    const h = location.hash;
+    if (!h) return;
+    const prod = h.match(/^#product\/(.+)$/);
+    const order = h.match(/^#order-received\/(.+)$/);
+    let path = null;
+    if (prod) path = "/p/product/" + prod[1];          // slug filled in once the name is known
+    else if (order) path = "/order/" + order[1];
+    else if (LEGACY[h]) path = LEGACY[h];
+    if (path && /^https?:$/.test(location.protocol)){
+      try { history.replaceState({ dplex: 1 }, "", path); } catch (err){}
+    }
+  })();
+
+  // In-page anchors (#products, #categories) clicked while a sub-page is open
+  // have to return to the home page first.
+  document.addEventListener("click", function(e){
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const href = a.getAttribute("href");
+    if (!href || href === "#" || href.length < 2) return;
+    if (location.pathname !== "/"){
+      e.preventDefault();
+      navigate("/" + href);
+    }
+  }, true);
+
+  window.addEventListener("popstate", function(){
+    if (window.handleDplexRoute) window.handleDplexRoute();
+  });
+})();
+</script>
 </head>
 <body>
 <!-- ============ TIER-1 CINEMATIC PRELOADER ============ -->
@@ -6064,11 +6195,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
   function openCustomerPortal() {
     if (typeof closeCartDrawer === "function") closeCartDrawer();
-    if (window.location.hash === "#account") {
-      openCustomerPortalInternal();
-    } else {
-      window.location.hash = "account";
-    }
+    window.dplexNavigate("/account");
   }
   function openCustomerPortalInternal() {
     if (window.hideAllSubPages) window.hideAllSubPages();
@@ -6086,9 +6213,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
   }
   function closeCustomerPortal() {
     hideCustomerPortalInternal();
-    if (window.location.hash === "#account") {
-      window.location.hash = "";
-    }
+    if (window.dplexRouteKey() === "#account") window.dplexNavigate("/");
   }
   window.openCustomerPortalInternal = openCustomerPortalInternal;
   window.hideCustomerPortalInternal = hideCustomerPortalInternal;
@@ -7578,7 +7703,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
         // *does* finish loading (its hashchange listener fires as soon as
         // it's registered, and a hash that's already set is re-checked).
         console.warn('[prod-card] showProductDetailView is not available yet -- the PDP module may still be loading or failed to load. Falling back to hash navigation for product:', productId);
-        window.location.hash = 'product/' + encodeURIComponent(productId);
+        window.dplexNavigate(window.dplexProductPath(productId));
       }
     }
   });
@@ -8450,7 +8575,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
         };
         put();
         requestAnimationFrame(put);
-        [40, 120, 260].forEach(ms => setTimeout(put, ms));
+        [40, 120, 260, 500].forEach(ms => setTimeout(put, ms));
         return true;
       }
     }
@@ -8623,39 +8748,33 @@ html.dps-scroll-lock{ overflow:hidden !important; }
 
   // ---- Public navigation API (keeps the URL / browser history in sync) ----
   function showProductDetailView(productId){
-    const targetHash = "#product/" + encodeURIComponent(productId);
-    if (window.location.hash === targetHash){
-      // Same product requested again (e.g. re-clicked) — just (re)load it.
-      openProductDetailInternal(productId);
-    } else {
-      // Assigning location.hash pushes a new history entry and fires
-      // 'hashchange', which is what actually opens the view (see below).
-      window.location.hash = "product/" + encodeURIComponent(productId);
-    }
+    const name = (window.__productCache && window.__productCache[productId] && window.__productCache[productId].name) || "";
+    window.dplexNavigate(window.dplexProductPath(productId, name));
   }
 
   function closeProductDetailView(){
     hideProductDetailInternal();
-    if (window.location.hash){
-      // Clearing the hash fires hashchange, which restores the scroll below;
-      // do it here too for the case where there was no hash to clear.
-      window.location.hash = "";
-    }
+    window.dplexNavigate("/");
     restoreHomeScroll("#products");
   }
 
   function goHomeFromPdp(){
     hideProductDetailInternal();
-    if (window.location.hash){
-      window.location.hash = "";
-    }
+    window.dplexNavigate("/");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   // ---- Hash-based routing: supports #product/ID, #checkout, and #cart deep links + browser Back/Forward ----
   function handlePdpHashRouting(){
-    const hash = window.location.hash;
+    const hash = window.dplexRouteKey ? window.dplexRouteKey() : window.location.hash;
     const match = hash.match(/^#product\/(.+)$/);
+    // Keep the slug part of /p/<slug>/<id> in step with the product name.
+    if (match && window.dplexProductPath && location.pathname.startsWith("/p/")){
+      const wanted = window.dplexProductPath(decodeURIComponent(match[1]));
+      if (wanted !== location.pathname && !/^\/p\/product\//.test(wanted)){
+        try { history.replaceState({ dplex: 1 }, "", wanted); } catch (e){}
+      }
+    }
     const orderMatch = hash.match(/^#order-received\/(.+)$/);
     if (match){
       openProductDetailInternal(decodeURIComponent(match[1]));
@@ -8722,6 +8841,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
   }
 
   window.addEventListener("hashchange", handlePdpHashRouting);
+  window.handleDplexRoute = handlePdpHashRouting;
   document.addEventListener("DOMContentLoaded", handlePdpHashRouting);
 
   // Guarantee initial route is processed even if this module loads late
@@ -8735,7 +8855,9 @@ html.dps-scroll-lock{ overflow:hidden !important; }
   // ---- Share / copy product link ----
   function pdpShareProduct(){
     if (!pdpCurrentId) return;
-    const url = window.location.origin + window.location.pathname + "#product/" + encodeURIComponent(pdpCurrentId);
+    const url = window.dplexProductUrl
+      ? window.dplexProductUrl(pdpCurrentId, (pdpCurrentProduct && pdpCurrentProduct.name) || "")
+      : window.location.href;
     const btn = document.getElementById("pdpShareBtn");
     const label = document.getElementById("pdpShareBtnLabel");
     const showCopied = () => {
@@ -9820,8 +9942,8 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     if (Array.isArray(p.colors) && typeof idx === "number" && p.colors[idx] && typeof p.colors[idx] === "object" && p.colors[idx].name){
       colorName = " (" + p.colors[idx].name + ")";
     }
-    const link = location.origin && location.origin !== "null"
-      ? location.origin + location.pathname + "#product/" + encodeURIComponent(p.id || "")
+    const link = (location.origin && location.origin !== "null" && window.dplexProductUrl)
+      ? window.dplexProductUrl(p.id || "", p.name || "")
       : "";
     const msg = "Hi DPLEX, please let me know when \"" + (p.name || "this product") + colorName + "\" is back in stock." + (link ? "\n" + link : "");
     window.open("https://wa.me/94719553478?text=" + encodeURIComponent(msg), "_blank", "noopener");
@@ -9831,7 +9953,7 @@ html.dps-scroll-lock{ overflow:hidden !important; }
     const target = (related && related.style.display !== "none") ? related
       : document.querySelector("#pdpBody .pdp-recommended-section:not([style*='display: none']):not([style*='display:none'])");
     if (target){ target.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
-    location.hash = "#products";
+    window.dplexNavigate("/#products");
   };
 
   window.showProductDetailView = showProductDetailView;
@@ -9901,8 +10023,7 @@ function mmSyncState(){
 function mmLeaveSubpage(){
   // Routing to #products shows the home sections again (same as the header nav),
   // without goHomeFromPdp's smooth scroll-to-top fighting the scroll we do next.
-  if (location.hash === '#products') history.replaceState(null, '', location.pathname + location.search);
-  location.hash = '#products';
+  window.dplexNavigate("/#products");
 }
 function mmScrollToProducts(){
   const el = document.getElementById('products');
@@ -9919,7 +10040,7 @@ function mmGo(e, where){
   if (where === 'home'){
     if (!mmHomeVisible() && typeof window.goHomeFromPdp === 'function'){ window.goHomeFromPdp(); }
     else {
-      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      if (location.pathname !== "/" || location.hash) window.dplexNavigate("/");
       window.scrollTo({ top:0, behavior:'smooth' });
     }
     return false;
@@ -10279,7 +10400,7 @@ function searchOverlayGoToProducts(){
   const home = document.getElementById('homeSections');
   const onHome = !home || home.style.display !== 'none';
   const go = () => { const el = document.getElementById('products'); if (el) el.scrollIntoView({ behavior:'smooth', block:'start' }); };
-  if (!onHome){ location.hash = '#products'; setTimeout(go, 200); }
+  if (!onHome){ window.dplexNavigate("/#products"); setTimeout(go, 200); }
   else setTimeout(go, 30);
 }
 
@@ -10308,7 +10429,7 @@ function searchOverlayPickCategory(cat){
     else searchOverlayPickTerm(cat);
   };
   const home = document.getElementById('homeSections');
-  if (home && home.style.display === 'none'){ location.hash = '#products'; setTimeout(run, 200); }
+  if (home && home.style.display === 'none'){ window.dplexNavigate("/#products"); setTimeout(run, 200); }
   else run();
 }
 window.searchOverlayPickCategory = searchOverlayPickCategory;
@@ -11382,36 +11503,24 @@ function showToast(message){
       return;
     }
     window.closeCartDrawer && window.closeCartDrawer();
-    if (window.location.hash === "#checkout"){
-      window.openCheckoutPageInternal && window.openCheckoutPageInternal();
-    } else {
-      window.location.hash = "checkout";
-    }
+    window.dplexNavigate("/checkout");
   };
 
   window.closeCheckout = function(){
     window.hideCheckoutPageInternal && window.hideCheckoutPageInternal();
-    if (window.location.hash === "#checkout"){
-      window.location.hash = "";
-    }
+    if (window.dplexRouteKey() === "#checkout") window.dplexNavigate("/");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // ---- Full Cart page open/close (routes through #cart, like Checkout) ----
   window.openCartPage = function(){
     window.closeCartDrawer && window.closeCartDrawer();
-    if (window.location.hash === "#cart"){
-      window.openCartPageInternal && window.openCartPageInternal();
-    } else {
-      window.location.hash = "cart";
-    }
+    window.dplexNavigate("/cart");
   };
 
   window.closeCartPage = function(){
     window.hideCartPageInternal && window.hideCartPageInternal();
-    if (window.location.hash === "#cart"){
-      window.location.hash = "";
-    }
+    if (window.dplexRouteKey() === "#cart") window.dplexNavigate("/");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -11948,11 +12057,11 @@ function showToast(message){
 
     // Make the receipt addressable/shareable. Guarded so the resulting
     // hashchange does not re-fetch the order we are already displaying.
-    const shareHash = "#order-received/" + encodeURIComponent(orderId);
+    const sharePath = "/order/" + encodeURIComponent(orderId);
     window.__currentReceiptId = orderId;
-    if (window.location.hash !== shareHash){
+    if (location.pathname !== sharePath){
       window.__suppressReceiptFetch = true;
-      window.location.hash = shareHash;
+      window.dplexNavigate(sharePath);
       setTimeout(() => { window.__suppressReceiptFetch = false; }, 0);
     }
   }
@@ -12162,9 +12271,9 @@ Please confirm my order.`
     if (successPage) successPage.style.display = "none";
     document.body.style.overflow = "";
     window.__currentReceiptId = null;
-    if (window.location.hash.indexOf("#order-received/") === 0){
+    if (window.dplexRouteKey().indexOf("#order-received/") === 0){
       window.__suppressReceiptFetch = false;
-      window.location.hash = "";
+      window.dplexNavigate("/");
     }
 
     // Restore the home sections through the shared helper.
